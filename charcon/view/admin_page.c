@@ -110,7 +110,7 @@ void admin_login_pages()
 
 void save_username(const char *text)
 {
-    FILE *file = fopen("config.json", "w");
+    FILE *file = fopen("/home/config.json", "w");
     if (file) {
         fprintf(file, "{\"User ID\": \"%s\"}", text);
         fclose(file);
@@ -122,7 +122,7 @@ void save_username(const char *text)
 
 void save_password(const char *text)
 {
-    FILE *file = fopen("config.json", "a");
+    FILE *file = fopen("/home/config.json", "a");
     if (file) {
         fprintf(file, ",\n{\"Password\": \"%s\"}", text);
         fclose(file);

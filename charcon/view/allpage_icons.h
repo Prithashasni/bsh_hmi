@@ -79,6 +79,7 @@ extern void scr_log_set();
 extern void img_recolor(lv_obj_t *img, lv_obj_t *text);
 extern void health_check_status(lv_obj_t *obj);
 extern void get_current_datetime(char *datetime_str);
-extern void get_position();
+extern int get_position();
 extern void get_gsm_signal();
+extern void parse_json(const char *json);
 #endif
