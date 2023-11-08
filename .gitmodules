@@ -4,3 +4,6 @@
 [submodule "lvgl"]
 	path = lvgl
 	url = https://github.com/lvgl/lvgl.git
+[submodule "paho.mqtt.c"]
+	path = paho.mqtt.c
+	url = https://github.com/eclipse/paho.mqtt.c.git
