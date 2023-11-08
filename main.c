@@ -51,7 +51,7 @@ int main(void)
     ui_start();
 
     while(1) {
-        //lv_tick_inc(5);
+        lv_tick_inc(1);
         lv_timer_handler();
         usleep(500);
     }
