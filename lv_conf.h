@@ -131,7 +131,7 @@ extern uint32_t custom_tick_get(void);
  *With complex image decoders (e.g. PNG or JPG) caching can save the continuous open/decode of images.
  *However the opened images might consume additional RAM.
  *0: to disable caching*/
-#define LV_IMG_CACHE_DEF_SIZE   0
+#define LV_IMG_CACHE_DEF_SIZE   8
 
 /*Number of stops allowed per gradient. Increase this to allow more stops.
  *This adds (sizeof(lv_color_t) + 1) bytes per additional stop*/
@@ -331,27 +331,27 @@ extern uint32_t custom_tick_get(void);
 
 /*Montserrat fonts with ASCII range and some symbols using bpp = 4
  *https://fonts.google.com/specimen/Montserrat*/
-#define LV_FONT_MONTSERRAT_8  0
-#define LV_FONT_MONTSERRAT_10 0
-#define LV_FONT_MONTSERRAT_12 0
+#define LV_FONT_MONTSERRAT_8  1
+#define LV_FONT_MONTSERRAT_10 1
+#define LV_FONT_MONTSERRAT_12 1
 #define LV_FONT_MONTSERRAT_14 1
 #define LV_FONT_MONTSERRAT_16 1
-#define LV_FONT_MONTSERRAT_18 0
-#define LV_FONT_MONTSERRAT_20 0
-#define LV_FONT_MONTSERRAT_22 0
+#define LV_FONT_MONTSERRAT_18 1
+#define LV_FONT_MONTSERRAT_20 1
+#define LV_FONT_MONTSERRAT_22 1
 #define LV_FONT_MONTSERRAT_24 1
-#define LV_FONT_MONTSERRAT_26 0
-#define LV_FONT_MONTSERRAT_28 0
-#define LV_FONT_MONTSERRAT_30 0
-#define LV_FONT_MONTSERRAT_32 0
-#define LV_FONT_MONTSERRAT_34 0
-#define LV_FONT_MONTSERRAT_36 0
-#define LV_FONT_MONTSERRAT_38 0
-#define LV_FONT_MONTSERRAT_40 0
-#define LV_FONT_MONTSERRAT_42 0
-#define LV_FONT_MONTSERRAT_44 0
-#define LV_FONT_MONTSERRAT_46 0
-#define LV_FONT_MONTSERRAT_48 0
+#define LV_FONT_MONTSERRAT_26 1
+#define LV_FONT_MONTSERRAT_28 1
+#define LV_FONT_MONTSERRAT_30 1
+#define LV_FONT_MONTSERRAT_32 1
+#define LV_FONT_MONTSERRAT_34 1
+#define LV_FONT_MONTSERRAT_36 1
+#define LV_FONT_MONTSERRAT_38 1
+#define LV_FONT_MONTSERRAT_40 1
+#define LV_FONT_MONTSERRAT_42 1
+#define LV_FONT_MONTSERRAT_44 1
+#define LV_FONT_MONTSERRAT_46 1
+#define LV_FONT_MONTSERRAT_48 1
 
 /*Demonstrate special features*/
 #define LV_FONT_MONTSERRAT_12_SUBPX      0
@@ -374,13 +374,13 @@ extern uint32_t custom_tick_get(void);
 /*Enable handling large font and/or fonts with a lot of characters.
  *The limit depends on the font size, font face and bpp.
  *Compiler error will be triggered if a font needs it.*/
-#define LV_FONT_FMT_TXT_LARGE 0
+#define LV_FONT_FMT_TXT_LARGE 1
 
 /*Enables/disables support for compressed fonts.*/
-#define LV_USE_FONT_COMPRESSED 0
+#define LV_USE_FONT_COMPRESSED 1
 
 /*Enable subpixel rendering*/
-#define LV_USE_FONT_SUBPX 0
+#define LV_USE_FONT_SUBPX 1
 #if LV_USE_FONT_SUBPX
     /*Set the pixel order of the display. Physical order of RGB channels. Doesn't matter with "normal" fonts.*/
     #define LV_FONT_SUBPX_BGR 0  /*0: RGB; 1:BGR order*/
@@ -576,9 +576,9 @@ extern uint32_t custom_tick_get(void);
 /*File system interfaces for common APIs */
 
 /*API for fopen, fread, etc*/
-#define LV_USE_FS_STDIO 0
+#define LV_USE_FS_STDIO 1
 #if LV_USE_FS_STDIO
-    #define LV_FS_STDIO_LETTER '\0'     /*Set an upper cased letter on which the drive will accessible (e.g. 'A')*/
+    #define LV_FS_STDIO_LETTER 'A'     /*Set an upper cased letter on which the drive will accessible (e.g. 'A')*/
     #define LV_FS_STDIO_PATH ""         /*Set the working directory. File/directory paths will be appended to it.*/
     #define LV_FS_STDIO_CACHE_SIZE  0   /*>0 to cache this number of bytes in lv_fs_read()*/
 #endif
@@ -607,7 +607,7 @@ extern uint32_t custom_tick_get(void);
 #endif
 
 /*PNG decoder library*/
-#define LV_USE_PNG 0
+#define LV_USE_PNG 1
 
 /*BMP decoder library*/
 #define LV_USE_BMP 0

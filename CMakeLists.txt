@@ -1,12 +1,19 @@
 cmake_minimum_required(VERSION 3.1)
 
-project(lvgl-demo-wl)
+project(charcon-lvgl-wl)
 
 include_directories(.)
 add_subdirectory(lvgl)
 add_subdirectory(lv_drivers)
 
-add_executable(${PROJECT_NAME} main.c mouse_cursor_icon.c)
+# Add the paho.mqtt.c and cJSON library as a subdirectory
+# add_subdirectory(paho.mqtt.c)
+# add_subdirectory(cJSON)
+
+file(GLOB_RECURSE INCLUDES "lv_drivers/*.h" "lv_demos/*.h"  "lvgl/*.h" "charcon/view/*.h" "charcon/controller/*.h" "./*.h" )
+file(GLOB_RECURSE SOURCES  "lv_drivers/*.c" "lv_demos/*.c"  "lvgl/*.c" "charcon/assets/*.c" "charcon/view/*.c" "charcon/controller/*.c")
+
+add_executable(${PROJECT_NAME} main.c sub.c ${SOURCES} ${INCLUDES})
 target_link_libraries(${PROJECT_NAME} PRIVATE lvgl lvgl::examples lvgl::demos
 	lvgl::drivers wayland-client wayland-cursor xkbcommon)
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)

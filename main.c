@@ -7,6 +7,10 @@
 #include "lvgl/demos/lv_demos.h"
 #include "lv_drivers/wayland/wayland.h"
 #include <unistd.h>
+#include "sub.h"
+#include "MQTTClient.h"
+
+#include "charcon/controller/controller.h"
 
 int main(void)
 {
@@ -20,10 +24,6 @@ int main(void)
 
     /* Set a cursor for the touchscreen */
     lv_indev_t * touchscreen = lv_wayland_get_touchscreen(disp);
-    LV_IMG_DECLARE(mouse_cursor_icon)
-    lv_obj_t * cursor_obj = lv_img_create(lv_scr_act()); /* Create an image object for the cursor  */
-    lv_img_set_src(cursor_obj, &mouse_cursor_icon); /* Set the image source */
-    lv_indev_set_cursor(touchscreen, cursor_obj); /* Connect the image object to the driver */
 
     /* Search connected keyboard and attach it to the driver */
     lv_group_t * g = lv_group_create();
@@ -46,12 +46,14 @@ int main(void)
     }
 
     /* Create a Demo */
-    lv_demo_widgets();
+    // lv_demo_widgets();
+    // lv_demo_music();
+    ui_start();
 
     while(1) {
-        lv_tick_inc(5);
+        //lv_tick_inc(5);
         lv_timer_handler();
-        usleep(5000);
+        usleep(500);
     }
 
     return 0;
