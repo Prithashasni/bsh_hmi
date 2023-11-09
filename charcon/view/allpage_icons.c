@@ -63,18 +63,20 @@ lv_obj_t *mc_text;
 lv_obj_t *guest_btn;
 lv_obj_t *img_cloud_connection;
 lv_obj_t *img_arrow;
+lv_obj_t *img_no_signal;
 lv_timer_t *login_task;
 lv_timer_t *task_timer;
-
+lv_anim_t anim_scroll;
  
 // Global variables to store parsed values
 
 char g_position[1000];
 double g_latitude;
 double g_longitude;
-int g_GSMsignal;
+int g_GSMsignal = -1;
 const char *pos_start;
-
+const char *loc_text;
+const char *start;
 char admin_text[50];
 
 const int CONST_AdminLoginPage = 7;
@@ -85,6 +87,7 @@ const int CONST_MasterControl = 11;
 const int CONST_AdminLogsPage = 12;
 
 int gsm_signal_value;
+int char_count = 0;
 
 char datetime_str[30];
 char *position_value;
@@ -102,7 +105,7 @@ void get_current_datetime(char *datetime_str)
     tm_info->tm_min += 30;
 
     // Handle overflow
-    if (tm_info->tm_min >= 60) {
+    if (tm_info->tm_min >= 60)
         tm_info->tm_hour += 1;
         tm_info->tm_min -= 60;
     }
@@ -147,6 +150,10 @@ void allpage_status(lv_obj_t * obj)
     lv_img_set_src(img_signal5, &img_network_5);
     lv_obj_align(img_signal5, LV_ALIGN_TOP_RIGHT, -72, 0);
 
+    img_no_signal = lv_img_create(obj);
+    lv_img_set_src(img_no_signal, &img_no_network);
+    lv_obj_align(img_no_signal, LV_ALIGN_TOP_RIGHT, -72, 4);
+
     label_time = lv_label_create(obj);
     lv_obj_align(label_time, LV_ALIGN_TOP_RIGHT, 0, -5);
     lv_obj_add_style(label_time, &style_text_time, LV_STATE_DEFAULT);
@@ -162,8 +169,17 @@ void allpage_status(lv_obj_t * obj)
     lv_obj_align(img_location, LV_ALIGN_TOP_LEFT, 10, -10);
 
     label_location = lv_label_create(obj);
-    lv_obj_align(label_location, LV_ALIGN_TOP_LEFT, 50, -7);
+    lv_obj_align(label_location, LV_ALIGN_TOP_LEFT, 50, -5);
+    lv_label_set_text(label_location, " ");
     lv_obj_add_style(label_location, &style_text_time, LV_STATE_DEFAULT);
+
+    if (loc_text != NULL && char_count > 25) {
+
+        lv_label_set_long_mode(label_location, LV_LABEL_LONG_SCROLL_CIRCULAR);
+        lv_obj_set_width(label_location, 250);
+        lv_label_set_text(label_location, g_position);
+    }
+
 
     header_rect = lv_obj_create(obj);
     lv_obj_set_size(header_rect, 550, 50);
@@ -273,6 +289,11 @@ void health_check_status(lv_obj_t * obj)
         lv_img_set_src(img_cloud_connection, &cloud_connect);
     }
 
+    ////////// GSM & GPS //////////////////
+    /* Get Network signal from GSM Module and display */
+    get_gsm_signal();
+ 
+
     get_position();
 }
 // A simple JSON parser for the provided JSON structure
@@ -296,10 +317,7 @@ void parse_json(const char *json)
 
                 // Copy the extracted position string to the global variable
                 strcpy(g_position, position);
-                printf("Parsed Position: %s\n", g_position);
-            } else {
-                printf("Error: Incomplete position string or missing comma in JSON.\n");
-            }
+            } 
         } 
      }
  
@@ -347,14 +365,16 @@ int get_position() {
     printf("%s", json_data);
     parse_json(json_data);
 
+    /* Get location from the GPS Module and display */
+
+    loc_text = lv_label_get_text(label_location);
+    start = loc_text;
+    while (*start != '\0') {
+    char_count++;
+    start++;
+    }
+
     lv_label_set_text(label_location, g_position);
-    get_gsm_signal();
- 
-    // Access the parsed values from the global variables
-    printf("Position: %s\n", g_position);
-    printf("Latitude: %f\n", g_latitude);
-    printf("Longitude: %f\n", g_longitude);
-    printf("GSM Signal: %d\n", g_GSMsignal);
  
     // Free allocated memory
     free(json_data);
@@ -366,6 +386,8 @@ void get_gsm_signal()
 {
     if (g_GSMsignal == 0)
     {
+        lv_obj_add_flag(img_no_signal, LV_OBJ_FLAG_HIDDEN);
+
         lv_obj_set_style_img_recolor(img_signal1, LV_COLOR_WHITE, LV_STATE_DEFAULT);
         lv_obj_set_style_img_recolor_opa(img_signal1, LV_OPA_COVER, LV_STATE_DEFAULT);
 
@@ -384,6 +406,8 @@ void get_gsm_signal()
     }
     else if (g_GSMsignal == 1)
     {
+        lv_obj_add_flag(img_no_signal, LV_OBJ_FLAG_HIDDEN);
+
         lv_obj_set_style_img_recolor(img_signal1, LV_COLOR_WHITE, LV_STATE_DEFAULT);
         lv_obj_set_style_img_recolor_opa(img_signal1, LV_OPA_COVER, LV_STATE_DEFAULT);
 
@@ -402,6 +426,8 @@ void get_gsm_signal()
     }
     else if (g_GSMsignal == 2)
     {
+        lv_obj_add_flag(img_no_signal, LV_OBJ_FLAG_HIDDEN);
+
         lv_obj_set_style_img_recolor(img_signal1, LV_COLOR_WHITE, LV_STATE_DEFAULT);
         lv_obj_set_style_img_recolor_opa(img_signal1, LV_OPA_COVER, LV_STATE_DEFAULT);
 
@@ -420,6 +446,8 @@ void get_gsm_signal()
     }
     else if (g_GSMsignal == 3)
     {
+        lv_obj_add_flag(img_no_signal, LV_OBJ_FLAG_HIDDEN);
+
         lv_obj_set_style_img_recolor(img_signal1, LV_COLOR_WHITE, LV_STATE_DEFAULT);
         lv_obj_set_style_img_recolor_opa(img_signal1, LV_OPA_COVER, LV_STATE_DEFAULT);
 
@@ -438,6 +466,8 @@ void get_gsm_signal()
     }
     else if (g_GSMsignal == 4)
     {
+        lv_obj_add_flag(img_no_signal, LV_OBJ_FLAG_HIDDEN);
+
         lv_obj_set_style_img_recolor(img_signal1, LV_COLOR_WHITE, LV_STATE_DEFAULT);
         lv_obj_set_style_img_recolor_opa(img_signal1, LV_OPA_COVER, LV_STATE_DEFAULT);
 
@@ -456,19 +486,21 @@ void get_gsm_signal()
     }
     else
     {
-        lv_obj_set_style_img_recolor(img_signal1, LV_COLOR_RED, LV_STATE_DEFAULT);
+        lv_obj_clear_flag(img_no_signal, LV_OBJ_FLAG_HIDDEN);
+        
+        lv_obj_set_style_img_recolor(img_signal1, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
         lv_obj_set_style_img_recolor_opa(img_signal1, LV_OPA_COVER, LV_STATE_DEFAULT);
 
-        lv_obj_set_style_img_recolor(img_signal2, LV_COLOR_RED, LV_STATE_DEFAULT);
+        lv_obj_set_style_img_recolor(img_signal2, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
         lv_obj_set_style_img_recolor_opa(img_signal2, LV_OPA_COVER, LV_STATE_DEFAULT);
 
-        lv_obj_set_style_img_recolor(img_signal3, LV_COLOR_RED, LV_STATE_DEFAULT);
+        lv_obj_set_style_img_recolor(img_signal3, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
         lv_obj_set_style_img_recolor_opa(img_signal3, LV_OPA_COVER, LV_STATE_DEFAULT);
 
-        lv_obj_set_style_img_recolor(img_signal4, LV_COLOR_RED, LV_STATE_DEFAULT);
+        lv_obj_set_style_img_recolor(img_signal4, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
         lv_obj_set_style_img_recolor_opa(img_signal4, LV_OPA_COVER, LV_STATE_DEFAULT);
 
-        lv_obj_set_style_img_recolor(img_signal5, LV_COLOR_RED, LV_STATE_DEFAULT);
+        lv_obj_set_style_img_recolor(img_signal5, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
         lv_obj_set_style_img_recolor_opa(img_signal5, LV_OPA_COVER, LV_STATE_DEFAULT);
 
     }

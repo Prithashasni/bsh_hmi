@@ -54,6 +54,7 @@ LV_IMG_DECLARE(img_network_2)
 LV_IMG_DECLARE(img_network_3)
 LV_IMG_DECLARE(img_network_4)
 LV_IMG_DECLARE(img_network_5)
+LV_IMG_DECLARE(img_no_network)
 
 extern char admin_text[50];
 extern const int CONST_AdminLoginPage;
