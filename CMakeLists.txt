@@ -6,7 +6,7 @@ include_directories(.)
 add_subdirectory(lvgl)
 add_subdirectory(lv_drivers)
 
-# Add the paho.mqtt.c and cJSON library as a subdirectory
+# Add the paho.mqtt.c library as a subdirectory
 add_subdirectory(paho.mqtt.c)
 
 file(GLOB_RECURSE INCLUDES "lv_drivers/*.h" "lv_demos/*.h"  "lvgl/*.h" "charcon/view/*.h" "charcon/controller/*.h" "./*.h" )
