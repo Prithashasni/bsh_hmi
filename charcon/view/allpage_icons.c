@@ -106,6 +106,7 @@ void get_current_datetime(char *datetime_str)
 
     // Handle overflow
     if (tm_info->tm_min >= 60)
+    {
         tm_info->tm_hour += 1;
         tm_info->tm_min -= 60;
     }

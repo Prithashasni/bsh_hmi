@@ -84,10 +84,10 @@ extern uint32_t custom_tick_get(void);
  *====================*/
 
 /*Default display refresh period. LVG will redraw changed areas with this period time*/
-#define LV_DISP_DEF_REFR_PERIOD 30      /*[ms]*/
+#define LV_DISP_DEF_REFR_PERIOD 17      /*[ms]*/
 
 /*Input device read period in milliseconds*/
-#define LV_INDEV_DEF_READ_PERIOD 30     /*[ms]*/
+#define LV_INDEV_DEF_READ_PERIOD 17     /*[ms]*/
 
 /*Use a custom tick source that tells the elapsed time in milliseconds.
  *It removes the need to manually update the tick with `lv_tick_inc()`)*/
@@ -142,7 +142,7 @@ extern uint32_t custom_tick_get(void);
  *LV_GRAD_CACHE_DEF_SIZE sets the size of this cache in bytes.
  *If the cache is too small the map will be allocated only while it's required for the drawing.
  *0 mean no caching.*/
-#define LV_GRAD_CACHE_DEF_SIZE      8*1024
+#define LV_GRAD_CACHE_DEF_SIZE      0
 
 /*Allow dithering the gradients (to achieve visual smooth color gradients on limited color depth display)
  *LV_DITHER_GRADIENT implies allocating one or two more lines of the object's rendering surface
@@ -265,7 +265,7 @@ extern uint32_t custom_tick_get(void);
 #define LV_USE_REFR_DEBUG 0
 
 /*Change the built in (v)snprintf functions*/
-#define LV_SPRINTF_CUSTOM 1
+#define LV_SPRINTF_CUSTOM 0
 #if LV_SPRINTF_CUSTOM
     #define LV_SPRINTF_INCLUDE <stdio.h>
     #define lv_snprintf  snprintf
@@ -419,7 +419,7 @@ extern uint32_t custom_tick_get(void);
 /*Support bidirectional texts. Allows mixing Left-to-Right and Right-to-Left texts.
  *The direction will be processed according to the Unicode Bidirectional Algorithm:
  *https://www.w3.org/International/articles/inline-bidi-markup/uba-basics*/
-#define LV_USE_BIDI 1
+#define LV_USE_BIDI 0
 #if LV_USE_BIDI
     /*Set the default direction. Supported values:
     *`LV_BASE_DIR_LTR` Left-to-Right
@@ -430,7 +430,7 @@ extern uint32_t custom_tick_get(void);
 
 /*Enable Arabic/Persian processing
  *In these languages characters should be replaced with an other form based on their position in the text*/
-#define LV_USE_ARABIC_PERSIAN_CHARS 1
+#define LV_USE_ARABIC_PERSIAN_CHARS 0
 
 /*==================
  *  WIDGET USAGE
