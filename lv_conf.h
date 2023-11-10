@@ -265,7 +265,7 @@ extern uint32_t custom_tick_get(void);
 #define LV_USE_REFR_DEBUG 0
 
 /*Change the built in (v)snprintf functions*/
-#define LV_SPRINTF_CUSTOM 0
+#define LV_SPRINTF_CUSTOM 1
 #if LV_SPRINTF_CUSTOM
     #define LV_SPRINTF_INCLUDE <stdio.h>
     #define lv_snprintf  snprintf
