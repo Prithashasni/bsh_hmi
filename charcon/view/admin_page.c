@@ -137,23 +137,29 @@ static void ta_event_cb(lv_event_t * e)
         LV_LOG_USER("Ready, current text: %s", lv_textarea_get_text(ta));
         const char *text =  lv_textarea_get_text(text_ta);
         const char *ta =  lv_textarea_get_text(pwd_ta);
+
+        text_inc = lv_label_create(scr_home);
+        lv_label_set_text(text_inc, "Incorrect username or password");
+        lv_obj_add_flag(text_inc, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_align_to(text_inc, pwd_ta, LV_ALIGN_OUT_BOTTOM_MID, -140, 20);
+        lv_obj_add_style(text_inc, &style_red_text, LV_STATE_DEFAULT);
         // save_username(text);
         // save_password(ta);
         if(strcmp(text, "admin") == 0 && strcmp(ta,"admin") == 0)
         {
-            // LV_LOG_USER("Admin text");
             lv_label_set_text(label_guest, "Admin");
             strcpy(admin_text, "Admin");
-            if(text_inc != NULL){
-                lv_obj_add_flag(text_inc, LV_OBJ_FLAG_HIDDEN);
-            } 
+            lv_obj_add_flag(text_inc, LV_OBJ_FLAG_HIDDEN);
+        }
+        else if(strcmp(text, "user") == 0 && strcmp(ta,"user") == 0)
+        {
+            lv_label_set_text(label_guest, "User");
+            strcpy(admin_text, "User");
+            lv_obj_add_flag(text_inc, LV_OBJ_FLAG_HIDDEN);
         }
         else 
         {
-            text_inc = lv_label_create(scr_home);
-            lv_label_set_text(text_inc, "Incorrect username or password");
-            lv_obj_align_to(text_inc, pwd_ta, LV_ALIGN_OUT_BOTTOM_MID, -140, 20);
-            lv_obj_add_style(text_inc, &style_red_text, LV_STATE_DEFAULT);
+            lv_obj_clear_flag(text_inc, LV_OBJ_FLAG_HIDDEN);
         }
     }
 }
