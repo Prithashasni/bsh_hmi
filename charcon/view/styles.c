@@ -48,6 +48,7 @@ void init_style()
 void init_style_backdrop()
 {
     lv_style_init(&style_scr_backdrop);
+     lv_style_set_radius(&style_scr_backdrop, 0);
     lv_style_set_bg_color(&style_scr_backdrop, lv_color_hex(0x000000));
     lv_style_set_border_color(&style_scr_backdrop, lv_color_hex(0x000000));
 

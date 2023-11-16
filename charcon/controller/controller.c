@@ -51,7 +51,7 @@ void page_change()
             admin_page();
         }
     }
-    else if (Page != prev_page)
+    else if (prev_page != Page)
     {
         lv_obj_add_flag(img_bosch_logo, LV_OBJ_FLAG_HIDDEN);
         wallbox_page();
@@ -163,9 +163,20 @@ void wallbox_page()
 {
     if (Page == CONST_DeviceFailure)
     {
-        wallbox_failure_status();
-        delete_objects_on_page(prev_page);
-        prev_page = CONST_DeviceFailure;
+        if (user_flag != 0)
+        {
+            wallbox_failure_status();
+            delete_obj_on_headpage(user_flag);
+            prev_page = CONST_DeviceFailure;
+            user_flag = CONST_DeviceFailure;
+        }
+        else
+        {
+            wallbox_failure_status();
+            delete_objects_on_page(prev_page);
+            prev_page = CONST_DeviceFailure;
+            user_flag = CONST_DeviceFailure;
+        }
     }
     else if (Page == CONST_HealthCheck)
     {
@@ -201,7 +212,13 @@ void wallbox_page()
 
 void delete_objects_on_page(int prev_page)
 {
-    if (prev_page == CONST_HealthCheck)
+    if (prev_page == CONST_DeviceFailure)
+    {
+        lv_obj_del(failure_label);
+        lv_obj_del(service_label);
+        lv_obj_del(img_failure);
+    }
+    else if (prev_page == CONST_HealthCheck)
     {
         lv_obj_del(img_red_check);
         lv_obj_del(label_dc_text);

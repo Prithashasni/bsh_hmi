@@ -30,6 +30,8 @@ LV_IMG_DECLARE(error_icon)
 void wallbox_failure_status()
 {
     display_allpage_icons();
+    lv_obj_clear_flag(header_rect, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_clear_flag(label_guest, LV_OBJ_FLAG_CLICKABLE);
 
     failure_label = lv_label_create(scr_home);
     lv_label_set_text(failure_label, "Wall Box Failure Detected");
@@ -41,9 +43,9 @@ void wallbox_failure_status()
     lv_obj_align(service_label, LV_ALIGN_CENTER, 0, 235);
     lv_obj_add_style(service_label, &style_failure_text, LV_STATE_DEFAULT);
 
-    img_error = lv_img_create(img_charger);
-    lv_img_set_src(img_error, &error_icon);
-    lv_obj_align(img_error, LV_ALIGN_CENTER, 0, 0);
+    img_failure = lv_img_create(img_charger);
+    lv_img_set_src(img_failure, &error_icon);
+    lv_obj_align(img_failure, LV_ALIGN_CENTER, 0, 0);
 }
 
 void wallbox_not_configured()

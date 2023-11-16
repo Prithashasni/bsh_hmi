@@ -60,7 +60,6 @@ lv_obj_t *log_text;
 lv_obj_t *vsecc_text;
 lv_obj_t *charcon_text;
 lv_obj_t *mc_text;
-lv_obj_t *guest_btn;
 lv_obj_t *img_cloud_connection;
 lv_obj_t *img_arrow;
 lv_obj_t *img_no_signal;

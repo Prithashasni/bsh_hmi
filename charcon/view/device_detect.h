@@ -26,6 +26,9 @@ extern int CloudConnection;
 extern lv_obj_t *configure_label;
 extern lv_obj_t *please_conf;
 extern lv_obj_t *img_error;
+extern lv_obj_t *failure_label;
+extern lv_obj_t *service_label;
+extern lv_obj_t *img_failure;
 
 /* Project Includes */
 extern void wallbax_failure_status();
