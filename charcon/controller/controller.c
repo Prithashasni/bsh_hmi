@@ -44,25 +44,17 @@ void ui_start()
 
 void page_change()
 {
-    if (Page != CONST_DeviceFailure)
+    if (Page != CONST_DeviceFailure && header_page != 0)
     {
-        if (header_page != 0)
+        if (prev_header_page != header_page)
         {
-            if (prev_header_page != header_page)
-            {
-                LV_LOG_USER("Admin page logic");
-                admin_page();
-            }
+            admin_page();
         }
-        else
-        {
-            if (Page != prev_page)
-            {
-                LV_LOG_USER("DC page logic");
-                lv_obj_add_flag(img_bosch_logo, LV_OBJ_FLAG_HIDDEN);
-                wallbox_page();
-            }
-        }
+    }
+    else if (Page != prev_page)
+    {
+        lv_obj_add_flag(img_bosch_logo, LV_OBJ_FLAG_HIDDEN);
+        wallbox_page();
     }
 }
 
