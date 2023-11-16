@@ -43,64 +43,59 @@ lv_timer_t * check_task;
 
 void screen_dc_check()
 {
-    scr_check = lv_obj_create(lv_scr_act());
-    lv_obj_set_size(scr_check, 1280, 800);
-    lv_obj_set_scrollbar_mode(scr_check, LV_SCROLLBAR_MODE_OFF);
-    lv_obj_clear_flag(scr_check, LV_OBJ_FLAG_CLICKABLE);
-    lv_obj_add_style(scr_check, &style_scr_backdrop, LV_STATE_DEFAULT);
 
-    allpage_status(scr_check);
 
+    display_allpage_icons();
 
     img_red_check = lv_img_create(img_charger);
     lv_img_set_src(img_red_check, &red_check);
     lv_obj_align(img_red_check, LV_ALIGN_CENTER, 0, 0);
 
-    label_dc_text = lv_label_create(scr_check);
+    label_dc_text = lv_label_create(scr_home);
     lv_label_set_text(label_dc_text, "Health Check in Progress...");
     lv_obj_align(label_dc_text, LV_ALIGN_CENTER, 0, -260);
     lv_obj_add_style(label_dc_text, &style_dc_text, LV_STATE_DEFAULT);
 
-    cable_text = lv_label_create(scr_check);
+    cable_text = lv_label_create(scr_home);
     lv_label_set_text(cable_text, "Cable :");
     lv_obj_align(cable_text, LV_ALIGN_CENTER, -500, 0);
     lv_obj_add_style(cable_text, &style_check_text, LV_STATE_DEFAULT);
 
-    power_text = lv_label_create(scr_check);
+    power_text = lv_label_create(scr_home);
     lv_label_set_text(power_text, "Power Board :");
     lv_obj_align(power_text, LV_ALIGN_CENTER, -450, 90);
     lv_obj_add_style(power_text, &style_check_text, LV_STATE_DEFAULT);
 
-    check1_text = lv_label_create(scr_check);
+    check1_text = lv_label_create(scr_home);
     lv_label_set_text(check1_text, "Check");
     lv_obj_align(check1_text, LV_ALIGN_CENTER, -380, 0);
     lv_obj_add_flag(check1_text, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_style(check1_text, &style_check_text, LV_STATE_DEFAULT);
 
-    check1_good = lv_label_create(scr_check);
+    check1_good = lv_label_create(scr_home);
     lv_label_set_text(check1_good, "Good");
     lv_obj_add_flag(check1_good, LV_OBJ_FLAG_HIDDEN);
     lv_obj_align(check1_good, LV_ALIGN_CENTER, -380, 0);
     lv_obj_add_style(check1_good, &style_check_good, LV_STATE_DEFAULT);
 
-    check2_text = lv_label_create(scr_check);
+    check2_text = lv_label_create(scr_home);
     lv_label_set_text(check2_text, "Check");
     lv_obj_align(check2_text, LV_ALIGN_CENTER, -290, 90);
     lv_obj_add_flag(check2_text, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_style(check2_text, &style_check_text, LV_STATE_DEFAULT);
-
-    check2_good = lv_label_create(scr_check);
+    
+    check2_good = lv_label_create(scr_home);
     lv_label_set_text(check2_good, "Good");
     lv_obj_align(check2_good, LV_ALIGN_CENTER, -290, 90);
     lv_obj_add_flag(check2_good, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_style(check2_good, &style_check_good, LV_STATE_DEFAULT);
-
+    
     img_green_check = lv_img_create(img_charger);
     lv_img_set_src(img_green_check, &green_check);
     lv_obj_add_flag(img_green_check, LV_OBJ_FLAG_HIDDEN);
     lv_obj_align(img_green_check, LV_ALIGN_CENTER, 0, 0);
 
-    ready_text = lv_label_create(scr_check);
+    ready_text = lv_label_create(scr_home);
     lv_label_set_text(ready_text, "Charger Ready! Please Plug in to start Charging");
     lv_obj_align(ready_text, LV_ALIGN_CENTER, 0, -260);
     lv_obj_add_flag(ready_text, LV_OBJ_FLAG_HIDDEN);
@@ -113,9 +108,14 @@ void screen_dc_check()
     lv_timer_set_repeat_count(check_task, -1);
 }
 
-void anim_opacity_cb(void * var, int32_t v)
+void anim_opacity_cb(void *var, int32_t v)
 {
     lv_obj_set_style_opa(var, LV_OPA_COVER - v, 0);
+}
+
+void anim_zoom_cb(void *var, int32_t v)
+{
+    lv_img_set_zoom(var, v);
 }
 
 void cable_check_status()
@@ -161,9 +161,9 @@ void cable_check_status()
     if(HeartBeatMsg == 0) {
         lv_anim_t anim_img;
         lv_anim_init(&anim_img);
-        lv_anim_set_exec_cb(&anim_img, (lv_anim_exec_xcb_t)lv_img_set_zoom);
+        lv_anim_set_exec_cb(&anim_img, anim_zoom_cb);
         lv_anim_set_var(&anim_img, img_red_check);
-        lv_anim_set_time(&anim_img, 2000);
+        // lv_anim_set_time(&anim_img, 500);
         lv_anim_set_values(&anim_img, 250, 265);
         lv_anim_set_repeat_count(&anim_img, LV_ANIM_REPEAT_INFINITE);
         lv_anim_start(&anim_img);
@@ -179,32 +179,28 @@ void cable_check_status()
 
 void initialize_device()
 {
-    scr_init = lv_obj_create(lv_scr_act());
-    lv_obj_set_size(scr_init, 1280, 800);
-    lv_obj_set_scrollbar_mode(scr_init, LV_SCROLLBAR_MODE_OFF);
-    lv_obj_clear_flag(scr_init, LV_OBJ_FLAG_CLICKABLE);
-    lv_obj_add_style(scr_init, &style_scr_backdrop, LV_STATE_DEFAULT);
 
-    allpage_status(scr_init);
 
-    img_initializing = lv_img_create(img_charger);
+    display_allpage_icons();
+
+    img_initializing = lv_img_create(scr_home);
     lv_img_set_src(img_initializing, &img_loader);
     lv_obj_align(img_initializing, LV_ALIGN_CENTER, 0, 0);
 
-    ready_text = lv_label_create(scr_init);
-    lv_label_set_text(ready_text, "Connection Detected!");
-    lv_obj_align(ready_text, LV_ALIGN_CENTER, 0, -260);
-    lv_obj_add_style(ready_text, &style_dc_ready, LV_STATE_DEFAULT);
+    connection_text = lv_label_create(scr_home);
+    lv_label_set_text(connection_text, "Connection Detected!");
+    lv_obj_align(connection_text, LV_ALIGN_CENTER, 0, -260);
+    lv_obj_add_style(connection_text, &style_dc_ready, LV_STATE_DEFAULT);
 
-    initialize_text = lv_label_create(scr_init);
+    initialize_text = lv_label_create(scr_home);
     lv_label_set_text(initialize_text, "Initializing Device...");
     lv_obj_align(initialize_text, LV_ALIGN_CENTER, 0, 120);
     lv_obj_add_style(initialize_text, &style_confg_text, LV_STATE_DEFAULT);
 
     lv_anim_t anim_loader;
     lv_anim_init(&anim_loader);
-    lv_anim_set_var(&anim_loader, img_initializing);
     lv_anim_set_exec_cb(&anim_loader, anim_rotate_cb);
+    lv_anim_set_var(&anim_loader, img_initializing);
     lv_anim_set_time(&anim_loader, 2000); // Animation duration in milliseconds
     lv_anim_set_values(&anim_loader, 0, 3600);
     lv_anim_set_repeat_count(&anim_loader, LV_ANIM_REPEAT_INFINITE);

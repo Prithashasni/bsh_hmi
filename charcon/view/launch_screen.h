@@ -16,13 +16,14 @@
 
 extern lv_obj_t *scr_home;
 extern lv_obj_t *img_bosch_logo;
-extern lv_obj_t *img_initializing;
+extern lv_obj_t *default_text;
 
 LV_IMG_DECLARE(bosch_logo)
 
 /* Project Includes */
 extern void create_launch_screen();
 extern void img_animation(lv_obj_t *img_bosch_logo);
-static void scr_plugged(lv_event_t *event);
+extern void display_allpage_icons();
+extern void home_screen();
 
 #endif

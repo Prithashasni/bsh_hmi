@@ -23,8 +23,9 @@ extern int HealthIcon3;
 
 extern int CloudConnection;
 
-extern lv_obj_t *scr_wallbox;
-extern lv_obj_t *scr_failure;
+extern lv_obj_t *configure_label;
+extern lv_obj_t *please_conf;
+extern lv_obj_t *img_error;
 
 /* Project Includes */
 extern void wallbax_failure_status();

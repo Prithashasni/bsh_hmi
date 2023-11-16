@@ -13,6 +13,33 @@
 #include <time.h>
 #include "../../lvgl/lvgl.h"
 
+extern lv_obj_t *img_money;
+extern lv_obj_t *img_power;
+extern lv_obj_t *chart1;
+extern lv_obj_t *text_costgrid;
+extern lv_obj_t *text_energy;
+extern lv_obj_t *text_total;
+extern lv_obj_t *stop_button;
+extern lv_obj_t *stop_charging;
+extern lv_obj_t *stop_text;
+extern lv_obj_t *text_solar;
+extern lv_obj_t *text_grid;
+extern lv_obj_t *text_time_charging;
+extern lv_obj_t *cost_text;
+extern lv_obj_t *solar_energy_text;
+extern lv_obj_t *grid_energy_text;
+extern lv_obj_t *total_cost_value;
+extern lv_obj_t *terminate_text;
+extern lv_obj_t *charging_complete;
+extern lv_obj_t *unplug_text;
+extern lv_obj_t *timer_label;
+extern lv_obj_t *img_terminate;
+extern lv_obj_t *img_cost_unit;
+extern lv_obj_t *img_tot_cost;
+
+extern lv_timer_t *timer_task;
+extern lv_timer_t *progress_task;
+
 LV_IMG_DECLARE(icon_money)
 LV_IMG_DECLARE(icon_power)
 LV_IMG_DECLARE(img_cost)

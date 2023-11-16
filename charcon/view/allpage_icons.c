@@ -115,64 +115,76 @@ void get_current_datetime(char *datetime_str)
     strftime(datetime_str, 30, "%H:%M", tm_info);
 }
 
-void allpage_status(lv_obj_t * obj)
+void allpage_status()
 {
-    img_charger = lv_img_create(obj);
+    img_charger = lv_img_create(scr_home);
     lv_img_set_src(img_charger, &charger);
     lv_obj_align(img_charger, LV_ALIGN_CENTER, 0, 0);
-    lv_obj_clear_flag(img_charger, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(img_charger, LV_OBJ_FLAG_HIDDEN);
 
-    img_profile = lv_img_create(obj);
+    img_profile = lv_img_create(scr_home);
     lv_img_set_src(img_profile, &icon_profile);
     lv_obj_align(img_profile, LV_ALIGN_TOP_RIGHT, -160, -10);
+    lv_obj_add_flag(img_profile, LV_OBJ_FLAG_HIDDEN);
 
-    img_wifi = lv_img_create(obj);
+    img_wifi = lv_img_create(scr_home);
     lv_img_set_src(img_wifi, &icon_wifi);
     lv_img_set_zoom(img_wifi, 230);
     lv_obj_align(img_wifi, LV_ALIGN_TOP_RIGHT, -115, -14);
+    lv_obj_add_flag(img_wifi, LV_OBJ_FLAG_HIDDEN);
 
-    img_signal1 = lv_img_create(obj);
+    img_signal1 = lv_img_create(scr_home);
     lv_img_set_src(img_signal1, &img_network_1);
     lv_obj_align(img_signal1, LV_ALIGN_TOP_RIGHT, -96, 11);
+    lv_obj_add_flag(img_signal1, LV_OBJ_FLAG_HIDDEN);
 
-    img_signal2 = lv_img_create(obj);
+    img_signal2 = lv_img_create(scr_home);
     lv_img_set_src(img_signal2, &img_network_2);
     lv_obj_align(img_signal2, LV_ALIGN_TOP_RIGHT, -90, 8);
+    lv_obj_add_flag(img_signal2, LV_OBJ_FLAG_HIDDEN);
 
-    img_signal3 = lv_img_create(obj);
+    img_signal3 = lv_img_create(scr_home);
     lv_img_set_src(img_signal3, &img_network_3);
     lv_obj_align(img_signal3, LV_ALIGN_TOP_RIGHT, -84, 6);
+    lv_obj_add_flag(img_signal3, LV_OBJ_FLAG_HIDDEN);
 
-    img_signal4 = lv_img_create(obj);
+    img_signal4 = lv_img_create(scr_home);
     lv_img_set_src(img_signal4, &img_network_4);
     lv_obj_align(img_signal4, LV_ALIGN_TOP_RIGHT, -78, 3);
+    lv_obj_add_flag(img_signal4, LV_OBJ_FLAG_HIDDEN);
 
-    img_signal5 = lv_img_create(obj);
+    img_signal5 = lv_img_create(scr_home);
     lv_img_set_src(img_signal5, &img_network_5);
     lv_obj_align(img_signal5, LV_ALIGN_TOP_RIGHT, -72, 0);
+    lv_obj_add_flag(img_signal5, LV_OBJ_FLAG_HIDDEN);
 
-    img_no_signal = lv_img_create(obj);
+    img_no_signal = lv_img_create(scr_home);
     lv_img_set_src(img_no_signal, &img_no_network);
     lv_obj_align(img_no_signal, LV_ALIGN_TOP_RIGHT, -72, 4);
+    lv_obj_add_flag(img_no_signal, LV_OBJ_FLAG_HIDDEN);
 
-    label_time = lv_label_create(obj);
+    label_time = lv_label_create(scr_home);
     lv_obj_align(label_time, LV_ALIGN_TOP_RIGHT, 0, -5);
     lv_obj_add_style(label_time, &style_text_time, LV_STATE_DEFAULT);
+    lv_obj_add_flag(label_time, LV_OBJ_FLAG_HIDDEN);
 
-    img_footer = lv_img_create(obj);
+    img_footer = lv_img_create(scr_home);
     lv_img_set_src(img_footer, &bosch_logo);
     lv_obj_set_size(img_footer, 850, 200);
     lv_img_set_zoom(img_footer, 64);
     lv_obj_align(img_footer, LV_ALIGN_BOTTOM_RIGHT, 300, 50);
+    lv_obj_add_flag(img_footer, LV_OBJ_FLAG_HIDDEN);
 
-    img_location = lv_img_create(obj);
+    img_location = lv_img_create(scr_home);
     lv_img_set_src(img_location, &icon_location);
     lv_obj_align(img_location, LV_ALIGN_TOP_LEFT, 10, -10);
+    lv_obj_add_flag(img_location, LV_OBJ_FLAG_HIDDEN);
 
-    label_location = lv_label_create(obj);
+    label_location = lv_label_create(scr_home);
     lv_obj_align(label_location, LV_ALIGN_TOP_LEFT, 50, -5);
     lv_label_set_text(label_location, " ");
     lv_obj_add_style(label_location, &style_text_time, LV_STATE_DEFAULT);
+    lv_obj_add_flag(label_location, LV_OBJ_FLAG_HIDDEN);
 
     if (loc_text != NULL && char_count > 25) {
 
@@ -182,9 +194,10 @@ void allpage_status(lv_obj_t * obj)
     }
 
 
-    header_rect = lv_obj_create(obj);
+    header_rect = lv_obj_create(scr_home);
     lv_obj_set_size(header_rect, 550, 50);
     lv_obj_align(header_rect, LV_ALIGN_TOP_MID, 0, -30);
+    lv_obj_add_flag(header_rect, LV_OBJ_FLAG_HIDDEN);
     lv_obj_set_scrollbar_mode(header_rect, LV_SCROLLBAR_MODE_OFF);
     lv_obj_add_style(header_rect, &style_header_bar, LV_STATE_DEFAULT);
     lv_obj_add_event_cb(header_rect, header_icons_display, LV_EVENT_CLICKED, NULL);
@@ -192,9 +205,10 @@ void allpage_status(lv_obj_t * obj)
     header_text = lv_label_create(header_rect);
     lv_label_set_text(header_text, "............");
     lv_obj_align(header_text, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_add_flag(header_text, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_style(header_text, &style_header_text, LV_STATE_DEFAULT);
 
-    back_rect = lv_obj_create(obj);
+    back_rect = lv_obj_create(scr_home);
     lv_obj_set_size(back_rect, 200, 30);
     lv_obj_add_flag(back_rect, LV_OBJ_FLAG_HIDDEN);
     lv_obj_align_to(back_rect, header_rect, LV_ALIGN_OUT_BOTTOM_MID, 0, 20);
@@ -206,10 +220,9 @@ void allpage_status(lv_obj_t * obj)
     lv_img_set_zoom(img_arrow, 200);
     lv_obj_align(img_arrow, LV_ALIGN_CENTER, 0, 0);
 
-
     if (strcmp(admin_text, "Admin") == 0)
     {
-        label_guest = lv_label_create(obj);
+        label_guest = lv_label_create(scr_home);
         lv_label_set_text(label_guest, "Admin");
         lv_obj_add_flag(label_guest, LV_OBJ_FLAG_CLICKABLE);
         lv_obj_align(label_guest, LV_ALIGN_TOP_RIGHT, -200, -5);
@@ -218,8 +231,9 @@ void allpage_status(lv_obj_t * obj)
     }
     else
     {
-        label_guest = lv_label_create(obj);
+        label_guest = lv_label_create(scr_home);
         lv_label_set_text(label_guest, "Guest");
+        lv_obj_add_flag(label_guest, LV_OBJ_FLAG_HIDDEN);
         lv_obj_add_flag(label_guest, LV_OBJ_FLAG_CLICKABLE);
         lv_obj_align(label_guest, LV_ALIGN_TOP_RIGHT, -200, -5);
         lv_obj_add_style(label_guest, &style_text_time, LV_STATE_DEFAULT);
@@ -228,18 +242,22 @@ void allpage_status(lv_obj_t * obj)
 
     //////////// All Page Icons //////////////////
 
-    img_plug = lv_img_create(obj);
+    img_plug = lv_img_create(scr_home);
+    lv_obj_add_flag(img_plug, LV_OBJ_FLAG_HIDDEN);
     lv_obj_align(img_plug, LV_ALIGN_BOTTOM_LEFT, 8, 12);
 
-    label_plug = lv_label_create(obj);
+    label_plug = lv_label_create(scr_home);
     lv_obj_align(label_plug, LV_ALIGN_BOTTOM_LEFT, 90, -5);
+    lv_obj_add_flag(label_plug, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_style(label_plug, &style_text_plug, LV_STATE_DEFAULT);
 
-    img_health = lv_img_create(obj);
+    img_health = lv_img_create(scr_home);
+    lv_obj_add_flag(img_health, LV_OBJ_FLAG_HIDDEN);
     lv_obj_align(img_health, LV_ALIGN_TOP_RIGHT, 5, 30);
 
-    img_cloud_connection = lv_img_create(obj);
+    img_cloud_connection = lv_img_create(scr_home);
     lv_img_set_zoom(img_cloud_connection, 240);
+    lv_obj_add_flag(img_cloud_connection, LV_OBJ_FLAG_HIDDEN);
     lv_obj_align(img_cloud_connection, LV_ALIGN_TOP_RIGHT, 8, 115);
 
     task_timer = lv_timer_create(health_check_status, 1000, NULL);
@@ -248,14 +266,15 @@ void allpage_status(lv_obj_t * obj)
     lv_timer_set_repeat_count(task_timer, -1);
 }
 
-void health_check_status(lv_obj_t * obj)
+void health_check_status()
 {
     ///////////// Fetch System Time /////////////
     get_current_datetime(datetime_str);
     lv_label_set_text(label_time, datetime_str);
 
     ///////////// Health Icon Status ///////////////
-    if(HealthIcon == 1) {
+    if (HealthIcon == 1)
+    {
         lv_img_set_src(img_health, &red_failure);
     } else if(HealthIcon == 2) {
         lv_img_set_src(img_health, &white_confg);
@@ -301,10 +320,7 @@ void health_check_status(lv_obj_t * obj)
 void parse_json(const char *json) 
 {
     // Find "position" key
-    //const char *pos_start = strstr(json, "\"position\":");
     const char *pos_start = strstr(json, "\"position\":");
-    printf("JSON String: %s\n", json);
-    //printf("pos_start: %s\n", pos_start);
     
     if (pos_start) {
     char *pos_end = strstr(pos_start + 13, "\""); // Skip over opening double quote
@@ -487,7 +503,7 @@ void get_gsm_signal()
     }
     else
     {
-        lv_obj_clear_flag(img_no_signal, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(img_no_signal, LV_OBJ_FLAG_HIDDEN);
         
         lv_obj_set_style_img_recolor(img_signal1, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
         lv_obj_set_style_img_recolor_opa(img_signal1, LV_OPA_COVER, LV_STATE_DEFAULT);

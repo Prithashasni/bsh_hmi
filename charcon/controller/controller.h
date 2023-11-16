@@ -6,11 +6,16 @@
 extern void ui_start();
 extern void page_change();
 extern void admin_change();
+extern void admin_page();
 extern void wallbox_page();
+extern void delete_objects_on_page(int page);
+extern void delete_obj_on_headpage(int header_page);
 
 extern lv_timer_t *page_task;
 extern lv_timer_t *admin_task;
 extern int header_page;
 extern int prev_header_page;
+extern int prev_page;
+extern int user_flag;
 
 #endif //_CONTROLLER_H_

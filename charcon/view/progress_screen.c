@@ -18,8 +18,6 @@
 #include "pub_mqtt.h"
 
 /*Project Includes*/
-lv_obj_t *scr_progress;
-lv_obj_t *progress_text;
 lv_obj_t *img_money;
 lv_obj_t *img_power;
 lv_obj_t *chart1;
@@ -57,84 +55,79 @@ static lv_chart_series_t * ser2;
 
 void create_progress_screen()
 {
-    scr_progress = lv_obj_create(lv_scr_act());
-    lv_obj_set_size(scr_progress, 1280, 800);
-    lv_obj_clear_flag(scr_progress, LV_OBJ_FLAG_CLICKABLE);
-    lv_obj_set_scrollbar_mode(scr_progress, LV_SCROLLBAR_MODE_OFF);
-    lv_obj_add_style(scr_progress, &style_scr_backdrop, LV_STATE_DEFAULT);
 
-    allpage_status(scr_progress);
+    display_allpage_icons();
 
-    img_money = lv_img_create(scr_progress);
+    img_money = lv_img_create(scr_home);
     lv_img_set_src(img_money, &icon_money);
     lv_obj_align(img_money, LV_ALIGN_TOP_LEFT, 18, 100);
 
-    text_costgrid = lv_label_create(scr_progress);
+    text_costgrid = lv_label_create(scr_home);
     lv_label_set_text(text_costgrid, "Cost on Grid per kWh:");
     lv_obj_align(text_costgrid, LV_ALIGN_TOP_LEFT, 110, 100);
     lv_obj_add_style(text_costgrid, &style_check_text, LV_STATE_DEFAULT);
 
-    img_power = lv_img_create(scr_progress);
+    img_power = lv_img_create(scr_home);
     lv_img_set_src(img_power, &icon_power);
     lv_obj_align(img_power, LV_ALIGN_TOP_LEFT, 5, 210);
 
-    text_energy = lv_label_create(scr_progress);
+    text_energy = lv_label_create(scr_home);
     lv_label_set_text(text_energy, "Energy Consumed:");
     lv_obj_align(text_energy, LV_ALIGN_TOP_LEFT, 110, 215);
     lv_obj_add_style(text_energy, &style_check_text, LV_STATE_DEFAULT);
 
-    text_solar = lv_label_create(scr_progress);
+    text_solar = lv_label_create(scr_home);
     lv_label_set_text(text_solar, "Solar");
     lv_obj_align(text_solar, LV_ALIGN_TOP_LEFT, 110, 290);
     lv_obj_add_style(text_solar, &style_check_text, LV_STATE_DEFAULT);
 
-    text_grid = lv_label_create(scr_progress);
+    text_grid = lv_label_create(scr_home);
     lv_label_set_text(text_grid, "Grid");
     lv_obj_align(text_grid, LV_ALIGN_LEFT_MID, 110, -25);
     lv_obj_add_style(text_grid, &style_check_text, LV_STATE_DEFAULT);
 
-    text_total = lv_label_create(scr_progress);
+    text_total = lv_label_create(scr_home);
     lv_label_set_text(text_total, "Total Cost of Charging:");
     lv_obj_align(text_total, LV_ALIGN_LEFT_MID, 30, 60);
     lv_obj_add_style(text_total, &style_check_text, LV_STATE_DEFAULT);
 
-    text_time_charging = lv_label_create(scr_progress);
+    text_time_charging = lv_label_create(scr_home);
     lv_label_set_text(text_time_charging, "Time since Charging Start");
     lv_obj_align(text_time_charging, LV_ALIGN_BOTTOM_RIGHT, -100, -140);
     lv_obj_add_style(text_time_charging, &style_check_text, LV_STATE_DEFAULT);
 
     ////////////////// Physical values ////////////////////
-    img_cost_unit = lv_img_create(scr_progress);
+    img_cost_unit = lv_img_create(scr_home);
     lv_img_set_src(img_cost_unit, &img_cost);
     lv_obj_align(img_cost_unit, LV_ALIGN_TOP_LEFT, 110, 138);
 
-    cost_text = lv_label_create(scr_progress);
+    cost_text = lv_label_create(scr_home);
     lv_obj_align(cost_text, LV_ALIGN_TOP_LEFT, 140, 140);
     lv_obj_add_style(cost_text, &style_vehicle_text, LV_STATE_DEFAULT);    
 
-    solar_energy_text = lv_label_create(scr_progress);
+    solar_energy_text = lv_label_create(scr_home);
     lv_obj_add_flag(solar_energy_text, LV_OBJ_FLAG_HIDDEN);
     lv_obj_align(solar_energy_text, LV_ALIGN_TOP_LEFT, 230, 290);
     lv_obj_add_style(solar_energy_text, &style_yellow_text, LV_STATE_DEFAULT);
 
-    grid_energy_text = lv_label_create(scr_progress);
+    grid_energy_text = lv_label_create(scr_home);
     lv_obj_add_flag(grid_energy_text, LV_OBJ_FLAG_HIDDEN);
     lv_obj_align(grid_energy_text, LV_ALIGN_LEFT_MID, 230, -25);
     lv_obj_add_style(grid_energy_text, &style_blue_text, LV_STATE_DEFAULT);
 
-    img_tot_cost = lv_img_create(scr_progress);
+    img_tot_cost = lv_img_create(scr_home);
     lv_img_set_src(img_tot_cost, &img_tot);
     lv_obj_set_style_img_recolor(img_tot_cost,  lv_color_hex(0xf8b484), LV_STATE_DEFAULT);
     lv_obj_set_style_img_recolor_opa(img_tot_cost, LV_OPA_COVER, LV_STATE_DEFAULT);
     lv_obj_align(img_tot_cost, LV_ALIGN_LEFT_MID, 30, 112);
 
-    total_cost_value = lv_label_create(scr_progress);
+    total_cost_value = lv_label_create(scr_home);
     lv_obj_add_flag(total_cost_value, LV_OBJ_FLAG_HIDDEN);
     lv_obj_align(total_cost_value, LV_ALIGN_LEFT_MID, 70, 110);
     lv_obj_add_style(total_cost_value, &style_total_text, LV_STATE_DEFAULT);
 
     ////////////// Charging state ////////////////////
-    stop_button = lv_btn_create(scr_progress);
+    stop_button = lv_btn_create(scr_home);
     lv_obj_clear_flag(stop_button, LV_OBJ_FLAG_HIDDEN);
     lv_obj_set_size(stop_button, 150, 90);
     lv_obj_align(stop_button, LV_ALIGN_BOTTOM_LEFT, 30, -90);
@@ -146,13 +139,13 @@ void create_progress_screen()
     lv_obj_align(stop_text, LV_ALIGN_CENTER, 0, 0);
     lv_obj_add_style(stop_text, &style_stop_text, LV_STATE_DEFAULT);
 
-    terminate_text = lv_label_create(scr_progress);
+    terminate_text = lv_label_create(scr_home);
     lv_obj_add_flag(terminate_text, LV_OBJ_FLAG_HIDDEN);
     lv_label_set_text(terminate_text, "Terminating Charging Session");
     lv_obj_align(terminate_text, LV_ALIGN_BOTTOM_LEFT, 30, -110);
     lv_obj_add_style(terminate_text, &style_terminate_text, LV_STATE_DEFAULT);
 
-    img_terminate = lv_img_create(scr_progress);
+    img_terminate = lv_img_create(scr_home);
     lv_obj_add_flag(img_terminate, LV_OBJ_FLAG_HIDDEN);
     lv_img_set_src(img_terminate, &img_loader);
     lv_obj_align(img_terminate,  LV_ALIGN_BOTTOM_MID, 45, -50);
@@ -160,20 +153,20 @@ void create_progress_screen()
     lv_obj_set_style_img_recolor(img_terminate, LV_COLOR_RED, LV_STATE_DEFAULT);
     lv_obj_set_style_img_recolor_opa(img_terminate, LV_OPA_COVER, LV_STATE_DEFAULT);
 
-    charging_complete = lv_label_create(scr_progress);
+    charging_complete = lv_label_create(scr_home);
     lv_obj_add_flag(charging_complete, LV_OBJ_FLAG_HIDDEN);
     lv_label_set_text(charging_complete, "Charging Complete!");
     lv_obj_align(charging_complete, LV_ALIGN_BOTTOM_LEFT, 30, -145);
     lv_obj_add_style(charging_complete, &style_green_text, LV_STATE_DEFAULT);
 
-    unplug_text = lv_label_create(scr_progress);
+    unplug_text = lv_label_create(scr_home);
     lv_obj_add_flag(unplug_text, LV_OBJ_FLAG_HIDDEN);
     lv_label_set_text(unplug_text, "Please unplug the charger");
     lv_obj_align(unplug_text, LV_ALIGN_BOTTOM_LEFT, 30, -100);
     lv_obj_add_style(unplug_text, &style_white_text, LV_STATE_DEFAULT);
 
     /////////////// Progress chart ////////////////////
-    chart1 = lv_chart_create(scr_progress);
+    chart1 = lv_chart_create(scr_home);
     lv_obj_set_size(chart1, 500, 450);
     lv_obj_align(chart1, LV_ALIGN_RIGHT_MID, -100, -50);
     lv_chart_set_type(chart1, LV_CHART_TYPE_LINE);
@@ -199,7 +192,7 @@ void create_progress_screen()
     // // lv_chart_set_range(chart1, LV_CHART_AXIS_SECONDARY_Y, 0, 100);
     lv_chart_set_point_count(chart1, 50);
 
-    timer_label = lv_label_create(scr_progress);
+    timer_label = lv_label_create(scr_home);
     lv_obj_add_flag(timer_label, LV_OBJ_FLAG_HIDDEN);
     lv_obj_align(timer_label, LV_ALIGN_BOTTOM_RIGHT, -100, -95);
     lv_obj_add_style(timer_label, &style_white_text, LV_STATE_DEFAULT);

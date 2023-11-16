@@ -29,21 +29,14 @@ LV_IMG_DECLARE(error_icon)
 
 void wallbox_failure_status()
 {
-    scr_failure = lv_obj_create(lv_scr_act());
-    lv_obj_set_size(scr_failure, 1280, 800);
-    lv_obj_set_scrollbar_mode(scr_failure, LV_SCROLLBAR_MODE_OFF);
-    lv_obj_clear_flag(scr_failure, LV_OBJ_FLAG_CLICKABLE);
-    lv_obj_add_style(scr_failure, &style_scr_backdrop, LV_STATE_DEFAULT);
+    display_allpage_icons();
 
-    allpage_status(scr_failure);
-
-
-    failure_label = lv_label_create(scr_failure);
+    failure_label = lv_label_create(scr_home);
     lv_label_set_text(failure_label, "Wall Box Failure Detected");
     lv_obj_align(failure_label, LV_ALIGN_CENTER, 0, -270);
     lv_obj_add_style(failure_label, &style_failure_text, LV_STATE_DEFAULT);
 
-    service_label = lv_label_create(scr_failure);
+    service_label = lv_label_create(scr_home);
     lv_label_set_text(service_label, "Call Service Center");
     lv_obj_align(service_label, LV_ALIGN_CENTER, 0, 235);
     lv_obj_add_style(service_label, &style_failure_text, LV_STATE_DEFAULT);
@@ -55,20 +48,14 @@ void wallbox_failure_status()
 
 void wallbox_not_configured()
 {
-    scr_wallbox = lv_obj_create(lv_scr_act());
-    lv_obj_set_size(scr_wallbox, 1280, 800);
-    lv_obj_set_scrollbar_mode(scr_wallbox, LV_SCROLLBAR_MODE_OFF);
-    lv_obj_clear_flag(scr_wallbox, LV_OBJ_FLAG_CLICKABLE);
-    lv_obj_add_style(scr_wallbox, &style_scr_backdrop, LV_STATE_DEFAULT);
+    display_allpage_icons();
 
-    allpage_status(scr_wallbox);
-
-    configure_label = lv_label_create(scr_wallbox);
+    configure_label = lv_label_create(scr_home);
     lv_label_set_text(configure_label, "Charger not Configured!");
     lv_obj_align(configure_label, LV_ALIGN_CENTER, 0, -270);
     lv_obj_add_style(configure_label, &style_confg_text, LV_STATE_DEFAULT);
 
-    please_conf = lv_label_create(scr_wallbox);
+    please_conf = lv_label_create(scr_home);
     lv_label_set_text(please_conf, "Please Configure the Charger");
     lv_obj_align(please_conf, LV_ALIGN_CENTER, 0, 235);
     lv_obj_add_style(please_conf, &style_confg_text, LV_STATE_DEFAULT);

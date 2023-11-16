@@ -13,18 +13,45 @@
 #include <time.h>
 #include "../../lvgl/lvgl.h"
 
+
+extern lv_obj_t *img_profile;
+extern lv_obj_t *img_wifi;
+extern lv_obj_t *img_network;
+extern lv_obj_t *img_location;
+extern lv_obj_t *header_rect;
+extern lv_obj_t *back_rect;
+extern lv_obj_t *header_text;
+extern lv_obj_t *label_location;
+extern lv_obj_t *label_guest;
+extern lv_obj_t *label_time;
+extern lv_obj_t *img_footer;
+extern lv_obj_t *bg_object;
 extern lv_obj_t *img_charger;
+extern lv_obj_t *bosch_footer;
 extern lv_obj_t *label_plug;
 extern lv_obj_t *img_plug;
-extern lv_obj_t *label_guest;
-extern lv_obj_t *img_cloud;
-extern lv_obj_t *sw_text;
-extern lv_obj_t *img_vsecc;
 extern lv_obj_t *img_health;
-extern lv_obj_t *img_charcon;
-extern lv_obj_t *img_mc;
+extern lv_obj_t *img_settings;
+extern lv_obj_t *img_cloud;
+extern lv_obj_t *img_home;
 extern lv_obj_t *img_log;
+extern lv_obj_t *img_vsecc;
+extern lv_obj_t *img_charcon;
+extern lv_obj_t *img_signal1;
+extern lv_obj_t *img_signal2;
+extern lv_obj_t *img_signal3;
+extern lv_obj_t *img_signal4;
+extern lv_obj_t *img_signal5;
+extern lv_obj_t *img_mc;
+extern lv_obj_t *sw_text;
+extern lv_obj_t *home_text;
 extern lv_obj_t *log_text;
+extern lv_obj_t *vsecc_text;
+extern lv_obj_t *charcon_text;
+extern lv_obj_t *mc_text;
+extern lv_obj_t *img_cloud_connection;
+extern lv_obj_t *img_arrow;
+extern lv_obj_t *img_no_signal;
 
 LV_IMG_DECLARE(charger)
 LV_IMG_DECLARE(footer_logo)
@@ -64,11 +91,9 @@ extern const int CONST_CharconSettings;
 extern const int CONST_MasterControl;
 extern const int CONST_AdminLogsPage;
 
+
 /* Project Includes */
-extern void allpage_status(lv_obj_t *obj);
-extern void charger_plug_status(int PlugStatus, lv_obj_t *obj);
-extern void health_icon_status(int HealthIcon, lv_obj_t *obj);
-extern void cloud_connection_status(int CloudConnection, lv_obj_t *obj);
+extern void allpage_status();
 extern void header_icons_display();
 extern void scr_login();
 extern void header_icons_close();
@@ -77,10 +102,10 @@ extern void scr_vsecc_set();
 extern void scr_charcon_set();
 extern void scr_mc_set();
 extern void scr_log_set();
-extern void img_recolor(lv_obj_t *img, lv_obj_t *text);
-extern void health_check_status(lv_obj_t *obj);
+extern void health_check_status();
 extern void get_current_datetime(char *datetime_str);
 extern int get_position();
 extern void get_gsm_signal();
 extern void parse_json(const char *json);
+extern void scroll_location();
 #endif

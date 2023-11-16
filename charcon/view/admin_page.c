@@ -32,39 +32,31 @@ const char *text;
 lv_obj_t *text1;
 lv_obj_t *prev;
 lv_obj_t *prev_screen;
-lv_obj_t *scr_default;
 
 
 /////////// User Login Page //////////
 void admin_login_pages()
 {
-    scr_admin = lv_obj_create(lv_scr_act());
-    lv_obj_set_size(scr_admin, 1280, 800);
-    lv_obj_set_scrollbar_mode(scr_admin, LV_SCROLLBAR_MODE_OFF);
-    lv_obj_clear_flag(scr_admin, LV_OBJ_FLAG_CLICKABLE);
-    lv_obj_clear_flag(scr_admin, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_add_style(scr_admin, &style_scr_backdrop, LV_STATE_DEFAULT);
-
+    display_allpage_icons();
     lv_obj_add_flag(img_charger, LV_OBJ_FLAG_HIDDEN);
-    allpage_status(scr_admin);
 
-    login_text = lv_label_create(scr_admin);
+    login_text = lv_label_create(scr_home);
     lv_label_set_text(login_text, "Login to View/Change System Settings");
     lv_obj_align(login_text, LV_ALIGN_TOP_LEFT, 40, 120);
     lv_obj_add_style(login_text, &style_vehicle_text, LV_STATE_DEFAULT);
 
-    user_text = lv_label_create(scr_admin);
+    user_text = lv_label_create(scr_home);
     lv_label_set_text(user_text, "User ID:");
     lv_obj_align(user_text, LV_ALIGN_TOP_LEFT, 40, 260);
     lv_obj_add_style(user_text, &style_check_text, LV_STATE_DEFAULT);
 
-    pwd_text = lv_label_create(scr_admin);
+    pwd_text = lv_label_create(scr_home);
     lv_label_set_text(pwd_text, "Password:");
     lv_obj_align(pwd_text, LV_ALIGN_TOP_LEFT, 40, 350);
     lv_obj_add_style(pwd_text, &style_check_text, LV_STATE_DEFAULT);
 
     //// Text box
-    text_ta = lv_textarea_create(scr_admin);
+    text_ta = lv_textarea_create(scr_home);
     lv_obj_set_size(text_ta, 350, 150);
     lv_obj_align(text_ta, LV_ALIGN_TOP_LEFT, 220, 250);
     lv_textarea_set_one_line(text_ta, true);
@@ -74,7 +66,7 @@ void admin_login_pages()
     lv_obj_add_event_cb(text_ta, ta_event_cb, LV_EVENT_ALL, NULL);
 
     //// Password box
-    pwd_ta = lv_textarea_create(scr_admin);
+    pwd_ta = lv_textarea_create(scr_home);
     lv_obj_set_size(pwd_ta, 350, 150);
     lv_obj_align(pwd_ta, LV_ALIGN_TOP_LEFT, 220, 340);
     lv_textarea_set_text(pwd_ta, "");
@@ -84,7 +76,7 @@ void admin_login_pages()
     lv_obj_add_style(pwd_ta, &style_textbox, LV_PART_MAIN);
     lv_obj_add_event_cb(pwd_ta, ta_event_cb, LV_EVENT_ALL, NULL);
 
-    keyboard_area = lv_keyboard_create(scr_admin);
+    keyboard_area = lv_keyboard_create(scr_home);
     lv_obj_clear_flag(keyboard_area, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_size(keyboard_area, 600, 300);
     lv_obj_align(keyboard_area, LV_ALIGN_RIGHT_MID, -30, 10);
@@ -93,7 +85,7 @@ void admin_login_pages()
     lv_obj_add_style(keyboard_area, &style_keyboard_btn, LV_PART_ITEMS);
 
     ///// Cancel Button
-    cancel_button = lv_btn_create(scr_admin);
+    cancel_button = lv_btn_create(scr_home);
     lv_obj_set_size(cancel_button, 230, 80);
     lv_obj_align(cancel_button, LV_ALIGN_LEFT_MID, 50, 200);
     lv_obj_add_style(cancel_button, &style_red_button, LV_STATE_DEFAULT);
@@ -158,7 +150,7 @@ static void ta_event_cb(lv_event_t * e)
         }
         else 
         {
-            text1 = lv_label_create(scr_admin);
+            text1 = lv_label_create(scr_home);
             lv_label_set_text(text1, "Incorrect username or password");
             lv_obj_align_to(text1, pwd_ta, LV_ALIGN_OUT_BOTTOM_MID, -140, 20);
             lv_obj_add_style(text1, &style_red_text, LV_STATE_DEFAULT);
@@ -170,27 +162,13 @@ static void ta_event_cb(lv_event_t * e)
 ////////// A call back for previous screen ////////
 void prev_screen_cb()
 {
+    prev_page = -1;
+    user_flag = 0;
+    wallbox_page();
+    delete_obj_on_headpage(header_page);
     header_page = 0;
     prev_header_page = -1;
-    wallbox_page();
 }
 
-///////////////// Deafault screen ///////////////////
-void home_screen()
-{
-    scr_default = lv_obj_create(lv_scr_act());
-    lv_obj_set_size(scr_default, 1280, 800);
-    lv_obj_set_scrollbar_mode(scr_default, LV_SCROLLBAR_MODE_OFF);
-    lv_obj_clear_flag(scr_default, LV_OBJ_FLAG_CLICKABLE);
-    lv_obj_clear_flag(scr_default, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_add_style(scr_default, &style_scr_backdrop, LV_STATE_DEFAULT);
 
-    allpage_status(scr_default);
-
-    ready_text = lv_label_create(scr_default);
-    lv_label_set_text(ready_text, "Charger Ready! Please Plug in to start Charging");
-    lv_obj_align(ready_text, LV_ALIGN_CENTER, 0, -260);
-    lv_obj_add_style(ready_text, &style_dc_ready, LV_STATE_DEFAULT);
-
-}
 
