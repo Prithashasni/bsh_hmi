@@ -24,7 +24,7 @@ extern lv_obj_t *cancel_button;
 extern lv_obj_t *cancel_text;
 extern lv_obj_t *car_plugged;
 extern const char *text;
-extern lv_obj_t *text1;
+extern lv_obj_t *text_inc;
 extern lv_obj_t *prev;
 extern lv_obj_t *prev_screen;
 

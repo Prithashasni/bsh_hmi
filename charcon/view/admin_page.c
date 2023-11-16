@@ -29,7 +29,7 @@ lv_obj_t *cancel_button;
 lv_obj_t *cancel_text;
 lv_obj_t *car_plugged;
 const char *text;
-lv_obj_t *text1;
+lv_obj_t *text_inc;
 lv_obj_t *prev;
 lv_obj_t *prev_screen;
 
@@ -144,16 +144,16 @@ static void ta_event_cb(lv_event_t * e)
             // LV_LOG_USER("Admin text");
             lv_label_set_text(label_guest, "Admin");
             strcpy(admin_text, "Admin");
-            if(text1 != NULL){
-                lv_obj_add_flag(text1, LV_OBJ_FLAG_HIDDEN);
-            }  
+            if(text_inc != NULL){
+                lv_obj_add_flag(text_inc, LV_OBJ_FLAG_HIDDEN);
+            } 
         }
         else 
         {
-            text1 = lv_label_create(scr_home);
-            lv_label_set_text(text1, "Incorrect username or password");
-            lv_obj_align_to(text1, pwd_ta, LV_ALIGN_OUT_BOTTOM_MID, -140, 20);
-            lv_obj_add_style(text1, &style_red_text, LV_STATE_DEFAULT);
+            text_inc = lv_label_create(scr_home);
+            lv_label_set_text(text_inc, "Incorrect username or password");
+            lv_obj_align_to(text_inc, pwd_ta, LV_ALIGN_OUT_BOTTOM_MID, -140, 20);
+            lv_obj_add_style(text_inc, &style_red_text, LV_STATE_DEFAULT);
         }
     }
 }

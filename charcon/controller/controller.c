@@ -273,6 +273,7 @@ void delete_obj_on_headpage(int header_page)
         lv_obj_del(pwd_text);
         lv_obj_del(text_ta);
         lv_obj_del(pwd_ta);
+        lv_obj_del(text_inc);
         lv_obj_del(keyboard_area);
         lv_obj_del(cancel_button);
     }
