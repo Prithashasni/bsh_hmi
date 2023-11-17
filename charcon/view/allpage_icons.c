@@ -555,7 +555,7 @@ void header_icons_display()
     lv_img_set_src(img_home, &home_icon);
     lv_obj_align(img_home, LV_ALIGN_TOP_RIGHT, -5, -5);
     lv_obj_add_flag(img_home, LV_OBJ_FLAG_CLICKABLE);
-    lv_obj_add_event_cb(img_home, home_screen, LV_EVENT_PRESSED, NULL);
+    // lv_obj_add_event_cb(img_home, home_screen, LV_EVENT_PRESSED, NULL);
 
     home_text = lv_label_create(header_rect);
     lv_label_set_text(home_text, "Home");
