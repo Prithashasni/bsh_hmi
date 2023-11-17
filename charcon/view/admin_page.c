@@ -84,6 +84,12 @@ void admin_login_pages()
     lv_obj_add_style(keyboard_area, &style_keyboard, LV_PART_MAIN);
     lv_obj_add_style(keyboard_area, &style_keyboard_btn, LV_PART_ITEMS);
 
+    text_inc = lv_label_create(scr_home);
+    lv_label_set_text(text_inc, "Incorrect username or password");
+    lv_obj_add_flag(text_inc, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_align_to(text_inc, pwd_ta, LV_ALIGN_OUT_BOTTOM_MID, -140, 20);
+    lv_obj_add_style(text_inc, &style_red_text, LV_STATE_DEFAULT);
+
     ///// Cancel Button
     cancel_button = lv_btn_create(scr_home);
     lv_obj_set_size(cancel_button, 230, 80);
@@ -138,11 +144,6 @@ static void ta_event_cb(lv_event_t * e)
         const char *text =  lv_textarea_get_text(text_ta);
         const char *ta =  lv_textarea_get_text(pwd_ta);
 
-        text_inc = lv_label_create(scr_home);
-        lv_label_set_text(text_inc, "Incorrect username or password");
-        lv_obj_add_flag(text_inc, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_align_to(text_inc, pwd_ta, LV_ALIGN_OUT_BOTTOM_MID, -140, 20);
-        lv_obj_add_style(text_inc, &style_red_text, LV_STATE_DEFAULT);
         // save_username(text);
         // save_password(ta);
         if(strcmp(text, "admin") == 0 && strcmp(ta,"admin") == 0)

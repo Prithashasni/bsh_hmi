@@ -33,6 +33,7 @@ lv_style_t style_keyboard;
 lv_style_t style_keyboard_btn;
 lv_style_t style_textbox;
 lv_style_t style_red_button;
+lv_style_t style_blue_button;
 lv_style_t style_red_text;
 lv_style_t style_page_bg;
 lv_style_t style_numbox;
@@ -195,8 +196,16 @@ void init_style_backdrop()
     lv_style_set_clip_corner(&style_red_button, true);
     lv_style_set_border_color(&style_red_button, lv_color_hex(0xc40404));
     lv_style_set_radius(&style_red_button, 10);
-    lv_style_set_border_width(&style_red_button, 2);
+    lv_style_set_border_width(&style_red_button, 3);
     lv_style_set_shadow_width(&style_red_button, 0);
+
+    lv_style_init(&style_blue_button);
+    lv_style_set_bg_color(&style_blue_button, lv_color_hex(0x4472c4));
+    lv_style_set_clip_corner(&style_blue_button, true);
+    lv_style_set_border_color(&style_blue_button, lv_color_hex(0x30508f));
+    lv_style_set_radius(&style_blue_button, 10);
+    lv_style_set_border_width(&style_blue_button, 3);
+    lv_style_set_shadow_width(&style_blue_button, 0);
 
     lv_style_init(&style_page_bg);
     lv_style_set_bg_opa(&style_page_bg, LV_OPA_0);

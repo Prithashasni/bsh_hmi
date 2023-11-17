@@ -67,6 +67,8 @@ extern lv_obj_t *vsecc_underline;
 extern lv_obj_t *charcon_underline;
 extern lv_obj_t *mc_underline;
 extern lv_obj_t *logs_underline;
+extern lv_obj_t *export_logs;
+extern lv_obj_t *export_text;
 extern lv_timer_t *rect_timer;
 extern lv_timer_t *rect1_timer;
 extern lv_timer_t *log_timer;

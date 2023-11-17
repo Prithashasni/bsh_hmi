@@ -49,6 +49,7 @@ extern lv_style_t style_keyboard;
 extern lv_style_t style_keyboard_btn;
 extern lv_style_t style_textbox;
 extern lv_style_t style_red_button;
+extern lv_style_t style_blue_button;
 extern lv_style_t style_red_text;
 extern lv_style_t style_page_bg;
 extern lv_style_t style_numbox;

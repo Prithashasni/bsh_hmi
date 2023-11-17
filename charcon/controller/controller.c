@@ -1,3 +1,10 @@
+/**
+ * controller.c
+ *
+ * Created on: 28-Aug-2023
+ * Author: PSI2COB
+ */
+
 /* The file that controls the UI State */
 #include <stdio.h>
 #include <stdlib.h>
@@ -355,5 +362,7 @@ void delete_obj_on_headpage(int header_page)
         lv_obj_del(logs_underline);
         lv_obj_del(logs_page);
         lv_obj_del(cancel_logs);
+        lv_obj_del(export_logs);
+
     }
 }

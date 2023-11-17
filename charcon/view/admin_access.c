@@ -65,6 +65,8 @@ lv_obj_t *vsecc_underline;
 lv_obj_t *charcon_underline;
 lv_obj_t *mc_underline;
 lv_obj_t *logs_underline;
+lv_obj_t *export_logs;
+lv_obj_t *export_text;
 lv_timer_t *log_timer;
 lv_timer_t *rect_timer;
 lv_timer_t *rect1_timer;
@@ -585,9 +587,10 @@ void scr_logs_page()
     lv_obj_add_style(logs_page, &style_log_text, LV_PART_MAIN);
 
     ///// Cancel Button
-    cancel_logs = lv_btn_create(scr_home);
-    lv_obj_set_size(cancel_logs, 200, 80);
+    cancel_logs = lv_obj_create(scr_home);
+    lv_obj_set_size(cancel_logs, 180, 70);
     lv_obj_align(cancel_logs, LV_ALIGN_LEFT_MID, 65, 270);
+    lv_obj_set_scrollbar_mode(cancel_logs, LV_SCROLLBAR_MODE_OFF);
     lv_obj_add_style(cancel_logs, &style_red_button, LV_STATE_DEFAULT);
     lv_obj_add_flag(cancel_logs, LV_OBJ_FLAG_EVENT_BUBBLE);
     lv_obj_clear_flag(cancel_logs, LV_OBJ_FLAG_HIDDEN);
@@ -596,8 +599,23 @@ void scr_logs_page()
     cancel_text = lv_label_create(cancel_logs);
     lv_label_set_text(cancel_text, "Cancel");
     lv_obj_align(cancel_text, LV_ALIGN_CENTER, 0, 0);
-    lv_obj_set_style_text_font(cancel_text, &lv_font_montserrat_36, LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(cancel_text, &lv_font_montserrat_34, LV_STATE_DEFAULT);
     lv_obj_set_style_text_color(cancel_text, LV_COLOR_WHITE, LV_STATE_DEFAULT); 
+
+    ///// Export button
+    export_logs = lv_obj_create(scr_home);
+    lv_obj_set_size(export_logs, 350, 70);
+    lv_obj_align(export_logs, LV_ALIGN_RIGHT_MID, -65, 270);
+    lv_obj_set_scrollbar_mode(export_logs, LV_SCROLLBAR_MODE_OFF);  
+    lv_obj_add_style(export_logs, &style_blue_button, LV_STATE_DEFAULT);
+    lv_obj_add_flag(export_logs, LV_OBJ_FLAG_EVENT_BUBBLE);
+    lv_obj_clear_flag(export_logs, LV_OBJ_FLAG_HIDDEN);
+
+    export_text = lv_label_create(export_logs);
+    lv_label_set_text(export_text, "Export Logs to Cloud");
+    lv_obj_align(export_text, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_set_style_text_font(export_text, &lv_font_montserrat_28, LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(export_text, LV_COLOR_WHITE, LV_STATE_DEFAULT); 
 
     add_log();
 }
