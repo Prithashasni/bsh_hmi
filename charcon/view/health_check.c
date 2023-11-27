@@ -35,7 +35,8 @@ lv_obj_t *initialize_text;
 lv_obj_t *scr_check;
 lv_obj_t *check1_good;
 lv_obj_t *check2_good;
-lv_obj_t *scr_init;
+lv_obj_t *test_b1;
+lv_obj_t *test_b2;
 
 lv_timer_t * check_task;
 
@@ -121,7 +122,8 @@ void anim_zoom_cb(void *var, int32_t v)
 void cable_check_status()
 {
     /////////////////// Cable Check Status //////////////////
-    if(CableCheckStatus == 1) {
+    if (CableCheckStatus == 1)
+    {
         lv_obj_add_flag(check1_good, LV_OBJ_FLAG_HIDDEN);
         lv_obj_clear_flag(check1_text, LV_OBJ_FLAG_HIDDEN);
 
@@ -175,6 +177,29 @@ void cable_check_status()
     }
 }
 
+void scr_initial()
+{
+    lv_obj_del(img_red_check);
+    lv_obj_del(label_dc_text);
+    lv_obj_del(cable_text);
+    lv_obj_del(power_text);
+    lv_obj_del(check1_text);
+    lv_obj_del(check1_good);
+    lv_obj_del(check2_text);
+    lv_obj_del(check2_good);
+    lv_obj_del(img_green_check);
+    lv_obj_del(ready_text);
+    lv_anim_del(check1_text, anim_opacity_cb);
+    lv_anim_del(check2_text, anim_opacity_cb);
+    lv_anim_del(img_red_check, anim_zoom_cb);
+
+    // //// Test
+    lv_obj_del(test_b1);
+    HeartBeatMsg = -1;
+
+    initialize_device();
+}
+
 ////////////////////////     Device Iniatializing    ///////////////////////
 
 void initialize_device()
@@ -210,4 +235,16 @@ void initialize_device()
 void anim_rotate_cb(void * var, int32_t v)
 {
     lv_img_set_angle(var, v);
+}
+
+void scr_chart()
+{
+    lv_obj_del(test_b2);
+    lv_obj_del(initialize_text);
+    lv_obj_del(img_initializing);
+    lv_obj_del(connection_text);
+    lv_anim_del(img_initializing, anim_rotate_cb);
+
+    create_progress_screen();
+
 }

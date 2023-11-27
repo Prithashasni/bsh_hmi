@@ -16,7 +16,7 @@
 
 extern lv_obj_t *scr_home;
 extern lv_obj_t *img_bosch_logo;
-extern lv_obj_t *default_text;
+extern lv_obj_t *default_heading;
 
 LV_IMG_DECLARE(bosch_logo)
 

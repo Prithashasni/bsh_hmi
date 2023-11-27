@@ -275,36 +275,53 @@ void health_check_status()
     if (HealthIcon == 1)
     {
         lv_img_set_src(img_health, &red_failure);
-    } else if(HealthIcon == 2) {
+    }
+    else if (HealthIcon == 2)
+    {
         lv_img_set_src(img_health, &white_confg);
-    } else if(HealthIcon == 3) {
+    }
+    else if (HealthIcon == 3)
+    {
         lv_img_set_src(img_health, &icon_good);
     }
 
     /////////// Charger Plug Status ///////////////
 
-    if(PlugStatus == 0) {
+    if (PlugStatus == 0)
+    {
         lv_img_set_src(img_plug, &icon_not_plug);
         lv_style_set_text_color(&style_text_plug, LV_COLOR_WHITE);
         lv_label_set_text(label_plug, "NOT PLUGGED");
-    } else if(PlugStatus == 1) {
+
+    }
+    else if (PlugStatus == 1)
+    {
         lv_img_set_src(img_plug, &icon_connect);
         lv_style_set_text_color(&style_text_plug, LV_COLOR_GREEN);
         lv_label_set_text(label_plug, "CONNECTED");
-    } else if(PlugStatus == 2) {
+
+    }
+    else if (PlugStatus == 2)
+    {
         lv_img_set_src(img_plug, &icon_charging);
         lv_style_set_text_color(&style_text_plug, lv_color_hex(0x98d4fc));
         lv_label_set_text(label_plug, "CHARGING");
-    } else if(PlugStatus == 3) {
+    }
+    else if (PlugStatus == 3)
+    {
         lv_img_set_src(img_plug, &icon_connect_error);
         lv_style_set_text_color(&style_text_plug, lv_color_hex(0xFF0404));
         lv_label_set_text(label_plug, "CONNECTION ERROR");
+
     }
 
     /////////// Cloud Status /////////////////
-    if(CloudConnection == 0) {
+    if (CloudConnection == 0)
+    {
         lv_img_set_src(img_cloud_connection, &cloud_failure);
-    } else if(CloudConnection == 1) {
+    }
+    else if (CloudConnection == 1)
+    {
         lv_img_set_src(img_cloud_connection, &cloud_connect);
     }
 
@@ -605,7 +622,8 @@ void header_icons_display()
     lv_obj_set_style_text_color(mc_text, lv_color_hex(0xB0ACAC), LV_STATE_DEFAULT);
     lv_obj_add_style(mc_text, &style_icon_text, LV_STATE_DEFAULT);
 
-    if(strcmp(admin_text, "Admin") == 0) {
+    if (strcmp(admin_text, "Admin") == 0)
+    {
 
         lv_obj_set_style_img_recolor(img_log, LV_COLOR_WHITE, LV_STATE_DEFAULT);
         lv_obj_set_style_img_recolor_opa(img_log, LV_OPA_COVER, LV_STATE_DEFAULT);

@@ -36,9 +36,14 @@ extern lv_obj_t *timer_label;
 extern lv_obj_t *img_terminate;
 extern lv_obj_t *img_cost_unit;
 extern lv_obj_t *img_tot_cost;
+extern lv_obj_t *scr_progress;
 
 extern lv_timer_t *timer_task;
 extern lv_timer_t *progress_task;
+extern lv_chart_series_t * ser1;
+extern lv_chart_series_t * ser2;
+
+extern int sec, min, hr;
 
 LV_IMG_DECLARE(icon_money)
 LV_IMG_DECLARE(icon_power)

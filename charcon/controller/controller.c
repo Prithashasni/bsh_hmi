@@ -31,6 +31,8 @@ int prev_page;
 int header_page = 0;
 int prev_header_page = 0;
 int user_flag;
+int prog_flag = 0;
+int admin_flag = 0;
 
 void ui_start()
 {
@@ -53,9 +55,14 @@ void page_change()
 {
     if (Page != CONST_DeviceFailure && header_page != 0)
     {
-        if (prev_header_page != header_page)
+        if (prev_header_page != header_page && Page != CONST_ChargingProgressPage)
         {
             admin_page();
+        }
+        if (prev_header_page != header_page && Page == CONST_ChargingProgressPage)
+        {
+            admin_flag = -1;
+            progress_admin_page();
         }
     }
     else if (prev_page != Page)
@@ -65,6 +72,109 @@ void page_change()
     }
 }
 
+void progress_admin_page()
+{
+    progress_page_hidden();
+    if (header_page == CONST_AdminLoginPage)
+    {
+        if (user_flag != 0)
+        {
+            admin_login_pages();
+            delete_obj_on_headpage(user_flag);
+            prev_header_page = CONST_AdminLoginPage;
+            user_flag = CONST_AdminLoginPage;
+        }
+        else{
+            admin_login_pages();
+            progress_page_hidden();
+            prev_header_page = CONST_AdminLoginPage;
+            user_flag = CONST_AdminLoginPage;
+        }
+    }
+    else if (header_page == CONST_SoftwareUpdate)
+    {
+        if (user_flag != 0)
+        {
+            scr_software_update();
+            delete_obj_on_headpage(user_flag);
+            prev_header_page = CONST_SoftwareUpdate;
+            user_flag = CONST_SoftwareUpdate;
+        }
+        else
+        {
+            scr_software_update();
+            progress_page_hidden();
+            prev_header_page = CONST_SoftwareUpdate;
+            user_flag = CONST_SoftwareUpdate;
+        }
+    }
+    else if (header_page == CONST_VseccSettings)
+    {
+        if (user_flag != 0)
+        {
+            scr_vsecc_settings();
+            delete_obj_on_headpage(user_flag);
+            prev_header_page = CONST_VseccSettings;
+            user_flag = CONST_VseccSettings;
+        }
+        else{
+            scr_vsecc_settings();
+            progress_page_hidden();
+            prev_header_page = CONST_VseccSettings;
+            user_flag = CONST_VseccSettings;
+        }
+    }
+    else if (header_page == CONST_CharconSettings)
+    {
+        if (user_flag != 0)
+        {
+            scr_charcon_settings();
+            delete_obj_on_headpage(user_flag);
+            prev_header_page = CONST_CharconSettings;
+            user_flag = CONST_CharconSettings;
+        }
+        else{
+            scr_charcon_settings();
+            progress_page_hidden();
+            prev_header_page = CONST_CharconSettings;
+            user_flag = CONST_CharconSettings;
+        }
+    }
+    else if (header_page == CONST_MasterControl)
+    {
+        if (user_flag != 0)
+        {
+            scr_master_control();
+            delete_obj_on_headpage(user_flag);
+            prev_header_page = CONST_MasterControl;
+            user_flag = CONST_MasterControl;
+        }
+        else{
+            scr_master_control();
+            progress_page_hidden();
+            prev_header_page = CONST_MasterControl;
+            user_flag = CONST_MasterControl;
+        }
+    }
+    else if (header_page == CONST_AdminLogsPage)
+    {
+        if (user_flag != 0)
+        {
+            scr_logs_page();
+            delete_obj_on_headpage(user_flag);
+            prev_header_page = CONST_AdminLogsPage;
+            user_flag = CONST_AdminLogsPage;
+        }
+        else{
+            scr_logs_page();
+            progress_page_hidden();
+            prev_header_page = CONST_AdminLogsPage;
+            user_flag = CONST_AdminLogsPage;
+        }
+    }
+}
+
+/* User Admin Pages Logic */
 void admin_page()
 {
     prev_page = Page;
@@ -93,7 +203,8 @@ void admin_page()
             prev_header_page = CONST_SoftwareUpdate;
             user_flag = CONST_SoftwareUpdate;
         }
-        else{
+        else
+        {
             scr_software_update();
             delete_objects_on_page(prev_page);
             prev_header_page = CONST_SoftwareUpdate;
@@ -199,9 +310,22 @@ void wallbox_page()
     }
     else if (Page == CONST_ChargingProgressPage)
     {
-        create_progress_screen();
-        delete_objects_on_page(prev_page);   
-        prev_page = CONST_ChargingProgressPage;
+        if(prog_flag != 0)
+        {
+            admin_to_progress();
+            delete_objects_on_page(prev_page);
+            prev_page = CONST_ChargingProgressPage;
+        }
+        else{
+            display_allpage_icons();
+            progress_task = lv_timer_create(create_progress_chart, 1000, NULL);
+            if(ChargingState == 0){
+                timer_task = lv_timer_create(charge_timer_start, 1000, NULL);
+            }
+            progress_page_display();
+            delete_objects_on_page(prev_page);
+            prev_page = CONST_ChargingProgressPage;
+        }
     }
     else if (Page == CONST_MissingConfig)
     {
@@ -217,6 +341,80 @@ void wallbox_page()
     }
 }
 
+/* Hide Progress Page */
+void progress_page_hidden()
+{
+    ChargingState = -1;
+
+    lv_obj_add_flag(img_money, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(text_costgrid, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(img_power, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(text_energy, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(text_solar, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(text_grid, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(text_total, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(text_time_charging, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(img_cost_unit, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(cost_text, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(solar_energy_text, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(grid_energy_text, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(img_tot_cost, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(total_cost_value, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(stop_button, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(terminate_text, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(img_terminate, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(charging_complete, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(unplug_text, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(chart1, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(timer_label, LV_OBJ_FLAG_HIDDEN);
+}
+
+
+/* Admin to progress page callback */
+void admin_to_progress()
+{
+    lv_obj_clear_flag(img_money, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(text_costgrid, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(img_power, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(text_energy, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(text_solar, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(text_grid, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(text_total, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(text_time_charging, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(img_cost_unit, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(cost_text, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(solar_energy_text, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(grid_energy_text, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(img_tot_cost, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(total_cost_value, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(stop_button, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(chart1, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(timer_label, LV_OBJ_FLAG_HIDDEN);
+}
+
+/* Display Progress Page */
+void progress_page_display()
+{
+    lv_obj_clear_flag(img_money, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(text_costgrid, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(img_power, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(text_energy, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(text_solar, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(text_grid, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(text_total, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(text_time_charging, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(img_cost_unit, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(cost_text, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(solar_energy_text, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(grid_energy_text, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(img_tot_cost, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(total_cost_value, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(stop_button, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(chart1, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_clear_flag(timer_label, LV_OBJ_FLAG_HIDDEN);
+}
+
+/* Deleting objects on previous pages*/
 void delete_objects_on_page(int prev_page)
 {
     if (prev_page == CONST_DeviceFailure)
@@ -252,29 +450,16 @@ void delete_objects_on_page(int prev_page)
     }
     else if (prev_page == CONST_ChargingProgressPage)
     {
-        lv_obj_del(img_money);
-        lv_obj_del(text_costgrid);
-        lv_obj_del(img_power);
-        lv_obj_del(text_energy);
-        lv_obj_del(text_solar);
-        lv_obj_del(text_grid);
-        lv_obj_del(text_total);
-        lv_obj_del(text_time_charging);
-        lv_obj_del(img_cost_unit);
-        lv_obj_del(cost_text);
-        lv_obj_del(solar_energy_text);
-        lv_obj_del(grid_energy_text);
-        lv_obj_del(img_tot_cost);
-        lv_obj_del(total_cost_value);
-        lv_obj_del(stop_button);
-        lv_obj_del(terminate_text);
-        lv_obj_del(img_terminate);
-        lv_obj_del(charging_complete);
-        lv_obj_del(unplug_text);
-        lv_obj_del(chart1);
-        lv_obj_del(timer_label);
-        lv_timer_del(progress_task);
-        lv_timer_del(timer_task);
+        sec = 0;
+        min = 0;
+        hr = 0;
+        lv_chart_set_all_value(chart1, ser1, LV_CHART_POINT_NONE);
+        lv_chart_set_all_value(chart1, ser2, LV_CHART_POINT_NONE);
+        lv_timer_pause(progress_task);
+        lv_timer_pause(timer_task);
+
+        progress_page_hidden();
+
     }
     else if (prev_page == CONST_MissingConfig)
     {
@@ -284,7 +469,7 @@ void delete_objects_on_page(int prev_page)
     }
     else if (prev_page == CONST_ReadyToCharge)
     {
-        lv_obj_del(default_text);
+        lv_obj_del(default_heading);
     }
 }
 
@@ -334,12 +519,12 @@ void delete_obj_on_headpage(int header_page)
         lv_obj_del(charcon_current_value);
         lv_obj_del(voltage_label);
         lv_obj_del(voltage_value);
-        lv_obj_del(charcon_ta);
-        lv_obj_del(charcon_keyboard_area);
-        lv_obj_del(rect_ta);
-        lv_obj_del(cancel_charcon);
+        lv_obj_add_flag(charcon_ta, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(charcon_keyboard_area, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(rect_ta, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(cancel_charcon, LV_OBJ_FLAG_HIDDEN);
     }
-    else if(header_page == CONST_MasterControl)
+    else if (prev_header_page == CONST_MasterControl)
     {
         lv_timer_del(rect1_timer);
         lv_obj_del(icon_mc);
@@ -348,13 +533,12 @@ void delete_obj_on_headpage(int header_page)
         lv_obj_del(mc_current_limit);
         lv_obj_del(mc_mode_label);
         lv_obj_del(mc_mode_value);
-        lv_obj_del(mc_ta);
-        lv_obj_del(mc_keyboard_area);
-        lv_obj_del(rect_ta1);
-        lv_obj_del(cancel_mc);
-    
+        lv_obj_add_flag(mc_ta, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(mc_keyboard_area, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(rect_ta1, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_flag(cancel_mc, LV_OBJ_FLAG_HIDDEN);
     }
-    else if(header_page == CONST_AdminLogsPage)
+    else if (prev_header_page == CONST_AdminLogsPage)
     {
         lv_timer_del(log_timer);
         lv_obj_del(icon_log);

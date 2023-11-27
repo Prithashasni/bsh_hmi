@@ -15,7 +15,7 @@
 
 lv_obj_t *scr_home;
 lv_obj_t *img_bosch_logo;
-lv_obj_t *default_text;
+lv_obj_t *default_heading;
 
 void create_launch_screen()
 {   
@@ -29,6 +29,7 @@ void create_launch_screen()
     lv_obj_align(img_bosch_logo, LV_ALIGN_CENTER, 0, 0);
 
     allpage_status();
+    create_progress_screen();
 
     img_animation(img_bosch_logo);
 }
@@ -79,10 +80,10 @@ void home_screen()
 {
   display_allpage_icons();
 
-    default_text = lv_label_create(scr_home);
-    lv_label_set_text(default_text, "Charger Ready! Please Plug in to start Charging");
-    lv_obj_align(default_text, LV_ALIGN_CENTER, 0, -260);
-    lv_obj_add_style(default_text, &style_dc_ready, LV_STATE_DEFAULT);
+    default_heading = lv_label_create(scr_home);
+    lv_label_set_text(default_heading, "Charger Ready! Please Plug in to start Charging");
+    lv_obj_align(default_heading, LV_ALIGN_CENTER, 0, -260);
+    lv_obj_add_style(default_heading, &style_dc_ready, LV_STATE_DEFAULT);
 }
 
 

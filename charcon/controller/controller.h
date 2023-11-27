@@ -15,6 +15,10 @@ extern void page_change();
 extern void admin_change();
 extern void admin_page();
 extern void wallbox_page();
+extern void progress_admin_page();
+extern void progress_page_hidden();
+extern void progress_page_display();
+extern void admin_to_progress();
 extern void delete_objects_on_page(int page);
 extern void delete_obj_on_headpage(int header_page);
 
@@ -24,5 +28,7 @@ extern int header_page;
 extern int prev_header_page;
 extern int prev_page;
 extern int user_flag;
+extern int prog_flag;
+extern int admin_flag;
 
 #endif //_CONTROLLER_H_

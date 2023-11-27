@@ -169,12 +169,27 @@ static void ta_event_cb(lv_event_t * e)
 ////////// A call back for previous screen ////////
 void prev_screen_cb()
 {
-    prev_page = -1;
-    user_flag = 0;
-    wallbox_page();
-    delete_obj_on_headpage(header_page);
-    header_page = 0;
-    prev_header_page = -1;
+    if(Page == CONST_ChargingProgressPage)
+    {
+        prev_page = -1;
+        user_flag = 0;
+        admin_flag = 0;
+        prog_flag = -1;
+        wallbox_page();
+        delete_obj_on_headpage(header_page);
+        header_page = 0;
+        prev_header_page = -1;
+    }
+    else {
+        prev_page = -1;
+        user_flag = 0;
+        // admin_flag = 0;
+        wallbox_page();
+        delete_obj_on_headpage(header_page);
+        header_page = 0;
+        prev_header_page = -1;
+
+    }
 }
 
 

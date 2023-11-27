@@ -264,6 +264,7 @@ void scr_charcon_settings()
     ///////// User enter Textare ////////
     charcon_ta = lv_textarea_create(scr_home);
     lv_obj_set_size(charcon_ta, 90, 50);
+    lv_obj_clear_flag(charcon_ta, LV_OBJ_FLAG_HIDDEN);
     lv_obj_align(charcon_ta, LV_ALIGN_TOP_LEFT, 620, 240);
     lv_textarea_set_one_line(charcon_ta, true);
     lv_textarea_set_password_mode(charcon_ta, false);
@@ -276,6 +277,8 @@ void scr_charcon_settings()
 
     charcon_keyboard_area = lv_btnmatrix_create(scr_home);
     lv_obj_set_size(charcon_keyboard_area, 400, 300);
+    lv_obj_clear_flag(charcon_keyboard_area, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_set_scrollbar_mode(charcon_keyboard_area, LV_SCROLLBAR_MODE_OFF);
     lv_obj_align_to(charcon_keyboard_area, charcon_ta, LV_ALIGN_OUT_RIGHT_MID, 70, 100);
     lv_obj_clear_flag(charcon_keyboard_area, LV_OBJ_FLAG_CLICK_FOCUSABLE); /*To keep the text area focused on button clicks*/
     lv_btnmatrix_set_map(charcon_keyboard_area, btnm_map);
@@ -334,7 +337,7 @@ void save_max_current(const char *text)
 {
     FILE *file = fopen("/home/config.json", "a");
     if (file) {
-        fprintf(file, ",\n{\"Maximum Grid Current Limit\": \"%s\"}", text);
+        fprintf(file, "{\"Maximum Grid Current Limit\": \"%s\"}\n", text);
         fclose(file);
         printf("Text saved to config.json\n");
     } else {
@@ -389,7 +392,7 @@ void save_cost_grid(const char *text)
 {
     FILE *file = fopen("/home/config.json", "a");
     if (file) {
-        fprintf(file, ",\n{\"Cost per kWh on Grid\": \"%s\"}", text);
+        fprintf(file, "{\"Cost per kWh on Grid\": \"%s\"}\n", text);
         fclose(file);
         printf("Text saved to config.json\n");
     } else {
@@ -409,7 +412,6 @@ void scr_master_control()
     lv_obj_set_style_img_recolor(icon_mc, LV_COLOR_YELLOW, LV_STATE_DEFAULT);
     lv_obj_set_style_img_recolor_opa(icon_mc, LV_OPA_COVER, LV_STATE_DEFAULT);
     lv_obj_align(icon_mc, LV_ALIGN_TOP_LEFT, 60, 130);
-
 
     mc_settings = lv_label_create(scr_home);
     lv_label_set_text(mc_settings, "Master Control");
@@ -452,9 +454,12 @@ void scr_master_control()
     lv_obj_add_style(mc_ta, &style_numbox, LV_PART_MAIN);
     lv_obj_add_event_cb(mc_ta, ta_vol_handler, LV_EVENT_ALL, NULL);
     lv_obj_clear_state(mc_ta, LV_STATE_FOCUSED);
+    lv_obj_clear_flag(mc_ta, LV_OBJ_FLAG_HIDDEN);
 
     mc_keyboard_area = lv_btnmatrix_create(scr_home);
     lv_obj_set_size(mc_keyboard_area, 400, 300);
+    lv_obj_clear_flag(mc_keyboard_area, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_set_scrollbar_mode(mc_keyboard_area, LV_SCROLLBAR_MODE_OFF);
     lv_obj_align_to(mc_keyboard_area, mc_ta, LV_ALIGN_OUT_RIGHT_MID, 150, 100);
     lv_obj_clear_flag(mc_keyboard_area, LV_OBJ_FLAG_CLICK_FOCUSABLE); /*To keep the text area focused on button clicks*/
     lv_btnmatrix_set_map(mc_keyboard_area, btnm_map);
@@ -490,22 +495,22 @@ void scr_master_control()
 
 void ta1_rect_cb()
 {
-        /////// Disable textarea when charging in progress ///////
-        if(PlugStatus == 2)
-        {
-            lv_obj_clear_flag(rect_ta1, LV_OBJ_FLAG_CLICKABLE);
-            lv_obj_clear_flag(rect_ta1, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_clear_state(rect_ta1, LV_STATE_FOCUSED);
-            lv_obj_add_state(mc_ta, LV_STATE_DISABLED);
-            lv_obj_clear_state(mc_ta, LV_STATE_FOCUSED);            
-        }
-        else{
-            lv_obj_add_flag(rect_ta1, LV_OBJ_FLAG_CLICKABLE);
-            lv_obj_add_flag(rect_ta1, LV_OBJ_FLAG_HIDDEN);
-            lv_obj_add_state(rect_ta1, LV_STATE_FOCUSED);
-            lv_obj_clear_state(mc_ta, LV_STATE_DISABLED);
-            lv_obj_add_state(mc_ta, LV_STATE_FOCUSED);   
-        }
+    /////// Disable textarea when charging in progress ///////
+    if(PlugStatus == 2)
+    {
+        lv_obj_clear_flag(rect_ta1, LV_OBJ_FLAG_CLICKABLE);
+        lv_obj_clear_flag(rect_ta1, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_clear_state(rect_ta1, LV_STATE_FOCUSED);
+        lv_obj_add_state(mc_ta, LV_STATE_DISABLED);
+        lv_obj_clear_state(mc_ta, LV_STATE_FOCUSED);            
+    }
+    else{
+        lv_obj_add_flag(rect_ta1, LV_OBJ_FLAG_CLICKABLE);
+        lv_obj_add_flag(rect_ta1, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_add_state(rect_ta1, LV_STATE_FOCUSED);
+        lv_obj_clear_state(mc_ta, LV_STATE_DISABLED);
+        lv_obj_add_state(mc_ta, LV_STATE_FOCUSED);   
+    }
 }
 
 static void ta_vol_handler(lv_event_t * e)
