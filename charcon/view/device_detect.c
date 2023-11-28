@@ -13,6 +13,7 @@
 #include "colors.h"
 #include "allpage_icons.h"
 #include "device_detect.h"
+#include "../controller/controller.h"
 
 lv_obj_t *scr_wallbox;
 lv_obj_t *scr_failure;
@@ -46,6 +47,9 @@ void wallbox_failure_status()
     img_failure = lv_img_create(img_charger);
     lv_img_set_src(img_failure, &error_icon);
     lv_obj_align(img_failure, LV_ALIGN_CENTER, 0, 0);
+
+    // header_page = 0;
+    // prev_header_page = -1;
 }
 
 void wallbox_not_configured()

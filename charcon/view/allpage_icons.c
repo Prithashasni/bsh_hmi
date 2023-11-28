@@ -176,11 +176,11 @@ void allpage_status()
 
     img_location = lv_img_create(scr_home);
     lv_img_set_src(img_location, &icon_location);
-    lv_obj_align(img_location, LV_ALIGN_TOP_LEFT, 10, -10);
+    lv_obj_align(img_location, LV_ALIGN_TOP_LEFT, 2, -9);
     lv_obj_add_flag(img_location, LV_OBJ_FLAG_HIDDEN);
 
     label_location = lv_label_create(scr_home);
-    lv_obj_align(label_location, LV_ALIGN_TOP_LEFT, 50, -5);
+    lv_obj_align(label_location, LV_ALIGN_TOP_LEFT, 43, -5);
     lv_label_set_text(label_location, " ");
     lv_obj_add_style(label_location, &style_text_time, LV_STATE_DEFAULT);
     lv_obj_add_flag(label_location, LV_OBJ_FLAG_HIDDEN);

@@ -277,24 +277,23 @@ void admin_page()
     }
 }
 
+/* Wallbox flow pages Logic */
 void wallbox_page()
 {
     if (Page == CONST_DeviceFailure)
     {
-        if (user_flag != 0)
-        {
-            wallbox_failure_status();
-            delete_obj_on_headpage(user_flag);
-            prev_page = CONST_DeviceFailure;
-            user_flag = CONST_DeviceFailure;
-        }
-        else
-        {
+        // if(header_page != 0)
+        // {
+        //     wallbox_failure_status();
+        //     delete_obj_on_headpage(prev_header_page);
+        // }
+        // else
+        // {
             wallbox_failure_status();
             delete_objects_on_page(prev_page);
+            // delete_obj_on_headpage(prev_header_page);
             prev_page = CONST_DeviceFailure;
-            user_flag = CONST_DeviceFailure;
-        }
+        // }
     }
     else if (Page == CONST_HealthCheck)
     {
@@ -419,6 +418,9 @@ void delete_objects_on_page(int prev_page)
 {
     if (prev_page == CONST_DeviceFailure)
     {
+        lv_obj_add_flag(header_rect, LV_OBJ_FLAG_CLICKABLE);
+        lv_obj_add_flag(label_guest, LV_OBJ_FLAG_CLICKABLE);
+
         lv_obj_del(failure_label);
         lv_obj_del(service_label);
         lv_obj_del(img_failure);

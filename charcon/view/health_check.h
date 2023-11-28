@@ -63,6 +63,8 @@ extern void anim_rotate_cb(void * var, int32_t v);
 extern void anim_zoom_cb(void *var, int32_t v);
 
 extern void initialize_device();
+extern void scr_initial();
+extern void scr_chart();
 
 void dc_animation_finished_callback(lv_anim_t *anim);
 void dc2_animation_finished_callback(lv_anim_t *anim);
