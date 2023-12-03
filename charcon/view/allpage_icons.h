@@ -83,6 +83,7 @@ LV_IMG_DECLARE(img_network_4)
 LV_IMG_DECLARE(img_network_5)
 LV_IMG_DECLARE(img_no_network)
 
+extern int header_flag;
 extern char admin_text[50];
 extern const int CONST_AdminLoginPage;
 extern const int CONST_SoftwareUpdate;
@@ -97,6 +98,8 @@ extern void allpage_status();
 extern void header_icons_display();
 extern void scr_login();
 extern void header_icons_close();
+extern void header_icons_flag();
+extern void header_loc_scroll();
 extern void scr_sw_update();
 extern void scr_vsecc_set();
 extern void scr_charcon_set();

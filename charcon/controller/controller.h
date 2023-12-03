@@ -10,8 +10,6 @@
 
 #include "../../lvgl/lvgl.h"
 
-
-
 extern void ui_start();
 extern void page_change();
 extern void admin_change();
@@ -21,6 +19,9 @@ extern void progress_admin_page();
 extern void progress_page_hidden();
 extern void progress_page_display();
 extern void admin_to_progress();
+extern void progress_page_timer();
+extern void admin_before_progress();
+
 extern void delete_objects_on_page(int page);
 extern void delete_obj_on_headpage(int header_page);
 

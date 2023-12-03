@@ -30,6 +30,11 @@ LV_IMG_DECLARE(error_icon)
 
 void wallbox_failure_status()
 {
+    if(header_flag != 0)
+    {
+        header_icons_close();
+    }
+    
     display_allpage_icons();
     lv_obj_clear_flag(header_rect, LV_OBJ_FLAG_CLICKABLE);
     lv_obj_clear_flag(label_guest, LV_OBJ_FLAG_CLICKABLE);
@@ -48,8 +53,6 @@ void wallbox_failure_status()
     lv_img_set_src(img_failure, &error_icon);
     lv_obj_align(img_failure, LV_ALIGN_CENTER, 0, 0);
 
-    // header_page = 0;
-    // prev_header_page = -1;
 }
 
 void wallbox_not_configured()

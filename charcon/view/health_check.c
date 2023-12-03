@@ -38,14 +38,12 @@ lv_obj_t *check2_good;
 lv_obj_t *test_b1;
 lv_obj_t *test_b2;
 
-lv_timer_t * check_task;
+lv_timer_t *check_task;
 
 /////////////////////////////////  Health Check Page ///////////////////////////////
 
 void screen_dc_check()
 {
-
-
     display_allpage_icons();
 
     img_red_check = lv_img_create(img_charger);
@@ -131,7 +129,7 @@ void cable_check_status()
         lv_anim_init(&anim_opacity1);
         lv_anim_set_var(&anim_opacity1, check1_text);
         lv_anim_set_exec_cb(&anim_opacity1, anim_opacity_cb);
-        lv_anim_set_time(&anim_opacity1, 2000); // Animation duration in milliseconds
+        lv_anim_set_time(&anim_opacity1, 1000); // Animation duration in milliseconds
         lv_anim_set_values(&anim_opacity1, LV_OPA_0, LV_OPA_COVER);
         lv_anim_set_repeat_count(&anim_opacity1, LV_ANIM_REPEAT_INFINITE);
         lv_anim_start(&anim_opacity1);
@@ -150,7 +148,7 @@ void cable_check_status()
         lv_anim_init(&anim_opacity2);
         lv_anim_set_var(&anim_opacity2, check2_text);
         lv_anim_set_exec_cb(&anim_opacity2, anim_opacity_cb);
-        lv_anim_set_time(&anim_opacity2, 2000); // Animation duration in milliseconds
+        lv_anim_set_time(&anim_opacity2, 1000); // Animation duration in milliseconds
         lv_anim_set_values(&anim_opacity2, LV_OPA_0, LV_OPA_COVER);
         lv_anim_set_repeat_count(&anim_opacity2, LV_ANIM_REPEAT_INFINITE);
         lv_anim_start(&anim_opacity2);
@@ -165,7 +163,6 @@ void cable_check_status()
         lv_anim_init(&anim_img);
         lv_anim_set_exec_cb(&anim_img, anim_zoom_cb);
         lv_anim_set_var(&anim_img, img_red_check);
-        // lv_anim_set_time(&anim_img, 500);
         lv_anim_set_values(&anim_img, 250, 265);
         lv_anim_set_repeat_count(&anim_img, LV_ANIM_REPEAT_INFINITE);
         lv_anim_start(&anim_img);
@@ -175,29 +172,6 @@ void cable_check_status()
         lv_obj_clear_flag(img_green_check, LV_OBJ_FLAG_HIDDEN);
         lv_obj_clear_flag(ready_text, LV_OBJ_FLAG_HIDDEN);
     }
-}
-
-void scr_initial()
-{
-    lv_obj_del(img_red_check);
-    lv_obj_del(label_dc_text);
-    lv_obj_del(cable_text);
-    lv_obj_del(power_text);
-    lv_obj_del(check1_text);
-    lv_obj_del(check1_good);
-    lv_obj_del(check2_text);
-    lv_obj_del(check2_good);
-    lv_obj_del(img_green_check);
-    lv_obj_del(ready_text);
-    lv_anim_del(check1_text, anim_opacity_cb);
-    lv_anim_del(check2_text, anim_opacity_cb);
-    lv_anim_del(img_red_check, anim_zoom_cb);
-
-    // //// Test
-    lv_obj_del(test_b1);
-    HeartBeatMsg = -1;
-
-    initialize_device();
 }
 
 ////////////////////////     Device Iniatializing    ///////////////////////
@@ -232,7 +206,7 @@ void initialize_device()
     lv_anim_start(&anim_loader);
 }
 
-void anim_rotate_cb(void * var, int32_t v)
+void anim_rotate_cb(void *var, int32_t v)
 {
     lv_img_set_angle(var, v);
 }

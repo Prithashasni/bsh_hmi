@@ -65,6 +65,7 @@ lv_obj_t *img_arrow;
 lv_obj_t *img_no_signal;
 lv_timer_t *login_task;
 lv_timer_t *task_timer;
+lv_timer_t *location_timer;
 lv_anim_t anim_scroll;
  
 // Global variables to store parsed values
@@ -87,6 +88,7 @@ const int CONST_AdminLogsPage = 12;
 
 int gsm_signal_value;
 int char_count = 0;
+int header_flag = 0;
 
 char datetime_str[30];
 char *position_value;
@@ -176,22 +178,14 @@ void allpage_status()
 
     img_location = lv_img_create(scr_home);
     lv_img_set_src(img_location, &icon_location);
-    lv_obj_align(img_location, LV_ALIGN_TOP_LEFT, 2, -9);
+    lv_obj_align(img_location, LV_ALIGN_TOP_LEFT, 0, -10);
     lv_obj_add_flag(img_location, LV_OBJ_FLAG_HIDDEN);
 
     label_location = lv_label_create(scr_home);
-    lv_obj_align(label_location, LV_ALIGN_TOP_LEFT, 43, -5);
+    lv_obj_align(label_location, LV_ALIGN_TOP_LEFT, 35, -6);
     lv_label_set_text(label_location, " ");
     lv_obj_add_style(label_location, &style_text_time, LV_STATE_DEFAULT);
     lv_obj_add_flag(label_location, LV_OBJ_FLAG_HIDDEN);
-
-    if (loc_text != NULL && char_count > 25) {
-
-        lv_label_set_long_mode(label_location, LV_LABEL_LONG_SCROLL_CIRCULAR);
-        lv_obj_set_width(label_location, 250);
-        lv_label_set_text(label_location, g_position);
-    }
-
 
     header_rect = lv_obj_create(scr_home);
     lv_obj_set_size(header_rect, 550, 50);
@@ -203,8 +197,8 @@ void allpage_status()
 
     header_text = lv_label_create(header_rect);
     lv_label_set_text(header_text, "............");
-    lv_obj_align(header_text, LV_ALIGN_CENTER, 0, 0);
     lv_obj_add_flag(header_text, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_align(header_text, LV_ALIGN_CENTER, 0, 0);
     lv_obj_add_style(header_text, &style_header_text, LV_STATE_DEFAULT);
 
     back_rect = lv_obj_create(scr_home);
@@ -258,6 +252,8 @@ void allpage_status()
     lv_img_set_zoom(img_cloud_connection, 240);
     lv_obj_add_flag(img_cloud_connection, LV_OBJ_FLAG_HIDDEN);
     lv_obj_align(img_cloud_connection, LV_ALIGN_TOP_RIGHT, 8, 115);
+
+    location_timer = lv_timer_create(header_loc_scroll, 6000, NULL);
 
     task_timer = lv_timer_create(health_check_status, 1000, NULL);
     lv_timer_ready(task_timer);
@@ -325,13 +321,34 @@ void health_check_status()
         lv_img_set_src(img_cloud_connection, &cloud_connect);
     }
 
+    ////////// Charging Timer /////////////
+    if(Page == CONST_ChargingProgressPage)
+    {
+        create_progress_chart();
+        if(header_page != 0)
+        {
+            progress_page_hidden();
+        } 
+    }
+
     ////////// GSM & GPS //////////////////
     /* Get Network signal from GSM Module and display */
     get_gsm_signal();
  
-
     get_position();
 }
+
+void header_loc_scroll()
+{
+    /////// Location label scroll /////////
+    if (loc_text != NULL && char_count > 25) 
+    {
+        lv_label_set_long_mode(label_location, LV_LABEL_LONG_SCROLL_CIRCULAR);
+        lv_obj_set_width(label_location, 250);
+        lv_label_set_text(label_location, g_position);    
+    }
+}
+
 // A simple JSON parser for the provided JSON structure
 void parse_json(const char *json) 
 {
@@ -352,8 +369,8 @@ void parse_json(const char *json)
                 strcpy(g_position, position);
             } 
         } 
-     }
- 
+    }
+         
     // Find "latitude" key
     const char *lat_start = strstr(json, "\"latitude\":");
     sscanf(lat_start, "\"latitude\":%lf,", &g_latitude);
@@ -365,8 +382,9 @@ void parse_json(const char *json)
     // Find "GSMsignal" key
     const char *signal_start = strstr(json, "\"GSMsignal\":");
     sscanf(signal_start, "\"GSMsignal\":%d", &g_GSMsignal);
+
 }
- 
+
 int get_position() {
     // Get the home directory path of the current user
     char *home = getenv("HOME");
@@ -395,7 +413,7 @@ int get_position() {
     fclose(file);
  
     // Parse JSON data and store values in global variables
-    printf("%s", json_data);
+    // printf("%s", json_data);
     parse_json(json_data);
 
     /* Get location from the GPS Module and display */
@@ -415,9 +433,11 @@ int get_position() {
     return 0;
 }
 
+
 void get_gsm_signal()
 {
-    if (g_GSMsignal == 0)
+
+    if(g_GSMsignal == 0)
     {
         lv_obj_add_flag(img_no_signal, LV_OBJ_FLAG_HIDDEN);
 
@@ -519,7 +539,7 @@ void get_gsm_signal()
     }
     else
     {
-        lv_obj_add_flag(img_no_signal, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_clear_flag(img_no_signal, LV_OBJ_FLAG_HIDDEN);
         
         lv_obj_set_style_img_recolor(img_signal1, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
         lv_obj_set_style_img_recolor_opa(img_signal1, LV_OPA_COVER, LV_STATE_DEFAULT);
@@ -541,10 +561,25 @@ void get_gsm_signal()
 
 //////////////////////////// Header Icons ///////////////////////////////
 
+void header_icons_flag()
+{
+    ///////// Header text //////////////
+    if(header_flag != 0)
+    {
+        lv_obj_add_flag(header_text , LV_OBJ_FLAG_HIDDEN);
+    }
+    else if(header_flag == 0)
+    {
+        lv_obj_clear_flag(header_text, LV_OBJ_FLAG_HIDDEN);
+    }
+}
+
 void header_icons_display()
 {
+    header_flag = -1;
+
     lv_obj_set_size(header_rect, 550, 80);
-    lv_obj_add_flag(header_text, LV_OBJ_FLAG_HIDDEN);
+    // lv_obj_add_flag(header_text, LV_OBJ_FLAG_HIDDEN);
     lv_obj_remove_event_cb(header_rect, header_icons_display);
 
     lv_obj_clear_flag(back_rect, LV_OBJ_FLAG_HIDDEN);
@@ -658,10 +693,10 @@ void header_icons_display()
 
 void header_icons_close()
 {
+    header_flag = 0;
 
     lv_obj_add_flag(back_rect, LV_OBJ_FLAG_HIDDEN);
     lv_obj_set_size(header_rect, 550, 50);
-    lv_obj_clear_flag(header_text, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(img_cloud, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(img_settings, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(sw_text, LV_OBJ_FLAG_HIDDEN);
@@ -686,7 +721,6 @@ void scr_login()
 {
     header_page = CONST_AdminLoginPage;
 }
-
 
 void scr_sw_update()
 {

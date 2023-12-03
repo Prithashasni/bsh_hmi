@@ -39,7 +39,6 @@ void ui_start()
     init_style();
 
     prev_page = Page;
-
     pthread_t thread1;
     pthread_create(&thread1, NULL, mqtt_init, NULL);
 
@@ -53,22 +52,48 @@ void ui_start()
 
 void page_change()
 {
-    if (Page != CONST_DeviceFailure && header_page != 0)
+    header_icons_flag();
+    if (Page != CONST_DeviceFailure)
     {
-        if (prev_header_page != header_page && Page != CONST_ChargingProgressPage)
+        if (header_page != 0)
         {
-            admin_page();
+            if (prev_header_page != header_page && Page != CONST_ChargingProgressPage)
+            {
+                admin_page();
+            }
+            else if (Page == CONST_ChargingProgressPage && prev_header_page != header_page)
+            {
+                admin_flag = -1;
+                progress_admin_page();
+            }
         }
-        if (prev_header_page != header_page && Page == CONST_ChargingProgressPage)
+        else if (prev_page != Page)
         {
-            admin_flag = -1;
-            progress_admin_page();
+            lv_obj_add_flag(img_bosch_logo, LV_OBJ_FLAG_HIDDEN);
+            wallbox_page();
         }
     }
-    else if (prev_page != Page)
+    else
     {
-        lv_obj_add_flag(img_bosch_logo, LV_OBJ_FLAG_HIDDEN);
-        wallbox_page();
+        if (prev_page != Page && Page == CONST_DeviceFailure)
+        {
+            lv_obj_add_flag(img_bosch_logo, LV_OBJ_FLAG_HIDDEN);
+            if (user_flag != 0)
+            {
+                wallbox_failure_status();
+                delete_obj_on_headpage(prev_header_page);
+                user_flag = 0;
+                header_page = 0;
+                prev_header_page = -1;
+                prev_page = CONST_DeviceFailure;
+            }
+            else
+            {
+                wallbox_failure_status();
+                delete_objects_on_page(prev_page);
+                prev_page = CONST_DeviceFailure;
+            }
+        }
     }
 }
 
@@ -84,7 +109,8 @@ void progress_admin_page()
             prev_header_page = CONST_AdminLoginPage;
             user_flag = CONST_AdminLoginPage;
         }
-        else{
+        else
+        {
             admin_login_pages();
             progress_page_hidden();
             prev_header_page = CONST_AdminLoginPage;
@@ -117,7 +143,8 @@ void progress_admin_page()
             prev_header_page = CONST_VseccSettings;
             user_flag = CONST_VseccSettings;
         }
-        else{
+        else
+        {
             scr_vsecc_settings();
             progress_page_hidden();
             prev_header_page = CONST_VseccSettings;
@@ -133,7 +160,8 @@ void progress_admin_page()
             prev_header_page = CONST_CharconSettings;
             user_flag = CONST_CharconSettings;
         }
-        else{
+        else
+        {
             scr_charcon_settings();
             progress_page_hidden();
             prev_header_page = CONST_CharconSettings;
@@ -149,7 +177,8 @@ void progress_admin_page()
             prev_header_page = CONST_MasterControl;
             user_flag = CONST_MasterControl;
         }
-        else{
+        else
+        {
             scr_master_control();
             progress_page_hidden();
             prev_header_page = CONST_MasterControl;
@@ -165,7 +194,8 @@ void progress_admin_page()
             prev_header_page = CONST_AdminLogsPage;
             user_flag = CONST_AdminLogsPage;
         }
-        else{
+        else
+        {
             scr_logs_page();
             progress_page_hidden();
             prev_header_page = CONST_AdminLogsPage;
@@ -187,7 +217,8 @@ void admin_page()
             prev_header_page = CONST_AdminLoginPage;
             user_flag = CONST_AdminLoginPage;
         }
-        else{
+        else
+        {
             admin_login_pages();
             delete_objects_on_page(prev_page);
             prev_header_page = CONST_AdminLoginPage;
@@ -220,7 +251,8 @@ void admin_page()
             prev_header_page = CONST_VseccSettings;
             user_flag = CONST_VseccSettings;
         }
-        else{
+        else
+        {
             scr_vsecc_settings();
             delete_objects_on_page(prev_page);
             prev_header_page = CONST_VseccSettings;
@@ -236,7 +268,8 @@ void admin_page()
             prev_header_page = CONST_CharconSettings;
             user_flag = CONST_CharconSettings;
         }
-        else{
+        else
+        {
             scr_charcon_settings();
             delete_objects_on_page(prev_page);
             prev_header_page = CONST_CharconSettings;
@@ -252,23 +285,25 @@ void admin_page()
             prev_header_page = CONST_MasterControl;
             user_flag = CONST_MasterControl;
         }
-        else{
+        else
+        {
             scr_master_control();
             delete_objects_on_page(prev_page);
             prev_header_page = CONST_MasterControl;
             user_flag = CONST_MasterControl;
         }
     }
-    else if(header_page == CONST_AdminLogsPage)
+    else if (header_page == CONST_AdminLogsPage)
     {
-        if(user_flag != 0)
+        if (user_flag != 0)
         {
             scr_logs_page();
             delete_obj_on_headpage(user_flag);
             prev_header_page = CONST_AdminLogsPage;
             user_flag = CONST_AdminLogsPage;
         }
-        else{
+        else
+        {
             scr_logs_page();
             delete_objects_on_page(prev_page);
             prev_header_page = CONST_AdminLogsPage;
@@ -280,22 +315,7 @@ void admin_page()
 /* Wallbox flow pages Logic */
 void wallbox_page()
 {
-    if (Page == CONST_DeviceFailure)
-    {
-        // if(header_page != 0)
-        // {
-        //     wallbox_failure_status();
-        //     delete_obj_on_headpage(prev_header_page);
-        // }
-        // else
-        // {
-            wallbox_failure_status();
-            delete_objects_on_page(prev_page);
-            // delete_obj_on_headpage(prev_header_page);
-            prev_page = CONST_DeviceFailure;
-        // }
-    }
-    else if (Page == CONST_HealthCheck)
+    if (Page == CONST_HealthCheck)
     {
         screen_dc_check();
         delete_objects_on_page(prev_page); 
@@ -309,22 +329,10 @@ void wallbox_page()
     }
     else if (Page == CONST_ChargingProgressPage)
     {
-        if(prog_flag != 0)
-        {
-            admin_to_progress();
-            delete_objects_on_page(prev_page);
-            prev_page = CONST_ChargingProgressPage;
-        }
-        else{
-            display_allpage_icons();
-            progress_task = lv_timer_create(create_progress_chart, 1000, NULL);
-            if(ChargingState == 0){
-                timer_task = lv_timer_create(charge_timer_start, 1000, NULL);
-            }
-            progress_page_display();
-            delete_objects_on_page(prev_page);
-            prev_page = CONST_ChargingProgressPage;
-        }
+        display_allpage_icons();
+        progress_page_display();
+        delete_objects_on_page(prev_page);
+        prev_page = CONST_ChargingProgressPage;
     }
     else if (Page == CONST_MissingConfig)
     {
@@ -457,11 +465,7 @@ void delete_objects_on_page(int prev_page)
         hr = 0;
         lv_chart_set_all_value(chart1, ser1, LV_CHART_POINT_NONE);
         lv_chart_set_all_value(chart1, ser2, LV_CHART_POINT_NONE);
-        lv_timer_pause(progress_task);
-        lv_timer_pause(timer_task);
-
         progress_page_hidden();
-
     }
     else if (prev_page == CONST_MissingConfig)
     {
@@ -475,6 +479,7 @@ void delete_objects_on_page(int prev_page)
     }
 }
 
+/* Deleting the previous header pages*/
 void delete_obj_on_headpage(int header_page)
 {
     if (prev_header_page == CONST_AdminLoginPage)
@@ -549,6 +554,5 @@ void delete_obj_on_headpage(int header_page)
         lv_obj_del(logs_page);
         lv_obj_del(cancel_logs);
         lv_obj_del(export_logs);
-
     }
 }

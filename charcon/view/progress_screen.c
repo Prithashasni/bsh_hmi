@@ -190,20 +190,17 @@ void create_progress_screen()
     lv_obj_set_style_bg_color(chart1, LV_COLOR_GREY, LV_STATE_DEFAULT);
     lv_obj_add_event_cb(chart1, draw_event_cb, LV_EVENT_DRAW_PART_BEGIN, NULL);
     lv_obj_set_style_line_color(chart1, LV_COLOR_GREY, LV_PART_MAIN | LV_STATE_DEFAULT);
-    
+
     // /* Set range to 0 to 100 for percentages. Draw ticks */
     lv_chart_set_range(chart1, LV_CHART_AXIS_PRIMARY_Y, 0, 4000);
     lv_chart_set_axis_tick(chart1, LV_CHART_AXIS_PRIMARY_Y, 3, 0, 5, 1, true, 500);
     // lv_chart_set_range(chart1, LV_CHART_AXIS_PRIMARY_X, 0, 200);
     // lv_chart_set_axis_tick(chart1, LV_CHART_AXIS_PRIMARY_X, 5, 5, 5, 1, true, 30);
     lv_obj_set_style_size(chart1, 0, LV_PART_INDICATOR);
-   
-    ser1 = lv_chart_add_series(chart1, lv_color_hex(0xf9c459), LV_CHART_AXIS_PRIMARY_Y);
-    ser2 = lv_chart_add_series(chart1, lv_color_hex(0x44b6ce), LV_CHART_AXIS_PRIMARY_Y);
 
     /*Add two data series*/
-
-    // // lv_chart_set_range(chart1, LV_CHART_AXIS_SECONDARY_Y, 0, 100);
+    ser1 = lv_chart_add_series(chart1, lv_color_hex(0xf9c459), LV_CHART_AXIS_PRIMARY_Y);
+    ser2 = lv_chart_add_series(chart1, lv_color_hex(0x44b6ce), LV_CHART_AXIS_PRIMARY_Y);
     lv_chart_set_point_count(chart1, 50);
 
     /* Start the timer*/
@@ -220,9 +217,10 @@ void create_progress_screen()
 
 void pub_stop(lv_event_t *event)
 {
-    for(int i=0 ; i<10; i++)
+    for (int i = 0; i < 10; i++)
     {
-        if(StopEventAck != 1){
+        if (StopEventAck != 1)
+        {
             pub_main();
             sleep(2);
         }
@@ -231,27 +229,26 @@ void pub_stop(lv_event_t *event)
 
 void create_progress_chart()
 {
-    // lv_obj_clear_flag(timer_label, LV_OBJ_FLAG_HIDDEN);
-    // lv_obj_clear_flag(chart1, LV_OBJ_FLAG_HIDDEN);
-
-    if(cost_on_grid != NULL){
+    if (cost_on_grid != NULL)
+    {
         lv_label_set_text(cost_text, cost_on_grid);
     }
 
-    if(SolarEnergy != 0){
-        // lv_obj_clear_flag(solar_energy_text, LV_OBJ_FLAG_HIDDEN);
+    if (SolarEnergy != 0)
+    {
         lv_label_set_text_fmt(solar_energy_text, "%.3f kWh", SolarEnergy);
     }
-    if(GridEnergy != 0){
-        // lv_obj_clear_flag(grid_energy_text, LV_OBJ_FLAG_HIDDEN);
+    if (GridEnergy != 0)
+    {
         lv_label_set_text_fmt(grid_energy_text, "%.3f kWh", GridEnergy);
     }
-    if(TotCost != 0){      
-        // lv_obj_clear_flag(total_cost_value, LV_OBJ_FLAG_HIDDEN);
+    if (TotCost != 0)
+    {
         lv_label_set_text_fmt(total_cost_value, "%.3f", TotCost);
     }
 
-    if(ySolarPwr !=0 || yGridPwr !=0 ){
+    if (ySolarPwr != 0 || yGridPwr != 0)
+    {
 
         lv_chart_set_next_value(chart1, ser1, ySolarPwr + yGridPwr);
 
@@ -264,14 +261,15 @@ void create_progress_chart()
     charging_progress_state();
 }
 
-static void draw_event_cb(lv_event_t * e)
+static void draw_event_cb(lv_event_t *e)
 {
-   lv_obj_t * obj = lv_event_get_target(e);
+    lv_obj_t *obj = lv_event_get_target(e);
 
     /*Add the faded area before the lines are drawn*/
-    lv_obj_draw_part_dsc_t * dsc = lv_event_get_draw_part_dsc(e);
-    if(dsc->part == LV_PART_ITEMS) {
-        if(!dsc->p1 || !dsc->p2)
+    lv_obj_draw_part_dsc_t *dsc = lv_event_get_draw_part_dsc(e);
+    if (dsc->part == LV_PART_ITEMS)
+    {
+        if (!dsc->p1 || !dsc->p2)
             return;
 
         /*Add a line mask that keeps the area below the line*/
@@ -297,67 +295,69 @@ static void draw_event_cb(lv_event_t * e)
         lv_draw_mask_free_param(&line_mask_param);
         lv_draw_mask_remove_id(line_mask_id);
     }
-
 }
 
 //////////////////////// Charging Progress Page ///////////////////////////
 
 void charging_progress_state()
 {
-    if (ChargingState == 0) {
+    if (ChargingState == 0)
+    {
         lv_obj_add_flag(terminate_text, LV_OBJ_FLAG_HIDDEN);
         lv_obj_add_flag(img_terminate, LV_OBJ_FLAG_HIDDEN);
         lv_obj_clear_flag(stop_button, LV_OBJ_FLAG_HIDDEN);
         lv_obj_add_flag(unplug_text, LV_OBJ_FLAG_HIDDEN);
         lv_obj_add_flag(charging_complete, LV_OBJ_FLAG_HIDDEN);
 
-        if(admin_flag != 0)
+        ////// Start the timer /////
+        charge_timer_start();
+        
+        if (admin_flag != 0)
         {
             lv_obj_add_flag(stop_button, LV_OBJ_FLAG_HIDDEN);
         }
-
     }
 
-    else if (ChargingState == 1) {
+    else if (ChargingState == 1)
+    {
         lv_obj_clear_flag(terminate_text, LV_OBJ_FLAG_HIDDEN);
         lv_obj_clear_flag(img_terminate, LV_OBJ_FLAG_HIDDEN);
         lv_obj_add_flag(stop_button, LV_OBJ_FLAG_HIDDEN);
         lv_obj_add_flag(unplug_text, LV_OBJ_FLAG_HIDDEN);
-        lv_obj_add_flag(charging_complete, LV_OBJ_FLAG_HIDDEN);  
-
-        lv_timer_pause(timer_task); 
+        lv_obj_add_flag(charging_complete, LV_OBJ_FLAG_HIDDEN);
 
         lv_anim_t anim_loader;
         lv_anim_init(&anim_loader);
         lv_anim_set_var(&anim_loader, img_terminate);
         lv_anim_set_exec_cb(&anim_loader, anim_rotate_cb);
-        lv_anim_set_time(&anim_loader, 2000);  // Animation duration in milliseconds
-        lv_anim_set_values(&anim_loader, 0, 3600);  
-        lv_anim_set_repeat_count(&anim_loader, LV_ANIM_REPEAT_INFINITE);  
+        lv_anim_set_time(&anim_loader, 2000); // Animation duration in milliseconds
+        lv_anim_set_values(&anim_loader, 0, 3600);
+        lv_anim_set_repeat_count(&anim_loader, LV_ANIM_REPEAT_INFINITE);
         lv_anim_start(&anim_loader);
 
-        if(admin_flag != 0)
+        if (admin_flag != 0)
         {
             lv_obj_add_flag(terminate_text, LV_OBJ_FLAG_HIDDEN);
             lv_obj_add_flag(img_terminate, LV_OBJ_FLAG_HIDDEN);
         }
     }
 
-    else if (ChargingState == 2) {
+    else if (ChargingState == 2)
+    {
         lv_obj_clear_flag(unplug_text, LV_OBJ_FLAG_HIDDEN);
         lv_obj_clear_flag(charging_complete, LV_OBJ_FLAG_HIDDEN);
         lv_obj_add_flag(stop_button, LV_OBJ_FLAG_HIDDEN);
         lv_obj_add_flag(terminate_text, LV_OBJ_FLAG_HIDDEN);
         lv_obj_add_flag(img_terminate, LV_OBJ_FLAG_HIDDEN);
 
-        if(admin_flag != 0)
+        if (admin_flag != 0)
         {
             lv_obj_add_flag(unplug_text, LV_OBJ_FLAG_HIDDEN);
             lv_obj_add_flag(charging_complete, LV_OBJ_FLAG_HIDDEN);
         }
-
     }
-    else if (ChargingState == 3) {
+    else if (ChargingState == 3)
+    {
         lv_label_set_text(charging_complete, "Connector Unplugged!");
 
         lv_label_set_text(unplug_text, "Charging session info updated to Cloud");
@@ -368,31 +368,31 @@ void charging_progress_state()
         lv_obj_add_flag(terminate_text, LV_OBJ_FLAG_HIDDEN);
         lv_obj_add_flag(img_terminate, LV_OBJ_FLAG_HIDDEN);
 
-        if(admin_flag != 0)
+        if (admin_flag != 0)
         {
             lv_obj_add_flag(unplug_text, LV_OBJ_FLAG_HIDDEN);
             lv_obj_add_flag(charging_complete, LV_OBJ_FLAG_HIDDEN);
         }
-
     }
 }
-
 
 ///////////////////////////////// Charging Timer ///////////////////////////////////
 
 void charge_timer_start()
 {
-
-    lv_label_set_text_fmt(timer_label,  "%02dh  %02dm  %02ds", hr, min, sec);
+    lv_label_set_text_fmt(timer_label, "%02dh  %02dm  %02ds", hr, min, sec);
 
     sec++;
-    if (sec >= 60) {
+    if (sec >= 60)
+    {
         sec = 0;
         min++;
-        if (min >= 60) {
+        if (min >= 60)
+        {
             min = 0;
             hr++;
-            if (hr >= 24) {
+            if (hr >= 24)
+            {
                 hr = 0;
             }
         }
