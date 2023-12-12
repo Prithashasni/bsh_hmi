@@ -35,15 +35,15 @@ int CloudConnection;
 int CableCheckStatus;
 int PowerBoardStatus;
 int HeartBeatMsg;
-float SolarEnergy;
-float GridEnergy;
+float SolarEnergy = 0;
+float GridEnergy = 0;
 float ySolarPwr;
 float yGridPwr;
 int xTime;
-float TotCost;
+float TotCost = 0;
 int PauseTimer;
 int StopEventAck;
-int ChargingState;
+int ChargingState = -1;
 int StopEvent;
 char *arr_split[20];
  
@@ -130,18 +130,16 @@ void processString(char *inputString, char *topicName)
             
             Page = CONST_ChargingProgressPage;
 
-            printf("Page %d\n", Page);
-            printf("SolarEnergy %f\n",SolarEnergy);
-            printf("GridEnergy %f\n",GridEnergy);
-            printf("ySolarPwr %f\n",ySolarPwr);  
-            printf("yGridPwr %f\n",yGridPwr);
-            printf("xTime %d\n",xTime);
-            printf("TotCost %f\n",TotCost);
-            printf("TimeHr %d\n",PauseTimer);
-            printf("StopEventAck %d\n",StopEventAck);
-            printf("ChargingState %d\n",ChargingState);
-            
-            
+            // printf("Page %d\n", Page);
+            // printf("SolarEnergy %f\n",SolarEnergy);
+            // printf("GridEnergy %f\n",GridEnergy);
+            // printf("ySolarPwr %f\n",ySolarPwr);  
+            // printf("yGridPwr %f\n",yGridPwr);
+            // printf("xTime %d\n",xTime);
+            // printf("TotCost %f\n",TotCost);
+            // printf("TimeHr %d\n",PauseTimer);
+            // printf("StopEventAck %d\n",StopEventAck);
+            // printf("ChargingState %d\n",ChargingState);       
     }
     if(strncmp(topicName,"DCWallbox/HMI/PageName/HealthCheck",100)==0 ){
         

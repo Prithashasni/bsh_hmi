@@ -1,3 +1,9 @@
+/**
+ * styles.c
+ *
+ * Created on: 28-Aug-2023
+ * Author: PSI2COB
+ */
 
 #include <math.h>
 #include "../../lvgl/lvgl.h"
@@ -219,3 +225,4 @@ void init_style_backdrop()
     lv_style_set_border_color(&style_ta_rect, LV_COLOR_LIGHT_GREY);
     lv_style_set_radius(&style_ta_rect, 0);
 }
+

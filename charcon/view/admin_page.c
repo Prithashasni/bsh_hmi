@@ -148,12 +148,20 @@ static void ta_event_cb(lv_event_t * e)
         // save_password(ta);
         if(strcmp(text, "admin") == 0 && strcmp(ta,"admin") == 0)
         {
+            if(header_flag != 0)
+            {
+                header_icons_close();
+            }
             lv_label_set_text(label_guest, "Admin");
             strcpy(admin_text, "Admin");
             lv_obj_add_flag(text_inc, LV_OBJ_FLAG_HIDDEN);
         }
         else if(strcmp(text, "user") == 0 && strcmp(ta,"user") == 0)
         {
+            if(header_flag != 0)
+            {
+                header_icons_close();
+            }
             lv_label_set_text(label_guest, "User");
             strcpy(admin_text, "User");
             lv_obj_add_flag(text_inc, LV_OBJ_FLAG_HIDDEN);

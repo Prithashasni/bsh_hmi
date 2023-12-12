@@ -14,8 +14,10 @@
 #include "allpage_icons.h"
 #include "admin_page.h"
 #include "admin_access.h"
+#include "allpage_signals.h"
 #include "../../sub.h"
 #include "../controller/controller.h"
+#include "../controller/progress_page_nav.h"
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -53,6 +55,12 @@ lv_obj_t *img_signal2;
 lv_obj_t *img_signal3;
 lv_obj_t *img_signal4;
 lv_obj_t *img_signal5;
+lv_obj_t *img_wifi5;
+lv_obj_t *img_wifi4;
+lv_obj_t *img_wifi3;
+lv_obj_t *img_wifi2;
+lv_obj_t *img_wifi1;
+lv_obj_t *img_no_wifi;
 lv_obj_t *img_mc;
 lv_obj_t *sw_text;
 lv_obj_t *home_text;
@@ -73,7 +81,8 @@ lv_anim_t anim_scroll;
 char g_position[1000];
 double g_latitude;
 double g_longitude;
-int g_GSMsignal = -1;
+int g_GSMsignal;
+int Wifisignal = 4;
 const char *pos_start;
 const char *loc_text;
 const char *start;
@@ -85,6 +94,7 @@ const int CONST_VseccSettings = 9;
 const int CONST_CharconSettings = 10;
 const int CONST_MasterControl = 11;
 const int CONST_AdminLogsPage = 12;
+const int CONST_WiFiPage = 13;
 
 int gsm_signal_value;
 int char_count = 0;
@@ -93,7 +103,7 @@ int header_flag = 0;
 char datetime_str[30];
 char *position_value;
 
-void get_current_datetime(char *datetime_str) 
+void get_current_datetime(char *datetime_str)
 {
     time_t t;
     struct tm *tm_info;
@@ -112,7 +122,6 @@ void get_current_datetime(char *datetime_str)
         tm_info->tm_min -= 60;
     }
 
-
     strftime(datetime_str, 30, "%H:%M", tm_info);
 }
 
@@ -128,11 +137,51 @@ void allpage_status()
     lv_obj_align(img_profile, LV_ALIGN_TOP_RIGHT, -160, -10);
     lv_obj_add_flag(img_profile, LV_OBJ_FLAG_HIDDEN);
 
-    img_wifi = lv_img_create(scr_home);
-    lv_img_set_src(img_wifi, &icon_wifi);
-    lv_img_set_zoom(img_wifi, 230);
-    lv_obj_align(img_wifi, LV_ALIGN_TOP_RIGHT, -115, -14);
-    lv_obj_add_flag(img_wifi, LV_OBJ_FLAG_HIDDEN);
+    // img_wifi = lv_img_create(scr_home);
+    // lv_img_set_src(img_wifi, &icon_wifi);
+    // lv_img_set_zoom(img_wifi, 230);
+    // lv_obj_align(img_wifi, LV_ALIGN_TOP_RIGHT, -115, -14);
+    // lv_obj_add_flag(img_wifi, LV_OBJ_FLAG_HIDDEN);
+
+    img_wifi5 = lv_img_create(scr_home);
+    lv_img_set_src(img_wifi5, &wifi_5);
+    lv_obj_align(img_wifi5, LV_ALIGN_TOP_RIGHT, -114, -5);
+    lv_obj_add_flag(img_wifi5, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(img_wifi5, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_add_event_cb(img_wifi5, scr_wifi_set, LV_EVENT_CLICKED, NULL);
+
+    img_wifi4 = lv_img_create(scr_home);
+    lv_img_set_src(img_wifi4, &wifi_4);
+    lv_obj_align(img_wifi4, LV_ALIGN_TOP_RIGHT, -117.5, -1);
+    lv_obj_add_flag(img_wifi4, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(img_wifi4, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_add_event_cb(img_wifi4, scr_wifi_set, LV_EVENT_CLICKED, NULL);
+
+    img_wifi3 = lv_img_create(scr_home);
+    lv_img_set_src(img_wifi3, &wifi_3);
+    lv_obj_align(img_wifi3, LV_ALIGN_TOP_RIGHT, -120, 2.5);
+    lv_obj_add_flag(img_wifi3, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(img_wifi3, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_add_event_cb(img_wifi3, scr_wifi_set, LV_EVENT_CLICKED, NULL);
+
+    img_wifi2 = lv_img_create(scr_home);
+    lv_img_set_src(img_wifi2, &wifi_2);
+    lv_obj_align(img_wifi2, LV_ALIGN_TOP_RIGHT, -122, 6.5);
+    lv_obj_add_flag(img_wifi2, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(img_wifi2, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_add_event_cb(img_wifi2, scr_wifi_set, LV_EVENT_CLICKED, NULL);
+
+    img_wifi1 = lv_img_create(scr_home);
+    lv_img_set_src(img_wifi1, &wifi_1);
+    lv_obj_align(img_wifi1, LV_ALIGN_TOP_RIGHT, -126, 10.5);
+    lv_obj_add_flag(img_wifi1, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(img_wifi1, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_add_event_cb(img_wifi1, scr_wifi_set, LV_EVENT_CLICKED, NULL);
+
+    img_no_wifi = lv_img_create(scr_home);
+    lv_img_set_src(img_no_wifi, &img_no_network);
+    lv_obj_align(img_no_wifi, LV_ALIGN_TOP_RIGHT, -114, -4);
+    lv_obj_add_flag(img_no_wifi, LV_OBJ_FLAG_HIDDEN);
 
     img_signal1 = lv_img_create(scr_home);
     lv_img_set_src(img_signal1, &img_network_1);
@@ -210,6 +259,7 @@ void allpage_status()
 
     img_arrow = lv_img_create(back_rect);
     lv_img_set_src(img_arrow, &arrow_up);
+    lv_obj_add_flag(img_arrow,  LV_OBJ_FLAG_FLOATING);
     lv_img_set_zoom(img_arrow, 200);
     lv_obj_align(img_arrow, LV_ALIGN_CENTER, 0, 0);
 
@@ -261,6 +311,7 @@ void allpage_status()
     lv_timer_set_repeat_count(task_timer, -1);
 }
 
+///////// All Page icons timer ///////////////////
 void health_check_status()
 {
     ///////////// Fetch System Time /////////////
@@ -336,6 +387,9 @@ void health_check_status()
     get_gsm_signal();
  
     get_position();
+
+    //////// Wifi signal /////////////////
+    get_wifi_signal();
 }
 
 void header_loc_scroll()
@@ -346,216 +400,6 @@ void header_loc_scroll()
         lv_label_set_long_mode(label_location, LV_LABEL_LONG_SCROLL_CIRCULAR);
         lv_obj_set_width(label_location, 250);
         lv_label_set_text(label_location, g_position);    
-    }
-}
-
-// A simple JSON parser for the provided JSON structure
-void parse_json(const char *json) 
-{
-    // Find "position" key
-    const char *pos_start = strstr(json, "\"position\":");
-    
-    if (pos_start) {
-    char *pos_end = strstr(pos_start + 13, "\""); // Skip over opening double quote
-        if (pos_end) {
-        char *comma_pos = strstr(pos_end + 1, ","); // Find the following comma
-            if (comma_pos) {
-                // Extract the position string without quotes and trailing comma
-                char position[100];
-                strncpy(position, pos_start + 13, comma_pos - pos_start - 13);
-                position[comma_pos - pos_start - 14] = '\0'; // Replace closing double quote with null terminator
-
-                // Copy the extracted position string to the global variable
-                strcpy(g_position, position);
-            } 
-        } 
-    }
-         
-    // Find "latitude" key
-    const char *lat_start = strstr(json, "\"latitude\":");
-    sscanf(lat_start, "\"latitude\":%lf,", &g_latitude);
- 
-    // Find "longitude" key
-    const char *lon_start = strstr(json, "\"longitude\":");
-    sscanf(lon_start, "\"longitude\":%lf,", &g_longitude);
- 
-    // Find "GSMsignal" key
-    const char *signal_start = strstr(json, "\"GSMsignal\":");
-    sscanf(signal_start, "\"GSMsignal\":%d", &g_GSMsignal);
-
-}
-
-int get_position() {
-    // Get the home directory path of the current user
-    char *home = getenv("HOME");
-    if (home == NULL) {
-        fprintf(stderr, "Error getting home directory.\n");
-        return 1;
-    }
- 
-    // Construct the absolute path to the JSON file in the home directory
-    char json_path[256];
-    // snprintf(GSM_FILE_PATH, sizeof(GSM_FILE_PATH), "%s/position.json", home);
- 
-    // Open the JSON file
-    FILE *file = fopen(GSM_FILE_PATH, "r");
-    if (!file) {
-        fprintf(stderr, "Error opening JSON file.\n");
-        return 1;
-    }
- 
-    // Read the JSON data from the file
-    fseek(file, 0, SEEK_END);
-    long file_size = ftell(file);
-    fseek(file, 0, SEEK_SET);
-    char *json_data = (char *)malloc(file_size);
-    fread(json_data, 1, file_size, file);
-    fclose(file);
- 
-    // Parse JSON data and store values in global variables
-    // printf("%s", json_data);
-    parse_json(json_data);
-
-    /* Get location from the GPS Module and display */
-
-    loc_text = lv_label_get_text(label_location);
-    start = loc_text;
-    while (*start != '\0') {
-    char_count++;
-    start++;
-    }
-
-    lv_label_set_text(label_location, g_position);
- 
-    // Free allocated memory
-    free(json_data);
- 
-    return 0;
-}
-
-
-void get_gsm_signal()
-{
-
-    if(g_GSMsignal == 0)
-    {
-        lv_obj_add_flag(img_no_signal, LV_OBJ_FLAG_HIDDEN);
-
-        lv_obj_set_style_img_recolor(img_signal1, LV_COLOR_WHITE, LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal1, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal2, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal2, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal3, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal3, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal4, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal4, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal5, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal5, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-    }
-    else if (g_GSMsignal == 1)
-    {
-        lv_obj_add_flag(img_no_signal, LV_OBJ_FLAG_HIDDEN);
-
-        lv_obj_set_style_img_recolor(img_signal1, LV_COLOR_WHITE, LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal1, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal2, LV_COLOR_WHITE, LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal2, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal3, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal3, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal4, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal4, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal5, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal5, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-    }
-    else if (g_GSMsignal == 2)
-    {
-        lv_obj_add_flag(img_no_signal, LV_OBJ_FLAG_HIDDEN);
-
-        lv_obj_set_style_img_recolor(img_signal1, LV_COLOR_WHITE, LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal1, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal2, LV_COLOR_WHITE, LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal2, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal3, LV_COLOR_WHITE, LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal3, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal4, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal4, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal5, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal5, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-    }
-    else if (g_GSMsignal == 3)
-    {
-        lv_obj_add_flag(img_no_signal, LV_OBJ_FLAG_HIDDEN);
-
-        lv_obj_set_style_img_recolor(img_signal1, LV_COLOR_WHITE, LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal1, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal2, LV_COLOR_WHITE, LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal2, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal3, LV_COLOR_WHITE, LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal3, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal4, LV_COLOR_WHITE, LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal4, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal5, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal5, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-    }
-    else if (g_GSMsignal == 4)
-    {
-        lv_obj_add_flag(img_no_signal, LV_OBJ_FLAG_HIDDEN);
-
-        lv_obj_set_style_img_recolor(img_signal1, LV_COLOR_WHITE, LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal1, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal2, LV_COLOR_WHITE, LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal2, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal3, LV_COLOR_WHITE, LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal3, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal4, LV_COLOR_WHITE, LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal4, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal5, LV_COLOR_WHITE, LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal5, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-    }
-    else
-    {
-        lv_obj_clear_flag(img_no_signal, LV_OBJ_FLAG_HIDDEN);
-        
-        lv_obj_set_style_img_recolor(img_signal1, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal1, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal2, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal2, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal3, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal3, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal4, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal4, LV_OPA_COVER, LV_STATE_DEFAULT);
-
-        lv_obj_set_style_img_recolor(img_signal5, lv_color_hex(0x3A3A3A), LV_STATE_DEFAULT);
-        lv_obj_set_style_img_recolor_opa(img_signal5, LV_OPA_COVER, LV_STATE_DEFAULT);
-
     }
 }
 
@@ -745,4 +589,9 @@ void scr_mc_set()
 void scr_log_set()
 {
     header_page = CONST_AdminLogsPage;
+}
+
+void scr_wifi_set()
+{
+    header_page = CONST_WiFiPage;
 }

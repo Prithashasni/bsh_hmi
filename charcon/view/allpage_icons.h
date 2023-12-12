@@ -42,6 +42,12 @@ extern lv_obj_t *img_signal2;
 extern lv_obj_t *img_signal3;
 extern lv_obj_t *img_signal4;
 extern lv_obj_t *img_signal5;
+extern lv_obj_t *img_wifi5;
+extern lv_obj_t *img_wifi4;
+extern lv_obj_t *img_wifi3;
+extern lv_obj_t *img_wifi2;
+extern lv_obj_t *img_wifi1;
+extern lv_obj_t *img_no_wifi;
 extern lv_obj_t *img_mc;
 extern lv_obj_t *sw_text;
 extern lv_obj_t *home_text;
@@ -81,16 +87,30 @@ LV_IMG_DECLARE(img_network_2)
 LV_IMG_DECLARE(img_network_3)
 LV_IMG_DECLARE(img_network_4)
 LV_IMG_DECLARE(img_network_5)
+LV_IMG_DECLARE(wifi_5)
+LV_IMG_DECLARE(wifi_4)
+LV_IMG_DECLARE(wifi_3)
+LV_IMG_DECLARE(wifi_2)
+LV_IMG_DECLARE(wifi_1)
 LV_IMG_DECLARE(img_no_network)
 
+extern char g_position[1000];
+extern double g_latitude;
+extern double g_longitude;
+extern int g_GSMsignal;
+extern int Wifisignal;
 extern int header_flag;
+extern int char_count;
 extern char admin_text[50];
+extern const char *loc_text;
+extern const char *start;
 extern const int CONST_AdminLoginPage;
 extern const int CONST_SoftwareUpdate;
 extern const int CONST_VseccSettings;
 extern const int CONST_CharconSettings;
 extern const int CONST_MasterControl;
 extern const int CONST_AdminLogsPage;
+extern const int CONST_WiFiPage;
 
 
 /* Project Includes */
@@ -105,10 +125,8 @@ extern void scr_vsecc_set();
 extern void scr_charcon_set();
 extern void scr_mc_set();
 extern void scr_log_set();
+extern void scr_wifi_set();
 extern void health_check_status();
 extern void get_current_datetime(char *datetime_str);
-extern int get_position();
-extern void get_gsm_signal();
-extern void parse_json(const char *json);
 extern void scroll_location();
 #endif

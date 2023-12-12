@@ -133,14 +133,17 @@ void cable_check_status()
         lv_anim_set_values(&anim_opacity1, LV_OPA_0, LV_OPA_COVER);
         lv_anim_set_repeat_count(&anim_opacity1, LV_ANIM_REPEAT_INFINITE);
         lv_anim_start(&anim_opacity1);
-    } else if(CableCheckStatus == 2) {
+    }
+    else if (CableCheckStatus == 2)
+    {
         lv_obj_clear_flag(check1_good, LV_OBJ_FLAG_HIDDEN);
         lv_obj_add_flag(check1_text, LV_OBJ_FLAG_HIDDEN);
     }
 
     /////////////////// Power Board Status //////////////////
 
-    if(PowerBoardStatus == 1) {
+    if (PowerBoardStatus == 1)
+    {
         lv_obj_add_flag(check2_good, LV_OBJ_FLAG_HIDDEN);
         lv_obj_clear_flag(check2_text, LV_OBJ_FLAG_HIDDEN);
 
@@ -152,13 +155,16 @@ void cable_check_status()
         lv_anim_set_values(&anim_opacity2, LV_OPA_0, LV_OPA_COVER);
         lv_anim_set_repeat_count(&anim_opacity2, LV_ANIM_REPEAT_INFINITE);
         lv_anim_start(&anim_opacity2);
-    } else if(PowerBoardStatus == 2) {
+    }
+    else if (PowerBoardStatus == 2)
+    {
         lv_obj_add_flag(check2_text, LV_OBJ_FLAG_HIDDEN);
         lv_obj_clear_flag(check2_good, LV_OBJ_FLAG_HIDDEN);
     }
 
     /////////////////// Heart beat Status //////////////////
-    if(HeartBeatMsg == 0) {
+    if (HeartBeatMsg == 0)
+    {
         lv_anim_t anim_img;
         lv_anim_init(&anim_img);
         lv_anim_set_exec_cb(&anim_img, anim_zoom_cb);
@@ -166,7 +172,9 @@ void cable_check_status()
         lv_anim_set_values(&anim_img, 250, 265);
         lv_anim_set_repeat_count(&anim_img, LV_ANIM_REPEAT_INFINITE);
         lv_anim_start(&anim_img);
-    } else if(HeartBeatMsg == 1) {
+    }
+    else if (HeartBeatMsg == 1)
+    {
         lv_obj_add_flag(img_red_check, LV_OBJ_FLAG_HIDDEN);
         lv_obj_add_flag(label_dc_text, LV_OBJ_FLAG_HIDDEN);
         lv_obj_clear_flag(img_green_check, LV_OBJ_FLAG_HIDDEN);
@@ -178,8 +186,6 @@ void cable_check_status()
 
 void initialize_device()
 {
-
-
     display_allpage_icons();
 
     img_initializing = lv_img_create(scr_home);

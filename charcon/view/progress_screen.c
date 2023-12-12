@@ -51,12 +51,11 @@ int sec = 0, min = 0, hr = 0;
 char cost_on_grid[10] = "0.41";
 
 /////////// Chart values //////////
-lv_chart_series_t * ser1;
-lv_chart_series_t * ser2;
+lv_chart_series_t *ser1;
+lv_chart_series_t *ser2;
 
 void create_progress_screen()
 {
-
     img_money = lv_img_create(scr_home);
     lv_img_set_src(img_money, &icon_money);
     lv_obj_add_flag(img_money, LV_OBJ_FLAG_HIDDEN);
@@ -112,7 +111,7 @@ void create_progress_screen()
     cost_text = lv_label_create(scr_home);
     lv_obj_align(cost_text, LV_ALIGN_TOP_LEFT, 140, 140);
     lv_obj_add_flag(cost_text, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_style(cost_text, &style_vehicle_text, LV_STATE_DEFAULT);    
+    lv_obj_add_style(cost_text, &style_vehicle_text, LV_STATE_DEFAULT);
 
     solar_energy_text = lv_label_create(scr_home);
     lv_obj_add_flag(solar_energy_text, LV_OBJ_FLAG_HIDDEN);
@@ -129,7 +128,7 @@ void create_progress_screen()
     img_tot_cost = lv_img_create(scr_home);
     lv_img_set_src(img_tot_cost, &img_tot);
     lv_obj_add_flag(img_tot_cost, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_set_style_img_recolor(img_tot_cost,  lv_color_hex(0xf8b484), LV_STATE_DEFAULT);
+    lv_obj_set_style_img_recolor(img_tot_cost, lv_color_hex(0xf8b484), LV_STATE_DEFAULT);
     lv_obj_set_style_img_recolor_opa(img_tot_cost, LV_OPA_COVER, LV_STATE_DEFAULT);
     lv_obj_align(img_tot_cost, LV_ALIGN_LEFT_MID, 30, 112);
 
@@ -161,7 +160,7 @@ void create_progress_screen()
     img_terminate = lv_img_create(scr_home);
     lv_obj_add_flag(img_terminate, LV_OBJ_FLAG_HIDDEN);
     lv_img_set_src(img_terminate, &img_loader);
-    lv_obj_align(img_terminate,  LV_ALIGN_BOTTOM_MID, 45, -50);
+    lv_obj_align(img_terminate, LV_ALIGN_BOTTOM_MID, 45, -50);
     lv_img_set_zoom(img_terminate, 120);
     lv_obj_set_style_img_recolor(img_terminate, LV_COLOR_RED, LV_STATE_DEFAULT);
     lv_obj_set_style_img_recolor_opa(img_terminate, LV_OPA_COVER, LV_STATE_DEFAULT);
@@ -210,7 +209,7 @@ void create_progress_screen()
 
     timer_label = lv_label_create(scr_home);
     lv_obj_add_flag(timer_label, LV_OBJ_FLAG_HIDDEN);
-    lv_label_set_text_fmt(timer_label,  "%02dh  %02dm  %02ds", hr, min, sec);
+    lv_label_set_text_fmt(timer_label, "%02dh  %02dm  %02ds", hr, min, sec);
     lv_obj_align(timer_label, LV_ALIGN_BOTTOM_RIGHT, -100, -95);
     lv_obj_add_style(timer_label, &style_white_text, LV_STATE_DEFAULT);
 }
@@ -276,7 +275,7 @@ static void draw_event_cb(lv_event_t *e)
         lv_draw_mask_line_param_t line_mask_param;
         lv_draw_mask_line_points_init(&line_mask_param, dsc->p1->x, dsc->p1->y, dsc->p2->x, dsc->p2->y, LV_DRAW_MASK_LINE_SIDE_BOTTOM);
         int16_t line_mask_id = lv_draw_mask_add(&line_mask_param, NULL);
-        
+
         /*Draw a rectangle that will be affected by the mask*/
         lv_draw_rect_dsc_t draw_rect_dsc;
         lv_draw_rect_dsc_init(&draw_rect_dsc);

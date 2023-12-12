@@ -15,10 +15,6 @@ extern void page_change();
 extern void admin_change();
 extern void admin_page();
 extern void wallbox_page();
-extern void progress_admin_page();
-extern void progress_page_hidden();
-extern void progress_page_display();
-extern void admin_to_progress();
 extern void progress_page_timer();
 extern void admin_before_progress();
 
