@@ -399,13 +399,11 @@ void delete_obj_on_headpage(int header_page)
     {
         lv_obj_del(back_icon);
         lv_obj_del(wifi_text);
-        if (Wifisignal < 5){
-            lv_obj_del(network_bg);
-        }
-        else{
-            lv_obj_del(no_wifi_icon);
-            lv_obj_del(no_wifi_text);
-        }
+        lv_obj_del(user_name);
+        lv_obj_del(wf_pwd);
+        lv_obj_del(wifi_ta);
+        lv_obj_del(wifi_pwd);
+        lv_obj_del(wifi_keyboard);       
     }
 
 }
