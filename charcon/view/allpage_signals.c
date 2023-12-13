@@ -23,7 +23,7 @@
 #include <string.h>
 #include <unistd.h>
 
-#define GSM_FILE_PATH "/home/psi2cob/Projects/charcon/stable_test/position.json"
+#define GSM_FILE_PATH "/home/position.json"
 
 // A simple JSON parser for the provided JSON structure
 void parse_json(const char *json)
