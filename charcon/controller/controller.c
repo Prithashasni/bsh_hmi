@@ -19,7 +19,7 @@
 #include "../view/device_detect.h"
 #include "../view/progress_screen.h"
 #include "../view/allpage_icons.h"
-n#include "../view/allpage_signals.h"
+#include "../view/allpage_signals.h"
 #include "../view/admin_page.h"
 #include "../view/admin_access.h"
 #include "../view/styles.h"
