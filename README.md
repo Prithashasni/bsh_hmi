@@ -18,3 +18,9 @@ make
 ./lvgl-demo-wl
 ```
 
+## Scr-Rev git code
+
+```
+8681b93d695fea90a8316e5935fd97b620ce3c3f
+```
+
