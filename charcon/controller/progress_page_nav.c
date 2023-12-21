@@ -143,7 +143,7 @@ void progress_admin_page()
         else
         {
             scr_wifi_page();
-            delete_objects_on_page(prev_page);
+            progress_page_hidden();
             prev_header_page = CONST_WiFiPage;
             user_flag = CONST_WiFiPage;
         }
