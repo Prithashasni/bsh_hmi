@@ -46,9 +46,9 @@ int main(void)
     }
 
     /* Create a Demo */
-    lv_demo_widgets();
+    // lv_demo_widgets();
     // lv_demo_music();
-    // ui_start();
+    ui_start();
 
   while(1) {
       /* Periodically call the lv_task handler.
