@@ -19,11 +19,11 @@ lv_obj_t *scroll_cont;
 lv_obj_t *menu_bar;
 lv_obj_t *img_launch_bg;
 
-LV_IMG_DECLARE(haloeffect)
-LV_IMG_DECLARE(img_chat);
-LV_IMG_DECLARE(img_wifi);
-LV_IMG_DECLARE(img_feature);
-LV_IMG_DECLARE(img_solution);
+// LV_IMG_DECLARE(haloeffect)
+// LV_IMG_DECLARE(img_chat);
+// LV_IMG_DECLARE(img_wifi);
+// LV_IMG_DECLARE(img_feature);
+// LV_IMG_DECLARE(img_solution);
 
 
 static const uint32_t btn_count = 4;   
@@ -86,11 +86,11 @@ void scr_menu_scroll()
     lv_obj_set_style_border_opa(scr_menu, LV_OPA_TRANSP, 0);
     // lv_obj_add_style(scr_home, &style_scr_backdrop, LV_PART_MAIN);
 
-    img_launch_bg = lv_img_create(scr_menu);
-    lv_img_set_src(img_launch_bg, &haloeffect);
-    lv_img_set_zoom(img_launch_bg, 256); 
-    lv_obj_set_style_bg_opa(img_launch_bg, LV_OPA_20, LV_PART_MAIN);
-    lv_obj_align(img_launch_bg, LV_ALIGN_CENTER, 0, 0);
+    // img_launch_bg = lv_img_create(scr_menu);
+    // lv_img_set_src(img_launch_bg, &haloeffect);
+    // lv_img_set_zoom(img_launch_bg, 256); 
+    // lv_obj_set_style_bg_opa(img_launch_bg, LV_OPA_20, LV_PART_MAIN);
+    // lv_obj_align(img_launch_bg, LV_ALIGN_CENTER, 0, 0);
 
     // menu_bar = lv_obj_create(scr_menu);
     // lv_obj_set_size(menu_bar, 1280, 100);
