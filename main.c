@@ -7,14 +7,11 @@
 #include "lvgl/demos/lv_demos.h"
 #include "lv_drivers/wayland/wayland.h"
 #include <unistd.h>
-#include "sub.h"
-#include "MQTTClient.h"
+
 
 // #include "charcon/controller/controller.h"
-
-#include "main/view/launch_screen.h"
-#include "main/view/menu_screen.h"
-#include "main/view/styles.h"
+#include "nfc/view/menu_screen.h"
+#include "nfc/view/styles.h"
 
 int main(void)
 {
@@ -53,7 +50,7 @@ int main(void)
     // lv_demo_widgets();
     // lv_demo_music();
     // ui_start();
-    // init_style();
+    init_style();
     scr_menu_scroll();
 
 
