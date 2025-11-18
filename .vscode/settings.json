@@ -1,5 +1,6 @@
 {
   "files.associations": {
-    "progress_page_nav.h": "c"
+    "progress_page_nav.h": "c",
+    "sub.h": "c"
   }
 }

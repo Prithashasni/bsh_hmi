@@ -10,7 +10,11 @@
 #include "sub.h"
 #include "MQTTClient.h"
 
-#include "charcon/controller/controller.h"
+// #include "charcon/controller/controller.h"
+
+#include "main/view/launch_screen.h"
+#include "main/view/menu_screen.h"
+#include "main/view/styles.h"
 
 int main(void)
 {
@@ -46,9 +50,12 @@ int main(void)
     }
 
     /* Create a Demo */
-    lv_demo_widgets();
+    // lv_demo_widgets();
     // lv_demo_music();
     // ui_start();
+    // init_style();
+    scr_menu_scroll();
+
 
   while(1) {
       /* Periodically call the lv_task handler.
