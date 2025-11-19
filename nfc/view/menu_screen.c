@@ -20,10 +20,10 @@ lv_obj_t *menu_bar;
 lv_obj_t *img_launch_bg;
 
 LV_IMG_DECLARE(haloeffect)
-// LV_IMG_DECLARE(img_chat);
-// LV_IMG_DECLARE(img_wifi);
-// LV_IMG_DECLARE(img_feature);
-// LV_IMG_DECLARE(img_solution);
+LV_IMG_DECLARE(img_chat);
+LV_IMG_DECLARE(img_wifi);
+LV_IMG_DECLARE(img_feature);
+LV_IMG_DECLARE(img_solution);
 
 
 static const uint32_t btn_count = 4;   
@@ -78,7 +78,7 @@ void scr_menu_scroll()
     init_button_styles();
 
     lv_style_t *btn_styles[4] = { &style_btn1, &style_btn2, &style_btn3, &style_btn4 };
-    // const lv_img_dsc_t *imgs[4] = { &img_chat, &img_wifi , &img_feature, &img_solution };
+    const lv_img_dsc_t *imgs[4] = { &img_chat, &img_wifi , &img_feature, &img_solution };
      
     scr_menu = lv_obj_create(lv_scr_act());
     lv_obj_set_size(scr_menu, 1280, 800);
@@ -141,10 +141,10 @@ void scr_menu_scroll()
             lv_obj_add_style(btn, btn_styles[i], LV_PART_MAIN);
 
             // img icons
-            // lv_obj_t *img = lv_img_create(btn);
-            // lv_img_set_src(img, imgs[i]);
-            // lv_obj_align(img, LV_ALIGN_CENTER, 0, -130); 
-            // lv_img_set_zoom(img, img_zoom[i]);
+            lv_obj_t *img = lv_img_create(btn);
+            lv_img_set_src(img, imgs[i]);
+            lv_obj_align(img, LV_ALIGN_CENTER, 0, -130); 
+            lv_img_set_zoom(img, img_zoom[i]);
 
             lv_obj_t *label = lv_label_create(btn);
             lv_label_set_text(label, labels[i]);
