@@ -7,7 +7,7 @@
 
 
 #include "../../lvgl/lvgl.h"
-// #include "launch_screen.h"
+#include "launch_screen.h"
 #include "menu_screen.h"
 #include "styles.h"
 #include "colors.h"
@@ -160,16 +160,16 @@ void scr_menu_scroll()
             // lv_obj_set_style_text_color(sub_label, lv_color_hex(0xFFFFFF), 0);
 
              if (i == 1) {
-                lv_obj_set_style_text_color(sub_label, lv_color_hex(0xFFFFFF), 0);  // Bright white
-                lv_obj_set_style_text_color(label, lv_color_hex(0xFFFFFF), 0);  // Bright white
+                lv_obj_set_style_text_color(sub_label, lv_color_hex(0xFFFFFF), 0); 
+                lv_obj_set_style_text_color(label, lv_color_hex(0xFFFFFF), 0);  
             } else {
-                lv_obj_set_style_text_color(sub_label, lv_color_hex(0xAAAAAA), 0);  // Light gray (dimmed)
-                lv_obj_set_style_text_color(label, lv_color_hex(0xAAAAAA), 0);  // Light gray (dimmed)
+                lv_obj_set_style_text_color(sub_label, lv_color_hex(0xAAAAAA), 0);  
+                lv_obj_set_style_text_color(label, lv_color_hex(0xAAAAAA), 0); 
             }
 
 
             if(i == 1 && set == 0) {
-                // lv_obj_add_event_cb(btn, create_launch_screen, LV_EVENT_CLICKED, NULL);
+                lv_obj_add_event_cb(btn, create_launch_screen, LV_EVENT_CLICKED, NULL);
             }
 
             if(set == 0) btns[i] = btn; 
