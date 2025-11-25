@@ -141,10 +141,10 @@ void scr_menu_scroll()
             lv_obj_add_style(btn, btn_styles[i], LV_PART_MAIN);
 
             // img icons
-            lv_obj_t *img = lv_img_create(btn);
-            lv_img_set_src(img, imgs[i]);
-            lv_obj_align(img, LV_ALIGN_CENTER, 0, -130); 
-            lv_img_set_zoom(img, img_zoom[i]);
+            // lv_obj_t *img = lv_img_create(btn);
+            // lv_img_set_src(img, imgs[i]);
+            // lv_obj_align(img, LV_ALIGN_CENTER, 0, -130); 
+            // lv_img_set_zoom(img, img_zoom[i]);
 
             lv_obj_t *label = lv_label_create(btn);
             lv_label_set_text(label, labels[i]);
@@ -169,7 +169,7 @@ void scr_menu_scroll()
 
 
             if(i == 1 && set == 0) {
-                lv_obj_add_event_cb(btn, create_launch_screen, LV_EVENT_CLICKED, NULL);
+                // lv_obj_add_event_cb(btn, create_launch_screen, LV_EVENT_CLICKED, NULL);
             }
 
             if(set == 0) btns[i] = btn; 
