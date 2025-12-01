@@ -12,7 +12,12 @@
 // #include "charcon/controller/controller.h"
 #include "nfc/view/menu_screen.h"
 #include "nfc/view/styles.h"
+#include "nfc.h"
+#include "interrupt.h"
+#include <pthread.h>
+#include "main.h"
 
+int running = 1;
 int main(void)
 {
     /* LVGL init */
@@ -46,21 +51,25 @@ int main(void)
         }
     }
 
-    /* Create a Demo */
-    // lv_demo_widgets();
-    // lv_demo_music();
-    // ui_start();
     init_style();
     scr_menu_scroll();
+  pthread_t t1, t2;
 
+  pthread_create(&t1, NULL, nfc_thread, NULL);
+  pthread_create(&t2, NULL, keyboard_thread, NULL);
 
-  while(1) {
-      /* Periodically call the lv_task handler.
-       * It could be done in a timer interrupt or an OS task too.*/
-      lv_tick_inc(1);
+  while (running) {
       lv_timer_handler();
-      usleep(500);
+      usleep(10 * 1000);
   }
 
-    return 0;
+  printf("Exiting cleanly.\n");
+
+  // Now wait for threads to exit
+  pthread_join(t2, NULL);
+  pthread_join(t1, NULL);
+
+  lv_deinit();
+  return 0;
+
 }

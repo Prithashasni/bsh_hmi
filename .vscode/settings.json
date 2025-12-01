@@ -1,7 +1,0 @@
-{
-  "files.associations": {
-    "progress_page_nav.h": "c",
-    "sub.h": "c",
-    "errno.h": "c"
-  }
-}
