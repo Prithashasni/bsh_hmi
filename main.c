@@ -14,7 +14,7 @@
 #include "nfc/view/styles.h"
 #include "nfc.h"
 #include "interrupt.h"
-#include <pthread.h>
+// #include <pthread.h>
 #include "main.h"
 
 int running = 1;
@@ -53,21 +53,21 @@ int main(void)
 
     init_style();
     scr_menu_scroll();
-  pthread_t t1, t2;
+//   pthread_t t1, t2;
 
-  pthread_create(&t1, NULL, nfc_thread, NULL);
-  pthread_create(&t2, NULL, keyboard_thread, NULL);
+//   pthread_create(&t1, NULL, nfc_thread, NULL);
+//   pthread_create(&t2, NULL, keyboard_thread, NULL);
 
   while (running) {
       lv_timer_handler();
       usleep(10 * 1000);
   }
 
-  printf("Exiting cleanly.\n");
+//   printf("Exiting cleanly.\n");
 
-  // Now wait for threads to exit
-  pthread_join(t2, NULL);
-  pthread_join(t1, NULL);
+//   // Now wait for threads to exit
+//   pthread_join(t2, NULL);
+//   pthread_join(t1, NULL);
 
   lv_deinit();
   return 0;
