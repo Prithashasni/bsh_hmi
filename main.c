@@ -19,26 +19,20 @@ int main(void)
     /* LVGL init */
     lv_init();
 
-    /* LVGL init */
-    printf("[INFO] Initializing LVGL...\n");
-    lv_init();
-    printf("[OK] LVGL initialized.\n");
-
     /* Wayland display init */
-    printf("[INFO] Initializing Wayland backend...\n");
     lv_wayland_init();
-    printf("[OK] Wayland backend initialized.\n");
-
-    printf("[INFO] Creating Wayland window 1280x800...\n");
-    lv_disp_t *disp = lv_wayland_create_window(1280, 800, "window", NULL);
-    if (!disp) {
-        printf("[ERROR] Failed to create Wayland display window\n");
-        return -1;
-    }
-    printf("[OK] Wayland window created.\n");
-
+    printf("[INFO] Display init...\n");
+    lv_disp_t * disp = lv_wayland_create_window(1024, 600, "window", NULL);
     lv_wayland_window_set_fullscreen(disp, true);
-    printf("[INFO] Fullscreen enabled.\n");
+
+    /* Set a cursor for the touchscreen */
+    lv_indev_t * touchscreen = lv_wayland_get_touchscreen(disp);
+
+    printf("[INFO] Touchscreen...\n");
+
+    /* Search connected keyboard and attach it to the driver */
+    lv_group_t * g = lv_group_create();
+    lv_group_set_default(g);
 
     lv_indev_t * cur_drv = NULL;
     for (;;) {
@@ -56,8 +50,6 @@ int main(void)
         }
     }
 
-    /* LVGL Screen Setup */
-    printf("[INFO] Initializing UI styles...\n");
     init_style();
     scr_menu_scroll();
 
