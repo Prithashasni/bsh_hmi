@@ -30,32 +30,6 @@ static int kbhit()
     return select(STDIN_FILENO+1, &fds, NULL, NULL, &tv);
 }
 
-// void *keyboard_thread(void *arg)
-// {
-//     init_kb();
-
-//     while (running)
-//     {
-//         if (kbhit())
-//         {
-//             char c = getchar();
-
-//             if (c == 'q') {
-//                 running = 0;
-//                 break;
-//             }
-
-//             printf("Key Pressed: %c\n", c);
-
-//             // If needed: send event to LVGL
-//         }
-//         usleep(10000);
-//     }
-
-//     close_kb();
-//     return NULL;
-// }
-
 void *keyboard_thread(void *arg)
 {
     init_kb();
@@ -71,22 +45,18 @@ void *keyboard_thread(void *arg)
                 break;
             }
 
-            printf("Key Pressed: %c\n", c);
+            char ssid[64]={0}, pw[64]={0};
 
-            char ssid[64] = {0};
-            char pw[64] = {0};
+            if (read_ssid_pw(ssid, pw) == 0) {
+                printf("SSID: %s\nPW: %s\n", ssid, pw);
 
-            if (read_ssid_pw(ssid, pw) == 0)
-            {
-                printf("SSID: %s\n", ssid);
-                printf("PW  : %s\n", pw);
-            }
-            else
-            {
-                printf("Failed reading NFC I2C\n");
+                // PUSH EVENT to LVGL
+                push_wifi_event(ssid, pw);
+
+            } else {
+                printf("Failed NFC read\n");
             }
         }
-
         usleep(10000);
     }
 
