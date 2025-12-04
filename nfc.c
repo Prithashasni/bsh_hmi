@@ -10,7 +10,7 @@
 #include <pthread.h>
 
 #define I2C_BUS "/dev/i2c-1"
-#define NFC_ADDR 0x53
+#define NFC_ADDR 0x62 //0x53
 #define READ_LEN 512
 
 #define TLV_SSID 0x1045
