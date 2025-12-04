@@ -22,6 +22,7 @@
 int running = 1;
 int main(void)
 {
+    setvbuf(stdout, NULL, _IONBF, 0);
     printf("[INFO] Starting LVGL Wayland application...\n");
     /* LVGL init */
     lv_init();
