@@ -61,23 +61,40 @@ int read_ssid_pw(char *out_ssid, char *out_pw){
 
 // NFC polling thread
 void *nfc_thread(void *arg){
-    char last_ssid[64] = {0};
-    char last_pw[64] = {0};
+    static char cached_ssid[64] = {0};
+    static char cached_pw[64]   = {0};
+    int wifi_updated = 0;
 
     while(running){
-        char ssid[64], pw[64];
-        if(read_ssid_pw(ssid, pw) == 0){
-            // Only update if credentials changed
-            if(strcmp(ssid, last_ssid) != 0 || strcmp(pw, last_pw) != 0){
+        char ssid[64] = {0}, pw[64] = {0};
+        int ret = read_ssid_pw(ssid, pw);
+
+        if(ret == 0){
+            // NFC read successful
+            if(strcmp(ssid, cached_ssid) != 0 || strcmp(pw, cached_pw) != 0){
+                // New credentials, update Wi-Fi
                 wifi_update_credentials(ssid, pw);
                 printf("[NFC] Updated WiFi credentials: SSID='%s', PW='%s'\n", ssid, pw);
-                strncpy(last_ssid, ssid, sizeof(last_ssid)-1);
-                last_ssid[sizeof(last_ssid)-1] = 0;
-                strncpy(last_pw, pw, sizeof(last_pw)-1);
-                last_pw[sizeof(last_pw)-1] = 0;
+
+                strncpy(cached_ssid, ssid, sizeof(cached_ssid)-1);
+                cached_ssid[sizeof(cached_ssid)-1] = 0;
+                strncpy(cached_pw, pw, sizeof(cached_pw)-1);
+                cached_pw[sizeof(cached_pw)-1] = 0;
+                wifi_updated = 1;
+            }
+        } else {
+            // NFC read failed
+            printf("[NFC] NFC read failed. Using cached credentials.\n");
+            if(cached_ssid[0] && cached_pw[0] && !wifi_updated){
+                wifi_update_credentials(cached_ssid, cached_pw);
+                printf("[NFC] Re-applied cached WiFi credentials: SSID='%s', PW='%s'\n",
+                        cached_ssid, cached_pw);
+                wifi_updated = 1;
             }
         }
-        usleep(500000); // 500ms poll
+
+        usleep(500000); // 0.5s poll
     }
     return NULL;
 }
+
