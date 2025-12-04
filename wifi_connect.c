@@ -15,7 +15,6 @@ static int run_cmd(const char *cmd)
     return system(cmd);
 }
 
-// Generate wpa_supplicant.conf for WPA/WPA2 networks
 static int create_wpa_conf(const char *ssid, const char *password)
 {
     FILE *fp = fopen(WPA_CONF_PATH, "w");

@@ -12,6 +12,7 @@ void push_wifi_event(const char *ssid, const char *pw)
     if (event_count < 8) {
         event_queue[event_count].type = EVENT_WIFI_CRED;
         strncpy(event_queue[event_count].ssid, ssid, sizeof(event_queue[event_count].ssid)-1);
+        printf("[EVENT] Queued WiFi Event: SSID='%s'\n", ssid);
         event_queue[event_count].ssid[sizeof(event_queue[event_count].ssid)-1] = 0;
         strncpy(event_queue[event_count].pw, pw, sizeof(event_queue[event_count].pw)-1);
         event_queue[event_count].pw[sizeof(event_queue[event_count].pw)-1] = 0;
@@ -26,6 +27,7 @@ void push_wifi_status_event(const char *ssid, int status)
     if (event_count < 8) {
         event_queue[event_count].type = EVENT_WIFI_STATUS;
         strncpy(event_queue[event_count].ssid, ssid, sizeof(event_queue[event_count].ssid)-1);
+        printf("[EVENT] Queued WiFi Status Event: SSID='%s', Status=%d\n", ssid, status);
         event_queue[event_count].ssid[sizeof(event_queue[event_count].ssid)-1] = 0;
         event_queue[event_count].status = status;
         event_count++;

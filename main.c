@@ -75,7 +75,6 @@ int main(void)
       usleep(500);
   }
 
-    // printf("Exiting cleanly.\n");
 
     // // Now wait for threads to exit
     pthread_join(nfc_t, NULL);
