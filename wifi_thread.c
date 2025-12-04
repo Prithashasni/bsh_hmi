@@ -12,7 +12,8 @@ static char g_ssid[64] = {0};
 static char g_pw[64] = {0};
 static int g_pending = 0;
 
-void wifi_update_credentials(const char *ssid, const char *pw, int force){
+void wifi_update_credentials(const char *ssid, const char *pw, int force)
+{
     pthread_mutex_lock(&g_lock);
 
     if(force || strcmp(g_ssid, ssid) != 0 || strcmp(g_pw, pw) != 0){
@@ -20,7 +21,7 @@ void wifi_update_credentials(const char *ssid, const char *pw, int force){
         g_ssid[sizeof(g_ssid)-1] = 0;
         strncpy(g_pw, pw, sizeof(g_pw)-1);
         g_pw[sizeof(g_pw)-1] = 0;
-        g_pending = 1;  // trigger Wi-Fi thread
+        g_pending = 1;  
     }
 
     pthread_mutex_unlock(&g_lock);
