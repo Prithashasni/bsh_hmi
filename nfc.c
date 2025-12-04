@@ -23,6 +23,7 @@ static uint16_t be16(const uint8_t *p) {
 
 int read_ssid_pw(char *out_ssid, char *out_pw)
 {
+    printf("[NFC] Reading SSID and Password from NFC module...\n");
     int fd = open(I2C_BUS, O_RDWR);
     if (fd < 0) return -2;
     if (ioctl(fd, I2C_SLAVE, NFC_ADDR) < 0) { close(fd); return -2; }
@@ -79,10 +80,13 @@ void *nfc_thread(void *arg)
             // Only update if credentials changed
             if (strcmp(ssid, last_ssid) != 0 || strcmp(pw, last_pw) != 0) {
                 wifi_update_credentials(ssid, pw);
+                printf("[NFC] Updated WiFi credentials: SSID='%s', PW='%s'\n", ssid, pw);
                 strncpy(last_ssid, ssid, sizeof(last_ssid)-1);
                 last_ssid[sizeof(last_ssid)-1] = 0;
+                printf("[NFC] Updated WiFi credentials: SSID='%s', PW='%s'\n", ssid, pw);
                 strncpy(last_pw, pw, sizeof(last_pw)-1);
                 last_pw[sizeof(last_pw)-1] = 0;
+                printf("[NFC] Waiting for WiFi connection...\n");
             }
         }
         usleep(100000);

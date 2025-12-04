@@ -73,11 +73,6 @@ int main(void)
       lv_tick_inc(1);
       lv_timer_handler();
       usleep(500);
-
-        // static int counter = 0;
-        // if (++counter % 2000 == 0) {
-        //     printf("[DEBUG] LVGL running (tick=%d)\n", counter);
-        // }
   }
 
     // printf("Exiting cleanly.\n");
