@@ -4,9 +4,9 @@
 #include <unistd.h>
 
 #define WIFI_IFACE     "wlan0"
-#define WPA_CONF_PATH  "/tmp/wpa_supplicant.conf"
+#define WPA_CONF_PATH  "/etc/wpa_supplicant.conf"
 #define MAX_RETRIES    5
-#define RETRY_DELAY    3   // seconds
+#define RETRY_DELAY    3   
 
 // Run shell command and return exit code
 static int run_cmd(const char *cmd)
@@ -60,47 +60,42 @@ static int check_wifi_connected()
 // Main WiFi connection function
 int wifi_connect(const char *ssid, const char *password)
 {
-    printf("Starting WiFi connection to SSID: %s\n", ssid);
+    printf("[WiFi] Starting connection to SSID='%s'\n", ssid);
 
-    // Step 1: Create WPA configuration file
-    if (create_wpa_conf(ssid, password) < 0)
+    if (create_wpa_conf(ssid, password) < 0) {
+        printf("[WiFi] ERROR: Failed to write wpa_supplicant.conf\n");
         return -1;
+    }
 
-    // Step 2: Bring interface up
+    run_cmd("ip link set " WIFI_IFACE " down");
     run_cmd("ip link set " WIFI_IFACE " up");
 
-    // Step 3: Kill possible old wpa_supplicant instances
     run_cmd("killall wpa_supplicant 2>/dev/null");
 
-    // Step 4: Start wpa_supplicant with iw
     char cmd[256];
     snprintf(cmd, sizeof(cmd),
              "wpa_supplicant -B -i %s -c %s",
              WIFI_IFACE, WPA_CONF_PATH);
 
     if (run_cmd(cmd) != 0) {
-        printf("Error: Failed to start wpa_supplicant\n");
+        printf("[WiFi] ERROR: Unable to start wpa_supplicant\n");
         return -1;
     }
 
-    // Step 5: Retry loop for connection
-    for (int i = 0; i < MAX_RETRIES; i++) {
+    printf("[WiFi] Waiting for association...\n");
 
-        printf("Checking WiFi connection... attempt %d/%d\n",
-               i + 1, MAX_RETRIES);
+    for (int i = 0; i < MAX_RETRIES; i++) {
+        printf("[WiFi] Check attempt %d/%d\n", i+1, MAX_RETRIES);
 
         if (check_wifi_connected()) {
-            printf("✅ WiFi CONNECTED successfully!\n");
-
-            // Get IP address using DHCP
+            printf("[WiFi] CONNECTED!\n");
             run_cmd("dhclient " WIFI_IFACE);
-
             return 0;
         }
 
         sleep(RETRY_DELAY);
     }
 
-    printf("❌ WiFi connection FAILED after retries.\n");
+    printf("[WiFi] FAILED to connect!\n");
     return -1;
 }

@@ -6,6 +6,7 @@
 #include <sys/ioctl.h>
 #include <linux/i2c-dev.h>
 #include <string.h>
+#include <stdint.h> 
 
 #define I2C_BUS "/dev/i2c-1"
 #define NFC_ADDR 0x53

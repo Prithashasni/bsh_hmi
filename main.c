@@ -12,7 +12,14 @@
 // #include "charcon/controller/controller.h"
 #include "nfc/view/menu_screen.h"
 #include "nfc/view/styles.h"
+#include "nfc.h"
+//#include "interrupt.h"
+#include <pthread.h>
+#include "main.h"
+#include "event.h"
+#include "wifi_thread.h"
 
+int running = 1;
 int main(void)
 {
     printf("[INFO] Starting LVGL Wayland application...\n");
@@ -52,22 +59,32 @@ int main(void)
 
     init_style();
     scr_menu_scroll();
+    pthread_t nfc_t, wifi_t;
+    running = 1;
 
-     printf("[OK] Menu screen loaded.\n");
+    pthread_create(&nfc_t, NULL, nfc_thread, NULL);
+    pthread_create(&wifi_t, NULL, wifi_thread, NULL);
 
-    printf("[INFO] Entering main LVGL loop...\n");
+    printf("[INFO] NFC + WiFi threads started.\n");
 
 
-  while(1) {
+  while(running) {
       lv_tick_inc(1);
       lv_timer_handler();
       usleep(500);
 
-        static int counter = 0;
-        if (++counter % 2000 == 0) {
-            printf("[DEBUG] LVGL running (tick=%d)\n", counter);
-        }
+        // static int counter = 0;
+        // if (++counter % 2000 == 0) {
+        //     printf("[DEBUG] LVGL running (tick=%d)\n", counter);
+        // }
   }
 
+    // printf("Exiting cleanly.\n");
+
+    // // Now wait for threads to exit
+    pthread_join(nfc_t, NULL);
+    pthread_join(wifi_t, NULL);
+
+    //lv_deinit();
     return 0;
 }
