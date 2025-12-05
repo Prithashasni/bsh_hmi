@@ -24,6 +24,7 @@ static pthread_mutex_t i2c_lock = PTHREAD_MUTEX_INITIALIZER;
 
 wifi_record_t record={0};
 
+
 static uint16_t be16(const uint8_t *p)
 {
     return ((uint16_t)p[0] << 8) | p[1];
@@ -36,12 +37,14 @@ int i2c_read_block(int fd, uint8_t start_addr, uint8_t *data, size_t len){
 }
 
 int read_wifi(wifi_record_t *out_record){
+    memset(out_record, 0, sizeof(wifi_record_t)); 
+
     int fd=open(I2C_BUS,O_RDWR);
-    if(fd<0){ perror("Open I2C"); return; }
-    if(ioctl(fd,I2C_SLAVE,NFC_ADDR)<0){ perror("Set I2C addr"); close(fd); return; }
+    if(fd<0){ perror("Open I2C"); return -1; }
+    if(ioctl(fd,I2C_SLAVE,NFC_ADDR)<0){ perror("Set I2C addr"); close(fd); return -1; }
 
     uint8_t buf[READ_LEN]; 
-    if(i2c_read_block(fd,0x00,buf,READ_LEN)<0){ close(fd); return; }
+    if(i2c_read_block(fd,0x00,buf,READ_LEN)<0){ close(fd); return -1; }
 
     int record_count=0;
     int offset=0;
@@ -66,7 +69,9 @@ int read_wifi(wifi_record_t *out_record){
                     if(record.password[0]) printf("  Password: %s\n",record.password);
                     // if(record.auth[0]) printf("  Auth: %s\n",record.auth);
                     // if(record.encr[0]) printf("  Encryption: %s\n",record.encr);
-                    printf("\n"); memset(&record,0,sizeof(record));
+                    printf("\n");
+                    return;
+                    // memset(&record,0,sizeof(record));
                 }
             }
         } else offset++;
