@@ -37,7 +37,7 @@ int i2c_read_block(int fd, uint8_t start_addr, uint8_t *data, size_t len){
 }
 
 int read_wifi(){
-    memset(out_record, 0, sizeof(wifi_record_t)); 
+    // memset(out_record, 0, sizeof(wifi_record_t)); 
 
     int fd=open(I2C_BUS,O_RDWR);
     if(fd<0){ perror("Open I2C"); return -1; }
