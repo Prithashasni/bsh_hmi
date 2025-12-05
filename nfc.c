@@ -56,7 +56,7 @@ int read_wifi(){
 
         int is_wifi_tlv=0;
         if(tlv_type==TLV_SSID){ strncpy(record.ssid,(char*)data,tlv_len); record.ssid[tlv_len]=0; record.has_data=1; record.offset=offset; is_wifi_tlv=1;}
-        else if(tlv_type==TLV_PASSWORD){ strncpy(record.password,(char*)data,tlv_len); record.password[tlv_len]=0; record.has_data=1; is_wifi_tlv=1;}
+        if(tlv_type==TLV_PASSWORD){ strncpy(record.password,(char*)data,tlv_len); record.password[tlv_len]=0; record.has_data=1; is_wifi_tlv=1;}
         // else if(tlv_type==TLV_AUTH){ uint16_t v=be16(data); strncpy(record.auth,auth_type(v),sizeof(record.auth)-1); record.has_data=1; is_wifi_tlv=1;}
         // else if(tlv_type==TLV_ENCR){ uint16_t v=be16(data); strncpy(record.encr,encr_type(v),sizeof(record.encr)-1); record.has_data=1; is_wifi_tlv=1;}
 
@@ -66,11 +66,13 @@ int read_wifi(){
                     record_count++;
                     printf("Wi-Fi Record #%d (offset 0x%X)\n",record_count,record.offset);
                     if(record.ssid[0]) printf("  SSID: %s\n",record.ssid);
-                    if(record.password[0]) printf("  Password: %s\n",record.password);
+                    if(record.password[0]) {
+                        printf("  Password: %s\n",record.password);
+                        return 1;
+                    }
                     // if(record.auth[0]) printf("  Auth: %s\n",record.auth);
                     // if(record.encr[0]) printf("  Encryption: %s\n",record.encr);
                     printf("\n");
-                    return 1;
                     // memset(&record,0,sizeof(record));
                 }
             }
