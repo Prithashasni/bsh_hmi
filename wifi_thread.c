@@ -41,7 +41,7 @@ void *wifi_thread(void *arg){
         printf("[WiFi] Connecting to SSID='%s'\n", ssid);
         int status = wifi_connect(ssid, pw);
 
-        push_wifi_status_event(ssid, status);
+        // push_wifi_status_event(ssid, status);
 
         pthread_mutex_lock(&g_lock);
         g_pending = 0;

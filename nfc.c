@@ -22,6 +22,8 @@ extern int running;
 
 static pthread_mutex_t i2c_lock = PTHREAD_MUTEX_INITIALIZER;
 
+wifi_record_t record={0};
+
 static uint16_t be16(const uint8_t *p)
 {
     return ((uint16_t)p[0] << 8) | p[1];
@@ -33,7 +35,7 @@ int i2c_read_block(int fd, uint8_t start_addr, uint8_t *data, size_t len){
     return 0;
 }
 
-void read_wifi(){
+int read_wifi(wifi_record_t *out_record){
     int fd=open(I2C_BUS,O_RDWR);
     if(fd<0){ perror("Open I2C"); return; }
     if(ioctl(fd,I2C_SLAVE,NFC_ADDR)<0){ perror("Set I2C addr"); close(fd); return; }
@@ -41,7 +43,7 @@ void read_wifi(){
     uint8_t buf[READ_LEN]; 
     if(i2c_read_block(fd,0x00,buf,READ_LEN)<0){ close(fd); return; }
 
-    wifi_record_t record={0}; int record_count=0; int offset=0;
+    int record_count=0; int offset=0;
     while(offset<READ_LEN-4){
         uint16_t tlv_type=be16(&buf[offset]);
         uint16_t tlv_len=be16(&buf[offset+2]);
@@ -70,51 +72,33 @@ void read_wifi(){
 
     if(record_count==0) printf("No Wi-Fi NDEF records found.\n");
     close(fd);
+
+    return 0;
 }
 
 /************* NFC Thread *************/
 void *nfc_thread(void *arg)
 {
-    // // Open I2C once
-    // int fd = open(I2C_BUS, O_RDWR);
-    // if (fd < 0) {
-    //     perror("[NFC] open");
-    //     return NULL;
-    // }
-    // if (ioctl(fd, I2C_SLAVE, NFC_ADDR) < 0) {
-    //     perror("[NFC] ioctl");
-    //     close(fd);
-    //     return NULL;
-    // }
-
     printf("[NFC] Thread started, waiting for tap...\n");
 
-    // wifi_record_t last = {0};  
     while (running)
     {
         pthread_mutex_lock(&i2c_lock);
-        read_wifi();
+        int out = read_wifi(&record);
         pthread_mutex_unlock(&i2c_lock);
 
-        // if (rec.has_data)
-        // {
-        //     // Avoid duplicate Wi-Fi updates
-        //     if (strcmp(rec.ssid, last.ssid) != 0 ||
-        //         strcmp(rec.password, last.password) != 0)
-        //     {
-        //         printf("[NFC] New Wi-Fi credentials received:\n");
-        //         printf("  SSID: %s\n", rec.ssid);
-        //         printf("  PW  : %s\n\n", rec.password);
+        if (out == 1)
+        {
+       
+                printf("[NFC] New Wi-Fi credentials received:\n");
+                printf("  SSID: %s\n", record.ssid);
+                printf("  PW  : %s\n\n", record.password);
 
-        //         wifi_update_credentials(rec.ssid, rec.password, 0);
+                wifi_update_credentials(record.ssid, record.password, 0);
 
-        //         last = rec; // cache last
-        //     }
-        // }
+                // last = rec; 
+        }
 
-        usleep(300000); // 500 ms
+        usleep(300000); 
     }
-
-    // close(fd);
-    // return NULL;
 }
