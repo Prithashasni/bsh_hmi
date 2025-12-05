@@ -13,112 +13,124 @@
 #define NFC_ADDR 0x53
 #define READ_LEN 512
 
-#define TLV_SSID 0x1045
+#define TLV_SSID     0x1045
 #define TLV_PASSWORD 0x1027
+// #define TLV_AUTH     0x1003
+// #define TLV_ENCR     0x100F
 
 extern int running;
 
-// Mutex for thread-safe I2C access
 static pthread_mutex_t i2c_lock = PTHREAD_MUTEX_INITIALIZER;
 
-// Convert big-endian two bytes to uint16
-static uint16_t be16(const uint8_t * p)
+static uint16_t be16(const uint8_t *p)
 {
     return ((uint16_t)p[0] << 8) | p[1];
 }
 
-// Read NFC EEPROM using an open FD (persistent)
-static int read_ssid_pw_fd(int fd, char * out_ssid, char * out_pw)
+int i2c_read_block(int fd, uint8_t start_addr, uint8_t *data, size_t len){
+    // if(write(fd,&start_addr,1)!=1){ perror("Set start addr"); return -1; }
+    if(read(fd,data,len)!=(ssize_t)len){ perror("I2C Read failed"); return -1; }
+    return 0;
+}
+
+/* Reads SSID/PW from NFC */
+static wifi_record_t read_ssid_pw_fd(int fd)
 {
+    wifi_record_t record = {0};
+
     uint8_t buf[READ_LEN];
-    uint8_t start = 0x00;
-
-    if(write(fd, &start, 1) != 1) {
-        perror("[NFC] Set start address failed");
-        return -1;
+    if (i2c_read_block(fd, 0x00, buf, READ_LEN) < 0) {
+        printf("[NFC] Read block failed\n");
+        return record;
     }
-    usleep(5000); 
-
-    if(read(fd, buf, READ_LEN) != READ_LEN) {
-        perror("[NFC] I2C read failed");
-        return -1;
-    }
-
-    out_ssid[0] = 0;
-    out_pw[0]   = 0;
 
     int offset = 0;
-    while(offset < READ_LEN - 4) {
-        uint16_t type = be16(&buf[offset]);
-        uint16_t len  = be16(&buf[offset + 2]);
-        if(len == 0 || offset + 4 + len > READ_LEN) {
+    while (offset < READ_LEN - 4)
+    {
+        uint16_t tlv_type = be16(&buf[offset]);
+        uint16_t tlv_len  = be16(&buf[offset+2]);
+        uint8_t *data     = &buf[offset+4];
+
+        if (tlv_len == 0 || offset + 4 + tlv_len > READ_LEN) {
             offset++;
             continue;
         }
-        uint8_t * data = &buf[offset + 4];
 
-        if(type == TLV_SSID) {
-            int copy_len = len < 63 ? len : 63;
-            strncpy(out_ssid, (char *)data, copy_len);
-            out_ssid[copy_len] = 0;
-        } else if(type == TLV_PASSWORD) {
-            int copy_len = len < 63 ? len : 63;
-            strncpy(out_pw, (char *)data, copy_len);
-            out_pw[copy_len] = 0;
+        switch (tlv_type) {
+            case TLV_SSID:
+                strncpy(record.ssid, (char*)data, tlv_len);
+                record.ssid[tlv_len] = '\0';
+                record.has_data = 1;
+                break;
+
+            case TLV_PASSWORD:
+                strncpy(record.password, (char*)data, tlv_len);
+                record.password[tlv_len] = '\0';
+                record.has_data = 1;
+                break;
+
+            // case TLV_AUTH: {
+            //     uint16_t v = be16(data);
+            //     strncpy(record.auth, auth_type(v), sizeof(record.auth)-1);
+            //     record.has_data = 1;
+            //     break;
+            // }
+            // case TLV_ENCR: {
+            //     uint16_t v = be16(data);
+            //     strncpy(record.encr, encr_type(v), sizeof(record.encr)-1);
+            //     record.has_data = 1;
+            //     break;
+            // }
         }
 
-        offset += 4 + len;
+        offset += 4 + tlv_len;
     }
 
-    return (out_ssid[0] && out_pw[0]) ? 0 : -1;
+    return record;
 }
 
-// NFC polling thread
-void * nfc_thread(void * arg)
+/************* NFC Thread *************/
+void *nfc_thread(void *arg)
 {
-    static char cached_ssid[64] = {0};
-    static char cached_pw[64]   = {0};
-
     // Open I2C once
     int fd = open(I2C_BUS, O_RDWR);
-    if(fd < 0) {
-        perror("[NFC] Open I2C failed");
+    if (fd < 0) {
+        perror("[NFC] open");
         return NULL;
     }
-    if(ioctl(fd, I2C_SLAVE, NFC_ADDR) < 0) {
-        perror("[NFC] Set I2C addr failed");
+    if (ioctl(fd, I2C_SLAVE, NFC_ADDR) < 0) {
+        perror("[NFC] ioctl");
         close(fd);
         return NULL;
     }
 
-    while(running) {
-        char ssid[64] = {0}, pw[64] = {0};
-        int ret;
+    printf("[NFC] Thread started, waiting for tap...\n");
 
+    wifi_record_t last = {0};   // store previous to avoid duplicates
+
+    while (running)
+    {
         pthread_mutex_lock(&i2c_lock);
-        ret = read_ssid_pw_fd(fd, ssid, pw);
+        wifi_record_t rec = read_ssid_pw_fd(fd);
         pthread_mutex_unlock(&i2c_lock);
 
-        if(ret == 0) {
-            // Successful NFC read → update cached
-            strncpy(cached_ssid, ssid, sizeof(cached_ssid) - 1);
-            cached_ssid[sizeof(cached_ssid) - 1] = 0;
-            strncpy(cached_pw, pw, sizeof(cached_pw) - 1);
-            cached_pw[sizeof(cached_pw) - 1] = 0;
+        if (rec.has_data)
+        {
+            // Avoid duplicate Wi-Fi updates
+            if (strcmp(rec.ssid, last.ssid) != 0 ||
+                strcmp(rec.password, last.password) != 0)
+            {
+                printf("[NFC] New Wi-Fi credentials received:\n");
+                printf("  SSID: %s\n", rec.ssid);
+                printf("  PW  : %s\n\n", rec.password);
 
-            wifi_update_credentials(ssid, pw, 0);
-            printf("[NFC] Read credentials: SSID='%s', PW='%s'\n", ssid, pw);
-        } else {
-            // Failed → use cached
-            if(cached_ssid[0] && cached_pw[0]) {
-                printf("[NFC] NFC read failed. Using cached credentials.\n");
-                wifi_update_credentials(cached_ssid, cached_pw, 1); // force reconnect
-            } else {
-                printf("[NFC] NFC read failed. No cached credentials.\n");
+                wifi_update_credentials(rec.ssid, rec.password, 0);
+
+                last = rec; // cache last
             }
         }
 
-        usleep(500000); 
+        usleep(500000); // 500 ms
     }
 
     close(fd);
