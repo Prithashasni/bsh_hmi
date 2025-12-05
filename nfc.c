@@ -43,12 +43,13 @@ int read_wifi(wifi_record_t *out_record){
     uint8_t buf[READ_LEN]; 
     if(i2c_read_block(fd,0x00,buf,READ_LEN)<0){ close(fd); return; }
 
-    int record_count=0; int offset=0;
-    if(offset<READ_LEN-4){
+    int record_count=0;
+    int offset=0;
+    while(offset<READ_LEN-4 && record_count == 0){
         uint16_t tlv_type=be16(&buf[offset]);
         uint16_t tlv_len=be16(&buf[offset+2]);
         uint8_t *data=&buf[offset+4];
-        if(tlv_len==0||offset+4+tlv_len>READ_LEN){ offset++;}
+        if(tlv_len==0||offset+4+tlv_len>READ_LEN){ offset++; continue; }
 
         int is_wifi_tlv=0;
         if(tlv_type==TLV_SSID){ strncpy(record.ssid,(char*)data,tlv_len); record.ssid[tlv_len]=0; record.has_data=1; record.offset=offset; is_wifi_tlv=1;}
@@ -58,7 +59,8 @@ int read_wifi(wifi_record_t *out_record){
 
         if(is_wifi_tlv){ offset+=4+tlv_len;
             if(offset>=READ_LEN-4||(be16(&buf[offset])!=TLV_SSID&&be16(&buf[offset])!=TLV_PASSWORD)){
-                if(record.has_data){ record_count++;
+                if(record.has_data){ 
+                    record_count++;
                     printf("Wi-Fi Record #%d (offset 0x%X)\n",record_count,record.offset);
                     if(record.ssid[0]) printf("  SSID: %s\n",record.ssid);
                     if(record.password[0]) printf("  Password: %s\n",record.password);

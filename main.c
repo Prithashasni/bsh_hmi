@@ -30,7 +30,7 @@ int main(void)
     /* Wayland display init */
     lv_wayland_init();
     printf("[INFO] Display init...\n");
-    lv_disp_t * disp = lv_wayland_create_window(1024, 600, "window", NULL);
+    lv_disp_t * disp = lv_wayland_create_window(1920, 1080, "window", NULL);
     lv_wayland_window_set_fullscreen(disp, true);
 
     /* Set a cursor for the touchscreen */
