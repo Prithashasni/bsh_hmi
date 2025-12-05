@@ -48,7 +48,7 @@ int read_wifi(wifi_record_t *out_record){
         uint16_t tlv_type=be16(&buf[offset]);
         uint16_t tlv_len=be16(&buf[offset+2]);
         uint8_t *data=&buf[offset+4];
-        if(tlv_len==0||offset+4+tlv_len>READ_LEN){ offset++; continue; }
+        if(tlv_len==0||offset+4+tlv_len>READ_LEN){ offset++;}
 
         int is_wifi_tlv=0;
         if(tlv_type==TLV_SSID){ strncpy(record.ssid,(char*)data,tlv_len); record.ssid[tlv_len]=0; record.has_data=1; record.offset=offset; is_wifi_tlv=1;}
