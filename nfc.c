@@ -44,7 +44,7 @@ int read_wifi(wifi_record_t *out_record){
     if(i2c_read_block(fd,0x00,buf,READ_LEN)<0){ close(fd); return; }
 
     int record_count=0; int offset=0;
-    while(offset<READ_LEN-4){
+    if(offset<READ_LEN-4){
         uint16_t tlv_type=be16(&buf[offset]);
         uint16_t tlv_len=be16(&buf[offset+2]);
         uint8_t *data=&buf[offset+4];
