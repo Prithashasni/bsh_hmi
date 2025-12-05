@@ -7,7 +7,7 @@ static lv_obj_t * label_title;
 static lv_obj_t * label_ssid;
 static lv_obj_t * label_pw;
 
-void create_wifi_screen(void)
+void create_wifi_screen()
 {
     lv_obj_t * scr = lv_scr_act();
 

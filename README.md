@@ -1,4 +1,4 @@
-# Charcon HMI with LVGL 
+# HMI with LVGL 
 
 LVGL configured to work with Wayland wl_shell on Linux.
 

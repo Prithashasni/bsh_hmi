@@ -69,11 +69,11 @@ int main(void)
     printf("[INFO] NFC + WiFi threads started.\n");
 
 
-  while(running) {
-      lv_tick_inc(1);
-      lv_timer_handler();
-      usleep(500);
-  }
+    while(running) {
+        lv_tick_inc(5);
+        lv_timer_handler();
+        usleep(5000);
+    }
 
 
     // // Now wait for threads to exit

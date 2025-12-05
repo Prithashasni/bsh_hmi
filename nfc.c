@@ -37,7 +37,7 @@ static int read_ssid_pw_fd(int fd, char * out_ssid, char * out_pw)
         perror("[NFC] Set start address failed");
         return -1;
     }
-    usleep(5000); // small delay to stabilize bus
+    usleep(5000); 
 
     if(read(fd, buf, READ_LEN) != READ_LEN) {
         perror("[NFC] I2C read failed");
@@ -82,12 +82,10 @@ void * nfc_thread(void * arg)
     // Open I2C once
     int fd = open(I2C_BUS, O_RDWR);
     if(fd < 0) {
-        usleep(5000);
         perror("[NFC] Open I2C failed");
         return NULL;
     }
     if(ioctl(fd, I2C_SLAVE, NFC_ADDR) < 0) {
-        usleep(5000);
         perror("[NFC] Set I2C addr failed");
         close(fd);
         return NULL;
@@ -120,7 +118,7 @@ void * nfc_thread(void * arg)
             }
         }
 
-        usleep(500000); // 500ms polling
+        usleep(500000); 
     }
 
     close(fd);
