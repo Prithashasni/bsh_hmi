@@ -28,6 +28,7 @@ static uint16_t be16(const uint8_t *p)
 }
 
 int i2c_read_block(int fd, uint8_t start_addr, uint8_t *data, size_t len){
+    if(write(fd,&start_addr,1)!=1){ perror("Set start addr"); return -1; }
     if(read(fd,data,len)!=(ssize_t)len){ perror("I2C Read failed"); return -1; }
     return 0;
 }
@@ -111,7 +112,7 @@ void *nfc_thread(void *arg)
         //     }
         // }
 
-        // usleep(500000); // 500 ms
+        usleep(300000); // 500 ms
     }
 
     // close(fd);
