@@ -70,7 +70,7 @@ int read_wifi(wifi_record_t *out_record){
                     // if(record.auth[0]) printf("  Auth: %s\n",record.auth);
                     // if(record.encr[0]) printf("  Encryption: %s\n",record.encr);
                     printf("\n");
-                    return;
+                    return 1;
                     // memset(&record,0,sizeof(record));
                 }
             }
