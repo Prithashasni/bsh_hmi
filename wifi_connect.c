@@ -3,98 +3,61 @@
 #include <string.h>
 #include <unistd.h>
 
-#define WIFI_IFACE     "wlan0"
-#define WPA_CONF_PATH  "/etc/wpa_supplicant.conf"
-#define MAX_RETRIES    5
-#define RETRY_DELAY    3   
-
-// Run shell command and return exit code
-static int run_cmd(const char *cmd)
+static int exec_cmd(const char *cmd)
 {
-    printf("CMD: %s\n", cmd);
-    return system(cmd);
+    int rc = system(cmd);
+    if (rc != 0)
+        printf("[WiFi] cmd failed: %s (rc=%d)\n", cmd, rc);
+    return rc;
 }
 
-static int create_wpa_conf(const char *ssid, const char *password)
+int wifi_connect(const char *ssid, const char *pw)
 {
-    FILE *fp = fopen(WPA_CONF_PATH, "w");
-    if (!fp) {
-        perror("Failed to create WPA config");
-        return -1;
-    }
-
-    fprintf(fp,
-        "ctrl_interface=/var/run/wpa_supplicant\n"
-        "network={\n"
-        "    ssid=\"%s\"\n"
-        "    psk=\"%s\"\n"
-        "}\n",
-        ssid, password
-    );
-
-    fclose(fp);
-    return 0;
-}
-
-// Check if connected via wpa_cli
-static int check_wifi_connected()
-{
-    FILE *fp = popen("wpa_cli -i " WIFI_IFACE " status | grep wpa_state=COMPLETED", "r");
-    if (!fp) return 0;
-
-    char buffer[256];
-    int connected = 0;
-
-    while (fgets(buffer, sizeof(buffer), fp)) {
-        if (strstr(buffer, "COMPLETED")) {
-            connected = 1;
-            break;
-        }
-    }
-
-    pclose(fp);
-    return connected;
-}
-
-// Main WiFi connection function
-int wifi_connect(const char *ssid, const char *password)
-{
-    printf("[WiFi] Starting connection to SSID='%s'\n", ssid);
-
-    if (create_wpa_conf(ssid, password) < 0) {
-        printf("[WiFi] ERROR: Failed to write wpa_supplicant.conf\n");
-        return -1;
-    }
-
-    run_cmd("ip link set " WIFI_IFACE " down");
-    run_cmd("ip link set " WIFI_IFACE " up");
-
-    run_cmd("killall wpa_supplicant 2>/dev/null");
+    printf("[WiFi] wifi_connect(): Using wpa_cli\n");
 
     char cmd[256];
+
+    /* remove previously configured networks */
+    exec_cmd("wpa_cli -i wlan0 remove_network all");
+
+    /* add network */
+    exec_cmd("wpa_cli -i wlan0 add_network");
+
+    /* set ssid */
     snprintf(cmd, sizeof(cmd),
-             "wpa_supplicant -B -i %s -c %s",
-             WIFI_IFACE, WPA_CONF_PATH);
+             "wpa_cli -i wlan0 set_network 0 ssid '\"%s\"'", ssid);
+    exec_cmd(cmd);
 
-    if (run_cmd(cmd) != 0) {
-        printf("[WiFi] ERROR: Unable to start wpa_supplicant\n");
-        return -1;
+    /* set psk */
+    snprintf(cmd, sizeof(cmd),
+             "wpa_cli -i wlan0 set_network 0 psk '\"%s\"'", pw);
+    exec_cmd(cmd);
+
+    /* optional: WPA2/WPA3 etc; for now allow WPA2-PSK */
+    exec_cmd("wpa_cli -i wlan0 set_network 0 key_mgmt WPA-PSK");
+
+    /* enable */
+    exec_cmd("wpa_cli -i wlan0 enable_network 0");
+
+    /* save config (optional) */
+    exec_cmd("wpa_cli -i wlan0 save_config");
+
+    /* reconfigure */
+    exec_cmd("wpa_cli -i wlan0 reconfigure");
+
+    printf("[WiFi] waiting for connection...\n");
+    sleep(3);
+
+    /* check status */
+    int rc = system(
+        "wpa_cli -i wlan0 status | grep -q 'wpa_state=COMPLETED'"
+    );
+
+    if (rc == 0) {
+        printf("[WiFi] Connected!\n");
+        return 0;
     }
 
-    printf("[WiFi] Waiting for association...\n");
-
-    for (int i = 0; i < MAX_RETRIES; i++) {
-        printf("[WiFi] Check attempt %d/%d\n", i+1, MAX_RETRIES);
-
-        if (check_wifi_connected()) {
-            printf("[WiFi] CONNECTED!\n");
-            run_cmd("dhclient " WIFI_IFACE);
-            return 0;
-        }
-
-        sleep(RETRY_DELAY);
-    }
-
-    printf("[WiFi] FAILED to connect!\n");
+    printf("[WiFi] Failed to connect.\n");
     return -1;
 }

@@ -13,61 +13,97 @@
 #define NFC_ADDR 0x53
 #define READ_LEN 512
 
-#define TLV_SSID     0x1045
+#define TLV_SSID 0x1045
 #define TLV_PASSWORD 0x1027
-#define TLV_AUTH     0x1003
-#define TLV_ENCR     0x100F
+#define TLV_AUTH 0x1003
+#define TLV_ENCR 0x100F
 
 extern int running;
 
 static pthread_mutex_t i2c_lock = PTHREAD_MUTEX_INITIALIZER;
 
-wifi_record_t record={0};
+wifi_record_t record = {0};
 
-
-static uint16_t be16(const uint8_t *p)
+static uint16_t be16(const uint8_t * p)
 {
     return ((uint16_t)p[0] << 8) | p[1];
 }
 
-int i2c_read_block(int fd, uint8_t start_addr, uint8_t *data, size_t len){
-    if(write(fd,&start_addr,1)!=1){ perror("Set start addr"); return -1; }
-    if(read(fd,data,len)!=(ssize_t)len){ perror("I2C Read failed"); return -1; }
+int i2c_read_block(int fd, uint8_t start_addr, uint8_t * data, size_t len)
+{
+    if(write(fd, &start_addr, 1) != 1) {
+        perror("Set start addr");
+        return -1;
+    }
+    if(read(fd, data, len) != (ssize_t)len) {
+        perror("I2C Read failed");
+        return -1;
+    }
     return 0;
 }
 
-int read_wifi(){
-    // memset(out_record, 0, sizeof(wifi_record_t)); 
+int read_wifi()
+{
+    memset(&record, 0, sizeof(record));
 
-    int fd=open(I2C_BUS,O_RDWR);
-    if(fd<0){ perror("Open I2C"); return -1; }
-    if(ioctl(fd,I2C_SLAVE,NFC_ADDR)<0){ perror("Set I2C addr"); close(fd); return -1; }
+    int fd = open(I2C_BUS, O_RDWR);
+    if(fd < 0) {
+        perror("Open I2C");
+        return -1;
+    }
+    if(ioctl(fd, I2C_SLAVE, NFC_ADDR) < 0) {
+        perror("Set I2C addr");
+        close(fd);
+        return -1;
+    }
 
-    uint8_t buf[READ_LEN]; 
-    if(i2c_read_block(fd,0x00,buf,READ_LEN)<0){ close(fd); return -1; }
+    uint8_t buf[READ_LEN];
+    if(i2c_read_block(fd, 0x00, buf, READ_LEN) < 0) {
+        close(fd);
+        return -1;
+    }
 
-    int record_count=0;
-    int offset=0;
-    while(offset<READ_LEN-4){
-        uint16_t tlv_type=be16(&buf[offset]);
-        uint16_t tlv_len=be16(&buf[offset+2]);
-        uint8_t *data=&buf[offset+4];
-        if(tlv_len==0||offset+4+tlv_len>READ_LEN){ offset++; continue; }
+    int record_count = 0;
+    int offset       = 0;
+    while(offset < READ_LEN - 4) {
+        uint16_t tlv_type = be16(&buf[offset]);
+        uint16_t tlv_len  = be16(&buf[offset + 2]);
+        uint8_t * data    = &buf[offset + 4];
 
-        int is_wifi_tlv=0;
-        if(tlv_type==TLV_SSID){ strncpy(record.ssid,(char*)data,tlv_len); record.ssid[tlv_len]=0; record.has_data=1; record.offset=offset; is_wifi_tlv=1;}
-        if(tlv_type==TLV_PASSWORD){ strncpy(record.password,(char*)data,tlv_len); record.password[tlv_len]=0; record.has_data=1; is_wifi_tlv=1;}
-        // else if(tlv_type==TLV_AUTH){ uint16_t v=be16(data); strncpy(record.auth,auth_type(v),sizeof(record.auth)-1); record.has_data=1; is_wifi_tlv=1;}
-        // else if(tlv_type==TLV_ENCR){ uint16_t v=be16(data); strncpy(record.encr,encr_type(v),sizeof(record.encr)-1); record.has_data=1; is_wifi_tlv=1;}
+        /* Sanity Check*/
+        if(tlv_len == 0 || offset + 4 + tlv_len > READ_LEN) {
+            offset++;
+            continue;
+        }
 
-        if(is_wifi_tlv){ offset+=4+tlv_len;
-            if(offset>=READ_LEN-4||(be16(&buf[offset])!=TLV_SSID&&be16(&buf[offset])!=TLV_PASSWORD)){
-                if(record.has_data){ 
+        int is_wifi_tlv = 0;
+
+        if(tlv_type == TLV_SSID) {
+            strncpy(record.ssid, (char *)data, tlv_len);
+            record.ssid[tlv_len] = 0;
+            record.has_data      = 1;
+            record.offset        = offset;
+            is_wifi_tlv          = 1;
+        }
+        if(tlv_type == TLV_PASSWORD) {
+            strncpy(record.password, (char *)data, tlv_len);
+            record.password[tlv_len] = 0;
+            record.has_data          = 1;
+            is_wifi_tlv              = 1;
+        }
+        // else if(tlv_type==TLV_AUTH){ uint16_t v=be16(data); strncpy(record.auth,auth_type(v),sizeof(record.auth)-1);
+        // record.has_data=1; is_wifi_tlv=1;} else if(tlv_type==TLV_ENCR){ uint16_t v=be16(data);
+        // strncpy(record.encr,encr_type(v),sizeof(record.encr)-1); record.has_data=1; is_wifi_tlv=1;}
+
+        if(is_wifi_tlv) {
+            offset += 4 + tlv_len;
+            if(offset >= READ_LEN - 4 || (be16(&buf[offset]) != TLV_SSID && be16(&buf[offset]) != TLV_PASSWORD)) {
+                if(record.has_data) {
                     record_count++;
-                    printf("Wi-Fi Record #%d (offset 0x%X)\n",record_count,record.offset);
-                    if(record.ssid[0]) printf("  SSID: %s\n",record.ssid);
+                    printf("Wi-Fi Record #%d (offset 0x%X)\n", record_count, record.offset);
+                    if(record.ssid[0]) printf("  SSID: %s\n", record.ssid);
                     if(record.password[0]) {
-                        printf("  Password: %s\n",record.password);
+                        printf("  Password: %s\n", record.password);
                         return 1;
                     }
                     // if(record.auth[0]) printf("  Auth: %s\n",record.auth);
@@ -76,39 +112,40 @@ int read_wifi(){
                     // memset(&record,0,sizeof(record));
                 }
             }
-        } else offset++;
+        } else
+            offset++;
     }
 
-    if(record_count==0) 
-        printf("No Wi-Fi NDEF records found.\n");
+    if(record_count == 0) printf("No Wi-Fi NDEF records found.\n");
     close(fd);
 
     return 0;
 }
 
 /************* NFC Thread *************/
-void *nfc_thread(void *arg)
+void * nfc_thread(void * arg)
 {
     printf("[NFC] Thread started, waiting for tap...\n");
 
-    while (running)
-    {
+    while(running) {
         pthread_mutex_lock(&i2c_lock);
         int out = read_wifi();
         pthread_mutex_unlock(&i2c_lock);
 
-        if (out == 1)
-        {
-       
-                printf("[NFC] New Wi-Fi credentials received:\n");
-                printf("  SSID: %s\n", record.ssid);
-                printf("  PW  : %s\n\n", record.password);
+        if(out == 1) {
 
-                wifi_update_credentials(record.ssid, record.password, 0);
+            printf("[NFC] New Wi-Fi credentials received:\n");
+            printf("  SSID: %s\n", record.ssid);
+            printf("  PW  : %s\n\n", record.password);
 
-                // last = rec; 
+            sanitize(record.ssid);
+            sanitize(record.password);
+
+            wifi_update_credentials(record.ssid, record.password, 0);
+
+            // last = rec;
         }
 
-        usleep(300000); 
+        usleep(300000);
     }
 }
