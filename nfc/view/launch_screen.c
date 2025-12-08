@@ -21,6 +21,9 @@ lv_obj_t *text3;
 lv_obj_t *loader;
 lv_obj_t *heading;
 
+LV_IMG_DECLARE(haloeffect);
+LV_IMG_DECLARE(coffee_launch);
+
 void create_floating_dots(lv_obj_t *parent);
 static void select_event_cb(lv_event_t * e);
 
@@ -45,12 +48,14 @@ void create_launch_screen()
     // lv_obj_add_style(scr_home, &style_scr_backdrop, LV_PART_MAIN);
 
     img_bg = lv_img_create(scr_home);
-    lv_img_set_src(img_bg, "/usr/share/nfc/assets/pngs/haloeffect.png");
+    // lv_img_set_src(img_bg, "/usr/share/nfc/assets/pngs/haloeffect.png");
+    lv_img_set_src(img_bg, &haloeffect);
     lv_img_set_zoom(img_bg, 256); 
     lv_obj_align(img_bg, LV_ALIGN_CENTER, 0, 0);
 
     img_coffee_logo = lv_img_create(scr_home);
-    lv_img_set_src(img_coffee_logo, "/usr/share/nfc/assets/pngs/coffee_launch.png");  
+    // lv_img_set_src(img_coffee_logo, "/usr/share/nfc/assets/pngs/coffee_launch.png");  
+    lv_img_set_src(img_coffee_logo, &coffee_launch);  
     lv_img_set_zoom(img_coffee_logo, 120); 
     lv_obj_align(img_coffee_logo, LV_ALIGN_CENTER, 0, -160);
 
