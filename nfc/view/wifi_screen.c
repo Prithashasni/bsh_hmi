@@ -27,9 +27,9 @@ void create_wifi_screen()
     // lv_img_set_src(test, "A:../lvgl/examples/libs/png/wink.png");
     // lv_obj_align(test, LV_ALIGN_CENTER, 0, 0);
 
-    lv_obj_t * lottie = lv_rlottie_create_from_file(scr_wifi, 350, 350,
-                                                    "../nfc/assets/gifs/wifi_connecting.json");
-    lv_obj_align(lottie, LV_ALIGN_CENTER, 0, 0);
+    // lv_obj_t * lottie = lv_rlottie_create_from_file(scr_wifi, 350, 350,
+    //                                                 "../nfc/assets/gifs/wifi_connecting.json");
+    // lv_obj_align(lottie, LV_ALIGN_CENTER, 0, 0);
 
     //   lv_obj_move_foreground(scr_wifi);
     // // Title

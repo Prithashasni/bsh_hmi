@@ -60,9 +60,9 @@ void create_launch_screen()
     lv_obj_set_style_text_font(text1, &lv_font_montserrat_20, LV_PART_MAIN);
     lv_obj_align(text1, LV_ALIGN_CENTER, 0, 170);
 
-    lv_obj_t * lottie = lv_rlottie_create_from_file(scr_home, 200, 200,
-                                                    "../nfc/assets/gifs/loader.json");
-    lv_obj_align(lottie, LV_ALIGN_CENTER, 0, 250);
+    // lv_obj_t * lottie = lv_rlottie_create_from_file(scr_home, 200, 200,
+    //                                                 "../nfc/assets/gifs/loader.json");
+    // lv_obj_align(lottie, LV_ALIGN_CENTER, 0, 250);
 
 
     text2 = lv_label_create(scr_home);
