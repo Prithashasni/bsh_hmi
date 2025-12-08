@@ -39,14 +39,14 @@ static const char *bev_names[] = {
 };
 
 static const char *bev_imgs[] = {
-    "A:../nfc/assets/pngs/img_cappuccino.png",
-    "A:../nfc/assets/pngs/img_espresso.png",
-    "A:../nfc/assets/pngs/img_macchiato.png",
-    "A:../nfc/assets/pngs/img_icedcoffee.png",
-    "A:../nfc/assets/pngs/img_latte.png",
-    "A:../nfc/assets/pngs/img_americano.png",
-    "A:../nfc/assets/pngs/img_flatwhite.png",
-    "A:../nfc/assets/pngs/img_milk.png"
+    "/usr/share/nfc/assets/pngs/img_cappuccino.png",
+    "/usr/share/nfc/assets/pngs/img_espresso.png",
+    "/usr/share/nfc/assets/pngs/img_macchiato.png",
+    "/usr/share/nfc/assets/pngs/img_icedcoffee.png",
+    "/usr/share/nfc/assets/pngs/img_latte.png",
+    "/usr/share/nfc/assets/pngs/img_americano.png",
+    "/usr/share/nfc/assets/pngs/img_flatwhite.png",
+    "/usr/share/nfc/assets/pngs/img_milk.png"
 };
 
 int img_zoom[8] = { 250, 250, 250, 250, 250, 250, 10, 10 };
@@ -151,12 +151,12 @@ void create_select_screen()
     // create_wifi_screen();
 
     img_select_bg = lv_img_create(scr_select);
-    lv_img_set_src(img_select_bg, "A:../nfc/assets/pngs/haloeffect.png");
+    lv_img_set_src(img_select_bg, "/usr/share/nfc/assets/pngs/haloeffect.png");
     lv_img_set_zoom(img_select_bg, 256); 
     lv_obj_align(img_select_bg, LV_ALIGN_CENTER, 0, 0);
 
     img_wifi_icon = lv_img_create(scr_select);
-    lv_img_set_src(img_wifi_icon, "A:../nfc/assets/pngs/icon_wifi.png");
+    lv_img_set_src(img_wifi_icon, "/usr/share/nfc/assets/pngs/icon_wifi.png");
     lv_obj_set_style_bg_img_recolor(img_wifi_icon, LV_COLOR_LIGHT_GREY, LV_STATE_DEFAULT);
     lv_img_set_zoom(img_wifi_icon, 150);
     lv_obj_align(img_wifi_icon, LV_ALIGN_TOP_RIGHT, -80, -10);
@@ -170,12 +170,12 @@ void create_select_screen()
     lv_obj_add_event_cb(home_cont, home_event_cb, LV_EVENT_PRESSED, NULL);
 
     img_home_icon = lv_img_create(home_cont);
-    lv_img_set_src(img_home_icon, "A:../nfc/assets/pngs/icon_home.png");
+    lv_img_set_src(img_home_icon, "/usr/share/nfc/assets/pngs/icon_home.png");
     lv_img_set_zoom(img_home_icon, 400);
     lv_obj_align(img_home_icon, LV_ALIGN_CENTER, 0, 0);
 
     img_cup_icon = lv_img_create(scr_select);
-    lv_img_set_src(img_cup_icon, "A:../nfc/assets/pngs/icon_cup.png");
+    lv_img_set_src(img_cup_icon, "/usr/share/nfc/assets/pngs/icon_cup.png");
     lv_img_set_zoom(img_cup_icon, 256);
     lv_obj_align(img_cup_icon, LV_ALIGN_TOP_LEFT, 10, 0);
 

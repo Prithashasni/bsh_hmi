@@ -45,12 +45,12 @@ void create_launch_screen()
     // lv_obj_add_style(scr_home, &style_scr_backdrop, LV_PART_MAIN);
 
     img_bg = lv_img_create(scr_home);
-    lv_img_set_src(img_bg, "A:../nfc/assets/pngs/haloeffect.png");
+    lv_img_set_src(img_bg, "/usr/share/nfc/assets/pngs/haloeffect.png");
     lv_img_set_zoom(img_bg, 256); 
     lv_obj_align(img_bg, LV_ALIGN_CENTER, 0, 0);
 
     img_coffee_logo = lv_img_create(scr_home);
-    lv_img_set_src(img_coffee_logo, "A:../nfc/assets/pngs/coffee_launch.png");  
+    lv_img_set_src(img_coffee_logo, "/usr/share/nfc/assets/pngs/coffee_launch.png");  
     lv_img_set_zoom(img_coffee_logo, 120); 
     lv_obj_align(img_coffee_logo, LV_ALIGN_CENTER, 0, -160);
 
