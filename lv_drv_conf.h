@@ -188,7 +188,7 @@
 #  endif
 /* Support for xdg-shell protocol */
 #  ifndef LV_WAYLAND_XDG_SHELL
-#    define LV_WAYLAND_XDG_SHELL 1
+#    define LV_WAYLAND_XDG_SHELL 0
 #  endif
 #endif
 
