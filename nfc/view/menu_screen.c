@@ -82,7 +82,7 @@ void scr_menu_scroll()
     const lv_img_dsc_t *imgs[4] = { &img_chat, &img_wifi , &img_feature, &img_solution };
      
     scr_menu = lv_obj_create(lv_scr_act());
-    lv_obj_set_size(scr_menu, 1280, 800);
+    lv_obj_set_size(scr_menu, 1260, 600);
     lv_obj_set_scrollbar_mode(scr_menu, LV_SCROLLBAR_MODE_OFF);
     lv_obj_set_style_border_opa(scr_menu, LV_OPA_TRANSP, 0);
     // lv_obj_add_style(scr_home, &style_scr_backdrop, LV_PART_MAIN);

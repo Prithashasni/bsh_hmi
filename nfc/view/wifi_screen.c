@@ -12,22 +12,22 @@ void create_wifi_screen()
     lv_obj_t * scr = lv_scr_act();
 
     // Title
-    label_title = lv_label_create(scr);
-    lv_label_set_text(label_title, "WiFi Credentials");
-    lv_obj_set_style_text_font(label_title, &lv_font_montserrat_28, 0);
-    lv_obj_align(label_title, LV_ALIGN_TOP_MID, 0, 20);
+    // label_title = lv_label_create(scr);
+    // lv_label_set_text(label_title, "WiFi Credentials");
+    // lv_obj_set_style_text_font(label_title, &lv_font_montserrat_28, 0);
+    // lv_obj_align(label_title, LV_ALIGN_TOP_MID, 0, 20);
 
-    // SSID
-    label_ssid = lv_label_create(scr);
-    lv_label_set_text(label_ssid, "SSID: -");
-    lv_obj_set_style_text_font(label_ssid, &lv_font_montserrat_22, 0);
-    lv_obj_align(label_ssid, LV_ALIGN_CENTER, 0, -30);
+    // // SSID
+    // label_ssid = lv_label_create(scr);
+    // lv_label_set_text(label_ssid, "SSID: -");
+    // lv_obj_set_style_text_font(label_ssid, &lv_font_montserrat_22, 0);
+    // lv_obj_align(label_ssid, LV_ALIGN_CENTER, 0, -30);
 
-    // PASSWORD
-    label_pw = lv_label_create(scr);
-    lv_label_set_text(label_pw, "Password: -");
-    lv_obj_set_style_text_font(label_pw, &lv_font_montserrat_22, 0);
-    lv_obj_align(label_pw, LV_ALIGN_CENTER, 0, 20);
+    // // PASSWORD
+    // label_pw = lv_label_create(scr);
+    // lv_label_set_text(label_pw, "Password: -");
+    // lv_obj_set_style_text_font(label_pw, &lv_font_montserrat_22, 0);
+    // lv_obj_align(label_pw, LV_ALIGN_CENTER, 0, 20);
 }
 
 void update_wifi_screen(const char *ssid, const char *pw)
