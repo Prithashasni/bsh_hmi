@@ -24,5 +24,7 @@ extern lv_obj_t *img_select_bg;
 
 /* Project Includes */
 extern void create_select_screen();
+void update_wifi_icon_color(lv_color_t color);
+
 
 #endif
