@@ -640,7 +640,7 @@ extern uint32_t custom_tick_get(void);
 #endif
 
 /*Rlottie library*/
-#define LV_USE_RLOTTIE 1
+#define LV_USE_RLOTTIE 0
 
 /*FFmpeg library for image decoding and playing videos
  *Supports all major image formats so do not enable other image decoder with it*/
