@@ -95,8 +95,8 @@
 #endif
 
 #if USE_SDL || USE_SDL_GPU
-#  define SDL_HOR_RES     480
-#  define SDL_VER_RES     320
+#  define SDL_HOR_RES     1024
+#  define SDL_VER_RES     600
 
 /* Scale window by this factor (useful when simulating small screens) */
 #  define SDL_ZOOM        1
@@ -188,7 +188,7 @@
 #  endif
 /* Support for xdg-shell protocol */
 #  ifndef LV_WAYLAND_XDG_SHELL
-#    define LV_WAYLAND_XDG_SHELL 0
+#    define LV_WAYLAND_XDG_SHELL 1
 #  endif
 #endif
 

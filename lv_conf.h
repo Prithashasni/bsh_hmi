@@ -131,7 +131,7 @@ extern uint32_t custom_tick_get(void);
  *With complex image decoders (e.g. PNG or JPG) caching can save the continuous open/decode of images.
  *However the opened images might consume additional RAM.
  *0: to disable caching*/
-#define LV_IMG_CACHE_DEF_SIZE   8
+#define LV_IMG_CACHE_DEF_SIZE   32
 
 /*Number of stops allowed per gradient. Increase this to allow more stops.
  *This adds (sizeof(lv_color_t) + 1) bytes per additional stop*/
@@ -142,7 +142,7 @@ extern uint32_t custom_tick_get(void);
  *LV_GRAD_CACHE_DEF_SIZE sets the size of this cache in bytes.
  *If the cache is too small the map will be allocated only while it's required for the drawing.
  *0 mean no caching.*/
-#define LV_GRAD_CACHE_DEF_SIZE      0
+#define LV_GRAD_CACHE_DEF_SIZE      8*1024
 
 /*Allow dithering the gradients (to achieve visual smooth color gradients on limited color depth display)
  *LV_DITHER_GRADIENT implies allocating one or two more lines of the object's rendering surface
@@ -617,7 +617,7 @@ extern uint32_t custom_tick_get(void);
 #define LV_USE_SJPG 0
 
 /*GIF decoder library*/
-#define LV_USE_GIF 0
+#define LV_USE_GIF 1
 
 /*QR code library*/
 #define LV_USE_QRCODE 0
@@ -640,7 +640,7 @@ extern uint32_t custom_tick_get(void);
 #endif
 
 /*Rlottie library*/
-#define LV_USE_RLOTTIE 0
+#define LV_USE_RLOTTIE 1
 
 /*FFmpeg library for image decoding and playing videos
  *Supports all major image formats so do not enable other image decoder with it*/

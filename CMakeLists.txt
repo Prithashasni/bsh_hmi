@@ -10,10 +10,10 @@ add_subdirectory(lv_drivers)
 # add_subdirectory(paho.mqtt.c)
 
 file(GLOB_RECURSE INCLUDES "lv_drivers/*.h" "lv_demos/*.h"  "lvgl/*.h" "nfc/view/*.h" "./*.h" )
-file(GLOB_RECURSE SOURCES  "lv_drivers/*.c" "lv_demos/*.c"  "lvgl/*.c" "nfc/view/*.c" "nfc/assets/pngs/*.c")
+file(GLOB_RECURSE SOURCES  "lv_drivers/*.c" "lv_demos/*.c"  "lvgl/*.c" "nfc/view/*.c" )
 
 SET(CMAKE_CXX_FLAGS "-O3")
 add_executable(${PROJECT_NAME} main.c nfc.c event.c wifi_thread.c wifi_connect.c ${SOURCES} ${INCLUDES})
 target_link_libraries(${PROJECT_NAME} PRIVATE lvgl lvgl::examples lvgl::demos
-	lvgl::drivers wayland-client wayland-cursor xkbcommon)
+	lvgl::drivers wayland-client wayland-cursor xkbcommon rlottie)
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin)
