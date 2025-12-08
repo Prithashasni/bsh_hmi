@@ -9,6 +9,7 @@
 #include "launch_screen.h"
 #include "menu_screen.h"
 #include "styles.h"
+#include "colors.h"
 #include "../../lvgl/src/core/lv_obj.h" 
 #include "wifi_screen.h"
 
@@ -147,7 +148,7 @@ void create_select_screen()
     lv_obj_clear_flag(scr_select, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_style_border_opa(scr_select, LV_OPA_TRANSP, 0);
 
-    create_wifi_screen();
+    // create_wifi_screen();
 
     img_select_bg = lv_img_create(scr_select);
     lv_img_set_src(img_select_bg, "A:../nfc/assets/pngs/haloeffect.png");
@@ -156,6 +157,7 @@ void create_select_screen()
 
     img_wifi_icon = lv_img_create(scr_select);
     lv_img_set_src(img_wifi_icon, "A:../nfc/assets/pngs/icon_wifi.png");
+    lv_obj_set_style_bg_img_recolor(img_wifi_icon, LV_COLOR_LIGHT_GREY, LV_STATE_DEFAULT);
     lv_img_set_zoom(img_wifi_icon, 150);
     lv_obj_align(img_wifi_icon, LV_ALIGN_TOP_RIGHT, -80, -10);
 

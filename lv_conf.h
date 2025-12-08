@@ -618,7 +618,7 @@ extern uint32_t custom_tick_get(void);
 #define LV_USE_SJPG 0
 
 /*GIF decoder library*/
-#define LV_USE_GIF 1
+#define LV_USE_GIF 0
 
 /*QR code library*/
 #define LV_USE_QRCODE 0
