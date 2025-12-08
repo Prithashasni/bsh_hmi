@@ -5,6 +5,7 @@ project(nfc-lvgl-wl)
 include_directories(.)
 add_subdirectory(lvgl)
 add_subdirectory(lv_drivers)
+add_subdirectory(rlottie)
 
 # # Add the paho.mqtt.c library as a subdirectory
 # add_subdirectory(paho.mqtt.c)
