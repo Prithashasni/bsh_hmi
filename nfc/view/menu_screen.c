@@ -81,7 +81,7 @@ void scr_menu_scroll()
 };
 
     scr_menu = lv_obj_create(lv_scr_act());
-    lv_obj_set_size(scr_menu, 1024, 600);
+    lv_obj_set_size(scr_menu, 1920, 1080);
     lv_obj_set_scrollbar_mode(scr_menu, LV_SCROLLBAR_MODE_OFF);
     lv_obj_set_style_border_opa(scr_menu, LV_OPA_TRANSP, 0);
     lv_obj_clear_flag(scr_menu, LV_OBJ_FLAG_CLICKABLE);

@@ -21,6 +21,12 @@ void create_wifi_screen()
     lv_obj_set_style_bg_color(scr_wifi, LV_COLOR_WHITE, 0);
     lv_obj_set_align(scr_wifi, LV_ALIGN_CENTER);
 
+    lv_obj_t *connect = lv_label_create(scr_wifi);
+    lv_label_set_text(connect, "Connecting to WiFi...");
+    lv_obj_set_style_text_font(connect, &lv_font_montserrat_28, 0);
+    lv_obj_align(connect, LV_ALIGN_CENTER, 0, 0);
+    
+
     // lv_obj_t *test = lv_img_create(scr_wifi);
     // /* Assuming a File system is attached to letter 'A'
     //  * E.g. set LV_USE_FS_STDIO 'A' in lv_conf.h */
