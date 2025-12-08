@@ -74,10 +74,10 @@ void scr_menu_scroll()
     // const lv_img_dsc_t *imgs[4] = { &img_chat, &img_wifi , &img_feature, &img_solution };
      
     const char *imgs[4] = {
-    "A:../nfc/assets/pngs/img_chat.png",
-    "A:../nfc/assets/pngs/img_wifi.png",
-    "A:../nfc/assets/pngs/img_feature.png",
-    "A:../nfc/assets/pngs/img_solution.png"
+    "/usr/share/nfc/assets/pngs/img_chat.png",
+    "/usr/share/nfc/assets/pngs/img_wifi.png",
+    "/usr/share/nfc/assets/pngs/img_feature.png",
+    "/usr/share/nfc/assets/pngs/img_solution.png"
 };
 
     scr_menu = lv_obj_create(lv_scr_act());
@@ -95,7 +95,7 @@ void scr_menu_scroll()
     lv_obj_align(img_launch_bg, LV_ALIGN_CENTER, 0, 0);
 
     scroll_cont = lv_obj_create(scr_menu);
-    lv_obj_set_size(scroll_cont, 1024, 500);
+    lv_obj_set_size(scroll_cont, 1920, 1000);
     lv_obj_center(scroll_cont);
     lv_obj_set_style_bg_opa(scroll_cont, LV_OPA_TRANSP, 0);
     lv_obj_set_style_border_opa(scroll_cont, LV_OPA_TRANSP, 0);

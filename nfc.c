@@ -138,7 +138,8 @@ void * nfc_thread(void * arg)
             printf("  SSID: %s\n", record.ssid);
             printf("  PW  : %s\n\n", record.password);
 
-            // create_wifi_screen();
+            create_wifi_screen();
+            
             wifi_update_credentials(record.ssid, record.password, 0);
 
         }
