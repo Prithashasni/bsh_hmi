@@ -12,14 +12,6 @@ static char g_ssid[64] = {0};
 static char g_pw[64] = {0};
 static int g_pending = 0;
 
-static void sanitize(char *s)
-{
-    for(int i = 0; i < strlen(s); i++){
-        if(s[i] == '\r' || s[i] == '\n')
-            s[i] = 0;
-    }
-}
-
 void wifi_update_credentials(const char *ssid, const char *pw, int force)
 {
     pthread_mutex_lock(&g_lock);
@@ -46,12 +38,9 @@ void *wifi_thread(void *arg){
 
         if(!pending){ usleep(200000); continue; }
 
-        //printf("[WiFi] Connecting to SSID='%s'\n", ssid);
-        printf("[WiFi] Connecting to SSID='%s' (len=%zu) PWlen=%zu\n", ssid, strlen(ssid), strlen(pw));
-
+        printf("[WiFi] Connecting to SSID='%s'\n", ssid);
         int status = wifi_connect(ssid, pw);
 
-        printf("[WiFi] wifi_connect returned: %d\n", status);
         // push_wifi_status_event(ssid, status);
 
         pthread_mutex_lock(&g_lock);

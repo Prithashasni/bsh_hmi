@@ -8,6 +8,7 @@
 #include "lv_drivers/wayland/wayland.h"
 #include <unistd.h>
 
+
 // #include "charcon/controller/controller.h"
 #include "nfc/view/menu_screen.h"
 #include "nfc/view/styles.h"
@@ -43,17 +44,17 @@ int main(void)
     lv_group_set_default(g);
 
     lv_indev_t * cur_drv = NULL;
-    for(;;) {
+    for (;;) {
         cur_drv = lv_indev_get_next(cur_drv);
-        if(!cur_drv) {
+        if (!cur_drv) {
             break;
         }
 
-        if(cur_drv->driver->type == LV_INDEV_TYPE_KEYPAD) {
+        if (cur_drv->driver->type == LV_INDEV_TYPE_KEYPAD) {
             lv_indev_set_group(cur_drv, g);
         }
 
-        if(cur_drv->driver->type == LV_INDEV_TYPE_ENCODER) {
+        if (cur_drv->driver->type == LV_INDEV_TYPE_ENCODER) {
             lv_indev_set_group(cur_drv, g);
         }
     }
@@ -68,16 +69,18 @@ int main(void)
 
     printf("[INFO] NFC + WiFi threads started.\n");
 
+
     while(running) {
         lv_tick_inc(5);
         lv_timer_handler();
         usleep(5000);
     }
 
+
     // // Now wait for threads to exit
     pthread_join(nfc_t, NULL);
     pthread_join(wifi_t, NULL);
 
-    // lv_deinit();
+    //lv_deinit();
     return 0;
 }
